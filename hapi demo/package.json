@@ -1,0 +1,22 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "a 1st attempt at hapi.js database",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robpierini/dbtest.git"
+  },
+  "author": "Rob Pierini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robpierini/dbtest/issues"
+  },
+  "homepage": "https://github.com/robpierini/dbtest#readme",
+  "dependencies": {
+    "pg": "^7.3.0"
+  }
+}
