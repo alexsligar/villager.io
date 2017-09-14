@@ -12,9 +12,9 @@ These instructions will get you a copy of the project up and running on your loc
 PostgresSQL
 ```
 ```
-A database named testdb (I have not figured out how to create new database other than using the console, so for now this is the fx)
+A database named testdb 
 ```
-
+I have not figured out how to create new database other than using the console, so for now this is the fx
 ### Installing
 
 ```sp
