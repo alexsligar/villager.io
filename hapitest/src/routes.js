@@ -1,4 +1,4 @@
-import Knex from '../knexfile';
+import Knex from './knex';
 
 
 const routes = [
