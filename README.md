@@ -21,5 +21,6 @@ I have not figured out how to create a new database other than using the console
 $npm i
 $knex migrate:latest
 $knex seed:run
+$npm start
 ```
 
