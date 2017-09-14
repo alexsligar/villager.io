@@ -14,7 +14,7 @@ PostgresSQL
 ```
 A database named testdb 
 ```
-I have not figured out how to create new database other than using the console, so for now this is the fx
+I have not figured out how to create new database other than using the console, so for now this is the fix
 ### Installing
 
 ```sp
