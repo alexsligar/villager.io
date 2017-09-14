@@ -143,11 +143,12 @@ const routes = [
         handler: (request,reply) => {
             const data =JSON.parse(request.payload);
             const username=data.username;
-            var count=0;
+            var countdel=0;
             const insertOperation =Knex("users").where("username",username).del().then(function (count) {
                 console.log(count);
+                countdel=count;
               }).then( ( res ) => {
-                if(count==0)
+                if(countdel==0)
                 {
                     reply( {
                         message: 'No user found'
