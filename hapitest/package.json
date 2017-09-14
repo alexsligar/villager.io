@@ -1,0 +1,23 @@
+{
+  "name": "hapitest",
+  "version": "1.0.0",
+  "description": "hapi postgres test",
+  "main": "bootstrap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bootstrap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robpierini/dbtest/tree/master/hapitest"
+  },
+  "author": "Villagers",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "hapi": "^16.6.0",
+    "knex": "^0.13.0",
+    "pg": "^7.3.0"
+  }
+}
