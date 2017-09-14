@@ -1,6 +1,5 @@
-import Knex from './knex';
-import jwt from 'jsonwebtoken';
-import GUID from 'node-uuid';
+import Knex from '../knexfile';
+
 
 const routes = [
     {
