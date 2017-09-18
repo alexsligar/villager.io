@@ -14,8 +14,6 @@ exports.up = function(knex, Promise) {
         usersTable.string( 'password', 128 ).notNullable();
         usersTable.string( 'guid', 50 ).notNullable().unique();
 
-        //usersTable.timestamp( 'created_at' ).notNullable();
-
     } )
 
     .createTable( 'items', function( itemTable ) {
@@ -24,23 +22,19 @@ exports.up = function(knex, Promise) {
         itemTable.increments();
         itemTable.string( 'owner', 36 ).references( 'guid' ).inTable( 'users' );
 
-        // Data
-        // Each chainable method creates a column of the given type with the chained constraints. For example, in the line below, we create a column named `name` which has a maximum length of 250 characters, is of type string (VARCHAR) and is not nullable. 
+        // Data 
         itemTable.string( 'name', 250 ).notNullable();
         itemTable.string( 'location', 250 ).notNullable();
         itemTable.string( 'guid', 36 ).notNullable().unique();
-
-       // itemTable.timestamp( 'created_at' ).notNullable();
 
     } );
 
 };
 
 exports.down = function(knex, Promise) {
-  // We use `...ifExists` because we're not sure if the table's there. Honestly, this is just a safety measure. 
   return knex
   .schema
       .dropTableIfExists( 'items' )
       .dropTableIfExists( 'users' );
-     // knex migrate:latest
+
 };
