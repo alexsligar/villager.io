@@ -4,14 +4,13 @@ exports.seed = function seed( knex, Promise ) {
       var tableName = 'users';
   
       var rows = [
-  
-          // You are free to add as many rows as you feel like in this array. Make sure that they're an object containing the following fields:
+          
           {
-              name: 'Shreyansh Pandey',
-              username: 'labsvisual',
+              name: 'Roberto Pierini',
+              username: 'Robfrikaans',
               password: 'password',
-              email: 'me@isomr.co',
-              guid: 'f03ede7c-b121-4112-bcc7-130a3e87988c'
+              email: 'Rob@email.com',
+              userid: 'f03ede7cb1'
           },
   
       ];
