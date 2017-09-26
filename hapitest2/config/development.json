@@ -1,0 +1,16 @@
+{
+    "db": {
+      "client": "pg",
+      "connection": {
+        "database": "testdb",
+        "user": "postgres",
+        "password": "p"
+      }
+    },
+    "connection": {
+    "public": {
+    "port": 8080,
+    "labels": "public"
+  }
+}
+} 

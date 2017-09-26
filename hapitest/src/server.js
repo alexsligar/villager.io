@@ -6,7 +6,7 @@ server.connection( {
     port: 8080
 } );
 
-server.register( require( 'hapi-auth-jwt' ), ( err ) => {
+server.register( require( 'hapi-auth-jwt2' ), ( err ) => {
     routes.forEach( ( route ) => {
         console.log( `attaching ${ route.path }` );
         server.route( route );

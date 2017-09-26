@@ -116,9 +116,7 @@ const routes = [
 },
     {
         path: '/users/{userid}',method:'GET',handler: (request,reply) => {
-            var id = request.params.userid;
-            
-        
+            var id = request.params.userid;        
             const getOperation = Knex( 'lists')
             .join('items','items.itemid','=','lists.itemid')
             .join('users','users.userid','=','lists.userid')
@@ -242,4 +240,3 @@ const routes = [
 ];
 
 export default routes;
-

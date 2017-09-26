@@ -1,0 +1,37 @@
+{
+  "name": "hapitest2",
+  "version": "1.0.0",
+  "description": "The second attempt at learning the hapi.js api",
+  "main": "server.js",
+  "scripts": {
+    "resetdb": "npm run unmakedb --silent && npm run makedb --silent && npm run migratedb --silent",
+    "dropdb": "dropdb --if-exists %db%",
+    "droprole": "psql -d postgres -c \"DROP ROLE IF EXISTS %user%\"",
+    "unmakedb": "npm run dropdb --silent && npm run droprole --silent",
+    "createdb": "createdb %db%",
+    "createrole": "psql -d postgres -c \"CREATE ROLE %user% WITH PASSWORD '%pass%' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\"",
+    "makedb": "set user=test && set pass=p && set db=testdb && npm run createrole --silent && npm run createdb --silent",
+    "uuiddb": "psql -d %db% -c 'CREATE EXTENSION \"uuid-ossp\"'",
+    "migratedb": "knex migrate:latest",
+    "knex": "knex",
+  
+    "test": "Test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robpierini/dbtest/tree/master/hapitest2"
+  },
+  "author": "Villagers",
+  "license": "ISC",
+  "dependencies": {
+    "getconfig": "^3.1.0",
+    "hapi": "^16.6.0",
+    "hapi-auth-jwt2": "^7.3.0",
+    "jsonwebtoken": "^8.0.1",
+    "keyfob": "^1.0.0",
+    "knex": "^0.13.0",
+    "muckraker": "^3.4.0",
+    "pg": "^7.3.0"
+  }
+}
