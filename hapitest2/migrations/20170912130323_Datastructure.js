@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     return knex
     .schema
     .createTable( 'users', function( usersTable ) {
-        usersTable.increments();//.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
+        usersTable.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
         usersTable.text( 'name' );
         usersTable.text( 'username' ).unique();
         usersTable.text( 'email' ).unique();
@@ -15,16 +15,17 @@ exports.up = function(knex, Promise) {
         itemsTable.text( 'location' );
     } )
     .createTable( 'lists', function(listsTable){
-        listsTable.increments();//.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
+        listsTable.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
         listsTable.text('name');
-        listsTable.integer('userid').references('id').inTable('users').index();
+        listsTable.uuid('userid').references('id').inTable('users').index();
     })
-    // .createTable('listitem',function(listitemTable){
-    //     listitemTable.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
-    //     listitemTable.text( 'itemid' ).references( 'id' ).inTable( 'items' ).index();
-    //     listitemTable.text( 'listid' ).references( 'id' ).inTable( 'lists' ).index();
-    //     listitemTable.text( 'order' );  
-    // });
+    .createTable('listitem',function(listitemTable){
+        listitemTable.uuid( 'id' ).defaultTo(knex.raw('uuid_generate_v4()')).primary();
+        listitemTable.integer( 'itemid' ).references( 'id' ).inTable( 'items' ).index();
+        listitemTable.uuid( 'listid' ).references( 'id' ).inTable( 'lists' ).index();
+        listitemTable.text( 'order' );  
+    })
+    ;
 
 };
 

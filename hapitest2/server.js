@@ -1,6 +1,6 @@
 'use strict';
 
-const Config = require('getconfig');
+const Config = require('./config');
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
 

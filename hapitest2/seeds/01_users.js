@@ -5,7 +5,7 @@ exports.seed = function seed( knex, Promise ) {
         var rows = [
             
             {
-                id: 'f03ede7cb1',
+                id: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
                 name: 'Roberto Pierini',
                 username: 'Robfrikaans',
                 password: 'password',

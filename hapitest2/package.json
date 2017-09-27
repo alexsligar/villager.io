@@ -4,23 +4,23 @@
   "description": "The second attempt at learning the hapi.js api",
   "main": "server.js",
   "scripts": {
-    "resetdb": "npm run unmakedb --silent && npm run makedb --silent && npm run migratedb --silent",
-    "dropdb": "dropdb --if-exists %db%",
-    "droprole": "psql -d postgres -c \"DROP ROLE IF EXISTS %user%\"",
-    "unmakedb": "npm run dropdb --silent && npm run droprole --silent",
-    "createdb": "createdb %db%",
-    "createrole": "psql -d postgres -c \"CREATE ROLE %user% WITH PASSWORD '%pass%' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\"",
-    "makedb": "set user=test && set pass=p && set db=testdb && npm run createrole --silent && npm run createdb --silent",
-    "uuiddb": "psql -d %db% -c 'CREATE EXTENSION \"uuid-ossp\"'",
+    "resetdb": "npm run unmakedb  && npm run makedb &&  npm run migratedb",
+    "dropdb": "dropdb --if-exists testdb",
+    "droprole": "psql -d postgres -c \"DROP ROLE IF EXISTS testuser\"",
+    "unmakedb": "npm run dropdb  && npm run droprole ",
+    "createdb": "createdb testdb",
+    "createrole": "psql -d postgres -c \"CREATE ROLE testuser WITH PASSWORD 'p' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\"",
+    "makedb": "npm run createrole  && npm run createdb && npm run uuiddb",
+    "uuiddb": "psql -d testdb -U postgres -f ./extension",
     "migratedb": "knex migrate:latest",
+    "seeddb": "knex seed:run",
     "knex": "knex",
-  
     "test": "Test",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/robpierini/dbtest/tree/master/hapitest2"
+    "url": "https://github.com/robpierini/villagers/tree/master/hapitest2"
   },
   "author": "Villagers",
   "license": "ISC",

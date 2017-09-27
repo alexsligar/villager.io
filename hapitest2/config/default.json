@@ -1,0 +1,27 @@
+{  
+    
+  "good": {
+    "includes": {
+      "request": ["headers"]
+    }
+  },
+  "shutdownTimeout": 15000,
+  "hapi": {
+    "connections": {
+      "routes": {
+        "security": true,
+        "cors": true
+      }
+    }
+},
+      "reply": {
+        "parameters": {
+          "results": {
+            "name": "data"
+          }
+        }
+      },
+      "routes": {
+        "include": []
+      }
+}   

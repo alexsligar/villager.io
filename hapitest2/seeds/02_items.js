@@ -4,7 +4,7 @@ exports.seed = function seed( knex, Promise ) {
     
         var rows = [
     
-            {
+            {    
                 name: 'Coding Club',
                 location: 'East 111'
             },
