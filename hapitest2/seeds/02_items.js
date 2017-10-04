@@ -6,12 +6,14 @@ exports.seed = function seed( knex, Promise ) {
     
             {    
                 name: 'Coding Club',
-                location: 'East 111'
+                location: 'East 111',
+                owner: 'e129cc9e-460e-4e52-9573-92e3ff0007ef'
             },
     
             {
                 name: 'Robotics Club',
-                location: 'West 111'
+                location: 'West 111',
+                owner: 'e129cc9e-460e-4e52-9573-92e3ff0007ef'
             },
     
         ];
