@@ -4,6 +4,8 @@ const knexfile = require('../knexfile.js');
 const knex = require('knex')(knexfile);
 
 module.exports = {
+    description: 'Create a list',
+    tags: ['api', 'user'],
     handler: (request, reply)=>{
         const postOperation = knex('lists')
         .insert(request.payload)
