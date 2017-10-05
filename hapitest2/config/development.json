@@ -1,6 +1,6 @@
 {
     "db": {
-      "client": "pg",
+      "client": "postgresql",
       "connection": {
         "database": "testdb",
         "user": "postgres",

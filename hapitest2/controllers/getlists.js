@@ -1,31 +1,29 @@
 'use strict';
-const Knex = require('knex');
+const Boom = require('boom');
+//const knex = require('knex');
+const query = require('keyfob').load({ path: './query' });
 
-module.exports={
-    handler: (request,reply) => {
-            const getOperation = Knex( 'lists')
-            .join('items','items.itemid','=','lists.itemid')
-            .join('users','users.userid','=','lists.userid')
-            .select('items.name','items.location','listid')
-            .orderBy('listid')
-            .then( ( results ) => {
-                if( !results || results.length === 0 ) {
-                    reply( {
-                        error: true,
-                        errMessage: 'non found',
-                    } );
-                }
-                else{
-                    reply({
-                        dataCount: results.length,
-                        data: results,
-                    });
-                }
-            })
-            .catch(( err ) => {
 
-                reply( err );
-            });
+const knexfile = require('../knexfile.js');
+const knex = require('knex')(knexfile);
 
-        }
-    }
+module.exports = {
+    handler: (request, reply)=>{
+        const getOperation = knex.raw(query.get_lists.toString())
+        .then( ( results ) => {
+            if( !results || results.length === 0 ) {
+                reply( {
+                    error: true,
+                    errMessage: 'non found',
+                } );
+            }
+            else{
+                reply(results.rows);
+            }
+        })
+        .catch(( err ) => {
+            reply( err );
+        });
+    } 
+};
+  

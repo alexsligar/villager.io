@@ -1,12 +1,15 @@
 'use strict';
-const Knex = require('knex');
-module.exports={
-    handler: ( request, reply ) => {
+const Boom = require('boom');
+//const knex = require('knex');
+const query = require('keyfob').load({ path: './query' });
 
-        //reply('hello rob');
-        const getOperation = Knex( 'items' )         
-        .where({})
-        .select('name','location','itemid')
+
+const knexfile = require('../knexfile.js');
+const knex = require('knex')(knexfile);
+
+module.exports = {
+    handler: (request, reply)=>{
+        const getOperation = knex.raw(query.get_items.toString())
         .then( ( results ) => {
             if( !results || results.length === 0 ) {
                 reply( {
@@ -15,13 +18,12 @@ module.exports={
                 } );
             }
             else{
-                reply({
-                    dataCount: results.length,
-                    data: results,
-                });
+                reply(results.rows);
             }
         })
         .catch(( err ) => {
-            reply( 'Error:'+err );
+            reply( err );
         });
-    }}
+    } 
+};
+  

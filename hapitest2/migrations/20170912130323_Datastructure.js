@@ -35,5 +35,6 @@ exports.down = function(knex, Promise) {
   .schema
       .dropTableIfExists( 'items' )
       .dropTableIfExists( 'users' )
-      .dropTableIfExists( 'lists' );
+      .dropTableIfExists( 'lists' )
+      .dropTableIfExists( 'listitem' );
 };
