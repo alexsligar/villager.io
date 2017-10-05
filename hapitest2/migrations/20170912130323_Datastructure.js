@@ -18,7 +18,7 @@ exports.up = function(knex, Promise) {
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         listsTable.text( 'name' );
-        listsTable.uuid( 'userid' ).references( 'id' ).inTable( 'users' ).index();
+        listsTable.uuid( 'owner' ).references( 'id' ).inTable( 'users' ).index();
     })
     .createTable('listitem',function(listitemTable){
         listitemTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();

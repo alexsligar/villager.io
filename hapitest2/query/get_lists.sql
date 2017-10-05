@@ -1,6 +1,6 @@
 SELECT 
 lists.id,
 lists.name,
-lists.userid
+lists.owner
 FROM 
 lists

@@ -5,15 +5,10 @@ const knex = require('knex')(knexfile);
 
 module.exports = {
     handler: (request, reply)=>{
-        const postOperation = knex('users')
+        const postOperation = knex('items')
         .insert(request.payload)
         .then(( results ) => {
-            if(!results || results.length === 0 ) {
-                
-            }
-            else{
                 reply("Event added");
-            }
         })
         .catch(( err ) => {
             console.log(err);

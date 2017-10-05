@@ -8,8 +8,8 @@ module.exports = [
 { method: 'GET', path: '/get_all_lists', config: Controllers.getlists },
 
 { method: 'POST', path: '/add_user', config: Controllers.adduser},
-// { method: 'POST', path: '/add_list_item', config: Controllers.adduser},
-{ method: 'POST', path: '/add_event', config: Controllers.adduser},
-// { method: 'POST', path: '/add_', config: Controllers.adduser}
+{ method: 'POST', path: '/add_listitem', config: Controllers.addlistitem},
+{ method: 'POST', path: '/add_event', config: Controllers.addevent},
+{ method: 'POST', path: '/add_list', config: Controllers.addlist}
 
 ];

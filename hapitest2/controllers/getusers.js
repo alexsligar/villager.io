@@ -1,9 +1,6 @@
 'use strict';
 const Boom = require('boom');
-//const knex = require('knex');
 const query = require('keyfob').load({ path: './query' });
-
-
 const knexfile = require('../knexfile.js');
 const knex = require('knex')(knexfile);
 
