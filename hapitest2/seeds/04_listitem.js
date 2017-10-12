@@ -16,7 +16,7 @@ exports.seed = function seed( knex, Promise ) {
                 itemid: 2,
                 listid: '1a9d09e7-a27e-414d-9417-01ea01669a59',
                 order: 2
-            },
+            }
             
     
         ];

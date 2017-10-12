@@ -1,32 +1,16 @@
 'use strict';
-const Boom = require('boom');
-const query = require('keyfob').load({ path: './query' });
-const knexfile = require('../knexfile.js');
-const knex = require('knex')(knexfile);
-// const swagger = Schema.generate();
+
+const Joi = require('joi');
+//const Boom = require('boom');
 
 module.exports = {
-    description: 'Returns all all users',
+    description: 'Returns all users',
     tags: ['api', 'admin'],
-    handler: (request, reply)=>{
-        const getOperation = knex.raw(query.get_users.toString())
-        .then( ( results ) => {
-            if( !results || results.length === 0 ) {
-                reply( {
-                    error: true,
-                    errMessage: 'non found',
-                } );
-            }
-            else{
-                reply(results.rows);
-            }
-        })
-        .catch(( err ) => {
-            reply( err );
-        });
-    }//, 
-    // Plugins:{
-    //     'hapi-swagger': swagger
-    // }
-};
-  
+    handler: async function (request, reply) {
+        var founduser = await this.db.users.find();
+        if (!founduser) {
+            founduser={error: "No users found"};
+        }
+        return reply(founduser);
+    }
+  };

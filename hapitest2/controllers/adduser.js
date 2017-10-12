@@ -1,25 +1,15 @@
 'use strict';
+
+const Joi = require('joi');
 const Boom = require('boom');
-const knexfile = require('../knexfile.js');
-const knex = require('knex')(knexfile);
-// const swagger = Schema.generate();
 
 module.exports = {
-    description: 'Create a user',
-    tags: ['api', 'user'],
-    handler: (request, reply)=>{
-        const postOperation = knex('users')
-        .insert(request.payload)
-        .then(( results ) => {        
-            reply("User added");
-        })
-        .catch(( err ) => {
-            console.log(err);
-            reply( err );
-        });
-     }//, 
-    // Plugins:{
-    //     'hapi-swagger': swagger
-    // } 
-};
-  
+    description: 'Add user',
+    tags: ['api', 'admin'],
+    handler: async function (request, reply) {
+        await this.db.users.insert(request.payload);
+        const userid = await this.db.users.findOne({username: request.payload.username});
+        await this.db.lists.insert({id: userid.id, name: 'Stared', owner: userid.id});
+        return reply(userid);
+    }
+  };

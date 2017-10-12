@@ -7,7 +7,7 @@ module.exports = [
 { method: 'GET', path: '/get_all_users', config: Controllers.getusers },
 { method: 'GET', path: '/get_all_lists', config: Controllers.getlists },
 { method: 'GET', path: '/get_all_lists/{id}', config: Controllers.getlistsbyid },
-
+{ method: 'GET', path: '/get_user/{id}',config: Controllers.getuser},
 
 
 { method: 'POST', path: '/add_user', config: Controllers.adduser},

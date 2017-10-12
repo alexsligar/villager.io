@@ -1,21 +1,13 @@
 'use strict';
+
+const Joi = require('joi');
 const Boom = require('boom');
-const knexfile = require('../knexfile.js');
-const knex = require('knex')(knexfile);
 
 module.exports = {
-    description: 'Create a list',
+    description: 'Add item',
     tags: ['api', 'user'],
-    handler: (request, reply)=>{
-        const postOperation = knex('lists')
-        .insert(request.payload)
-        .then(( results ) => {
-          reply("list added");
-        })
-        .catch(( err ) => {
-            console.log(err);
-            reply( err );
-        });
-    } 
-};
-  
+    handler: async function (request, reply) {
+        await this.db.lists.insert(request.payload);
+        return reply("list inserted");
+    }
+  };

@@ -1,25 +1,13 @@
 'use strict';
+
+const Joi = require('joi');
 const Boom = require('boom');
-const knexfile = require('../knexfile.js');
-const knex = require('knex')(knexfile);
-// const swagger = Schema.generate();
+
 module.exports = {
-    description: 'Add item to list',
+    description: 'Add list item',
     tags: ['api', 'user'],
-    handler: (request, reply)=>{
-        const postOperation = knex('listitem')
-        .insert(request.payload)
-        .then(( results ) => {
-            reply("list item added");
-        })
-        .catch(( err ) => {
-            console.log(err);
-            reply( err );
-        });
+    handler: async function (request, reply) {
+        await this.db.listitem.insert(request.payload);
+        return reply("item inserted in the list");
     }
-    // , 
-    // Plugins:{
-    //     'hapi-swagger': swagger
-    // }
-};
-  
+  };

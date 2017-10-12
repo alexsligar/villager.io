@@ -1,7 +1,7 @@
 {
   "name": "hapitest2",
   "version": "1.0.0",
-  "description": "The second attempt at learning the hapi.js api",
+  "description": "Villagers API Prototype",
   "main": "server.js",
   "scripts": {
     "resetdb": "npm run unmakedb  && npm run makedb &&  npm run migratedb",
@@ -9,14 +9,15 @@
     "droprole": "psql -d postgres -c \"DROP ROLE IF EXISTS testuser\"",
     "unmakedb": "npm run dropdb  && npm run droprole ",
     "createdb": "createdb testdb",
-    "createrole": "psql -d postgres -c \"CREATE ROLE testuser WITH PASSWORD 'p' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN\"",
-    "makedb": "npm run createrole  && npm run createdb && npm run uuiddb",
-    "uuiddb": "psql -d testdb -U postgres -f ./extension",
-    "migratedb": "knex migrate:latest",
+    "createrole": "psql -d postgres -c \"CREATE ROLE testuser WITH PASSWORD 'p' SUPERUSER NOCREATEDB CREATEROLE INHERIT LOGIN\"",
+    "makedb": "npm run setenv && npm run createrole  && npm run createdb && npm run uuiddb",
+    "uuiddb": "psql -d testdb -U testuser -f ./extension",
+    "migratedb": "knex migrate:latest && npm run seeddb",
     "seeddb": "knex seed:run",
     "knex": "knex",
     "test": "Test",
-    "start": "node server.js"
+    "start": "node server.js",
+    "setenv": "set NODE_ENV=development && set GETCONFIG_ROOT=./config"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,7 @@
     "hapi-auth-jwt2": "^7.3.0",
     "hapi-swagger": "^7.8.1",
     "inert": "^4.2.1",
-    "joi": "^11.1.1",
+    "joi": "^11.3.4",
     "jsonwebtoken": "^8.0.1",
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",

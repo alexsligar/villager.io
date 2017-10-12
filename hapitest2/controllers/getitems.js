@@ -1,33 +1,16 @@
 'use strict';
+
+const Joi = require('joi');
 const Boom = require('boom');
-const query = require('keyfob').load({ path: './query' });
-const knexfile = require('../knexfile.js');
-const knex = require('knex')(knexfile);
-// const swagger = Schema.generate();
 
 module.exports = {
-    description: 'Returns all events',
+    description: 'Returns all items',
     tags: ['api', 'admin'],
-    handler: (request, reply)=>{
-        const getOperation = knex.raw(query.get_items.toString())
-        .then( ( results ) => {
-            if( !results || results.length === 0 ) {
-                reply( {
-                    error: true,
-                    errMessage: 'non found',
-                } );
-            }
-            else{
-                reply(results.rows);
-            }
-        })
-        .catch(( err ) => {
-            reply( err );
-        });
-    }//, 
-    // Plugins:{
-    //     'hapi-swagger': swagger
-    // }
-
-};
-  
+    handler: async function (request, reply) {
+        var foundlitems = await this.db.items.find();
+        if (!foundlitems) {
+            foundlitems={error: "No items found"};
+        }
+        return reply(foundlitems);
+    }
+  };

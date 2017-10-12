@@ -4,7 +4,7 @@
       "connection": {
         "host": "localhost",
         "database": "testdb",
-        "user": "postgres",
+        "user": "rpier",
         "password": "p"
       }
     },
