@@ -24,9 +24,9 @@ module.exports = [
 { method: 'GET', path: '/list/{id}', config: Controllers.lists.getlistsbyid },
 //{ method: 'DELETE', path: '/list/{id}', config: Controllers.lists.dellist},
 
-{ method: 'POST', path: '/listitem', config: Controllers.listitem.addlistitem},
-{ method: 'PUT', path: '/listitem', config: Controllers.listitem.putlistitem},
-//{ method: 'DELETE', path: '/listitem/{id}', config: Controllers.listitem.dellistitem},
-//{ method: 'GET', path: '/listitem/{id}', config: Controllers.listitem.getlistitem}
+{ method: 'POST', path: '/listitem', config: Controllers.listitems.addlistitem},
+{ method: 'PUT', path: '/listitem', config: Controllers.listitems.putlistitem},
+//{ method: 'DELETE', path: '/listitem/{id}', config: Controllers.listitems.dellistitem},
+//{ method: 'GET', path: '/listitem/{id}', config: Controllers.listitems.getlistitem}
 
 ];
