@@ -16,7 +16,6 @@ const db = new Muckraker(Config.db);
 
 server.connection(Config.connection.public);
 
-
 server.on('request-error', (err, m) => {
 
   console.log(m.stack);
@@ -67,9 +66,8 @@ exports.server = server.register([{
 
     return server;
   }
-
+ 
   await server.start();
-
   //Disable CSP for this content that is not user controlled
   const doc_route = server.match('get', '/documentation');
   server.connections.forEach((connection) => {
