@@ -21,14 +21,12 @@ module.exports = [
 { method: 'GET', path: '/lists', config: Controllers.getlists},
 { method: 'POST', path: '/list', config: Controllers.addlist},
 { method: 'PUT', path: '/list', config: Controllers.putlist},
-{ method: 'GET', path: '/lists/{id}', config: Controllers.getlistsbyid },
+{ method: 'GET', path: '/list/{id}', config: Controllers.getlistsbyid },
 //{ method: 'DELETE', path: '/list/{id}', config: Controllers.dellist},
 
 { method: 'POST', path: '/listitem', config: Controllers.addlistitem},
 { method: 'PUT', path: '/listitem', config: Controllers.putlistitem},
 //{ method: 'DELETE', path: '/listitem/{id}', config: Controllers.dellistitem},
 //{ method: 'GET', path: '/listitem/{id}', config: Controllers.getlistitem}
-
-
 
 ];

@@ -7,7 +7,7 @@ module.exports = {
     description: 'Returns all users',
     tags: ['api', 'admin'],
     handler: async function (request, reply) {
-        var founduser = await this.db.users.find();
+        var founduser = await this.db.users.getall();
         if (!founduser) {
             founduser={error: "No users found"};
         }
