@@ -1,6 +1,6 @@
 # Hapitest
 
-The first api demo running on a local host that is able to query a database. 
+An api demo running on a local host that is able to query a database. 
 
 ## Getting Started
 
@@ -19,8 +19,12 @@ I have not figured out how to create a new database other than using the console
 
 ```sp
 $npm i
-$knex migrate:latest
-$knex seed:run
+$npm run makedb
+$npm run migratedb
 $npm start
+```
+### Reseting db
+```sp
+$npm run resetdb
 ```
 
