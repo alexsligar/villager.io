@@ -28,3 +28,7 @@ $npm start
 $npm run resetdb
 ```
 
+Postman
+* Post requests
+- Add data via Body tab
+- Set it to raw and JSON (application/json)
