@@ -9,7 +9,9 @@ exports.seed = function seed( knex, Promise ) {
                 name: 'Roberto Pierini',
                 username: 'Robfrikaans',
                 password: 'password',
-                email: 'Rob@email.com'
+                email: 'Rob@email.com',
+                bio: 'yup',
+                utype: 'admin'
             },
     
         ];

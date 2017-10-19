@@ -4,10 +4,10 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 module.exports = {
-    description: 'Put list item',
+    description: 'Add list item',
     tags: ['api', 'user'],
     handler: async function (request, reply) {
-        await this.db.items.update(request.payload);
-        return reply("list item updated");
+        await this.db.listitems.insert(request.payload);
+        return reply("item inserted in the list");
     }
   };

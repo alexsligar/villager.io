@@ -1,8 +1,13 @@
-{  
-    
+{ 
   "good": {
     "includes": {
       "request": ["headers"]
+    }
+  },
+  "auth":{
+    "secret":"hello",
+    "options": {
+      "algorithm": "HS256"
     }
   },
   "shutdownTimeout": 15000,

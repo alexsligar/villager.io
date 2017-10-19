@@ -74,7 +74,7 @@ exports.server = server.register([{
     console.log(`${connection.info.uri}`);
     server.log(['info', 'startup'], `${connection.info.uri} ${connection.settings.labels}`);
   });
-
+  
   
   // $lab:coverage:on$
 }).catch((err) => {

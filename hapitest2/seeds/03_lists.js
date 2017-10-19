@@ -7,7 +7,8 @@ exports.seed = function seed( knex, Promise ) {
             {
                 id: '1a9d09e7-a27e-414d-9417-01ea01669a59',
                 name: 'Nerd clubs',
-                owner: 'e129cc9e-460e-4e52-9573-92e3ff0007ef'
+                owner: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
+                description: 'I am very creative'
             },
     
             
