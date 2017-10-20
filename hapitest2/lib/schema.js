@@ -51,6 +51,17 @@
       password: Joi.string().example('shhh')
     }).label('FullUser');
     
+    const fullitem =Joi.object({
+      name: Joi.string(),
+      location: Joi.string(),
+      owner: Joi.string().guid(),
+      type: Joi.string(),
+      linkedgroup: Joi.string(),
+      linkedplace: Joi.string(),
+      staredNum: Joi.interger(),
+      listNum: Joi.interger()
+    })
+
     const publicuserdata =Joi.object({
       name: Joi.string().example('Person McPerson'),
       username: Joi.string().example('zerocool').allow(null),

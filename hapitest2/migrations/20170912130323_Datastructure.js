@@ -21,7 +21,6 @@ exports.up = function(knex, Promise) {
         itemsTable.text( 'type' ).notNullable();
         itemsTable.integer( 'linkedgroup' ).references('id').inTable('items').index();
         itemsTable.integer( 'linkedplace' ).references('id').inTable('items').index();
-        
     } )
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
