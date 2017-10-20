@@ -9,8 +9,8 @@ module.exports = {
     handler: async function (request, reply) {
         var foundlitems = await this.db.items.find();
         if (!foundlitems) {
-            foundlitems={error: "No items found"};
+            throw Boom.notFound();
         }
-        return reply(foundlitems);
+        return reply(request.payload);        
     }
   };

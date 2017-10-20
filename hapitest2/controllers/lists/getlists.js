@@ -9,7 +9,7 @@ module.exports = {
     handler: async function (request, reply) {
         var foundlists = await this.db.lists.find();
         if (!foundlists) {
-            foundlists={error: "No lists found"};
+            throw Boom.notFound();
         }
         return reply(foundlists);
     }

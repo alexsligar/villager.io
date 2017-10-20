@@ -34,7 +34,5 @@ module.exports = {
         const userid = await this.db.users.findOne({username: request.payload.username});
         await this.db.lists.insert({id: userid.id, name: 'Stared', owner: userid.id});
         return reply(userid);
-        
-        
     }
   };
