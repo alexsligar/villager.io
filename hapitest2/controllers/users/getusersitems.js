@@ -10,7 +10,8 @@ module.exports = {
     description: 'Returns users items',
     tags: ['api', 'users'],
     handler: async function (request, reply) {
-        var founduser = await this.db.items.find({owner: request.params.id},["name","location","type","linkedgroup","linkedplace"]);
+        let id = await this.db.users.findone({username: request.params.username},["id"]);        
+        var founduser = await this.db.items.find({owner: id},["name","location","type","linkedgroup","linkedplace"]);
         if(!founduser) {
             throw Boom.notFound();
         }

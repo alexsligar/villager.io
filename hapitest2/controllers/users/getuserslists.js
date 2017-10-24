@@ -8,9 +8,10 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Returns all users lists',
-    tags: ['api', 'admin'],
+    tags: ['api', 'users'],
     handler: async function (request, reply) {
-        var founduser = await this.db.lists.find({owner: request.params.id},["name","description"]);
+        let id = await this.db.users.findone({username: request.params.username},["id"]);
+        var founduser = await this.db.lists.find({owner: id},["name","description"]);
         if(!founduser) {
             throw Boom.notFound();
         }
