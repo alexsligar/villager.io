@@ -1,5 +1,5 @@
 'use strict';
-
+const Schema = require('../../lib/schema');
 const Joi = require('joi');
 const Boom = require('boom');
 const swagger = Schema.generate();

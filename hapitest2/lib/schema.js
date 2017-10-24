@@ -58,8 +58,8 @@
       type: Joi.string(),
       linkedgroup: Joi.string(),
       linkedplace: Joi.string(),
-      staredNum: Joi.interger(),
-      listNum: Joi.interger()
+      staredNum: Joi.number(),
+      listNum: Joi.number()
     })
 
     const publicuserdata =Joi.object({
