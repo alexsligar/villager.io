@@ -8,8 +8,8 @@ module.exports = {
     tags: ['api', 'users'],
     handler: async function (request, reply) {
 
-        let foundlist = await this.db.lists.find(request.payload.listid);
-        let founditem = await this.db.lists.find(request.payload.itemid);
+        let foundlist = await this.db.lists.findOne(request.payload.listid);
+        let founditem = await this.db.lists.findOne(request.payload.itemid);
         if(!founditem){
             throw Boom.notFound("Item not found");
         }

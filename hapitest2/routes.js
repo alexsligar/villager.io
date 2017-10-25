@@ -9,25 +9,16 @@ module.exports = [
 
 //items
 { method: 'GET', path: '/items', config: Controllers.items.getitems},//for testing
-    //{ method: 'GET', path: '/items/{id}', config: Controllers.items.getitem},
-    //{ method: 'GET', path: '/items/{name}', config: Controllers.items.getitemsbyname },
     
 //users
 { method: 'GET', path: '/users', config: Controllers.users.getusers }, //for testing
 { method: 'GET', path: '/users/{id}',config: Controllers.users.getuser},
-    //{ method: 'PUT', path: '/users/{id}', config: Controllers.users.putuser},
-    //{ method: 'DELETE', path: '/users/{id}', config: Controllers.users.deluser},
 { method: 'GET', path: '/users/{username}/lists',config: Controllers.users.getuserslists},
 { method: 'POST', path: '/users/{id}/lists', config: Controllers.users.addlist},
-{ method: 'PUT', path: '/users/{id}/lists/{listid}', config: Controllers.users.putlist},
-    //{ method: 'DELETE', path: '/users/{id}/lists/{listid}', config: Controllers.users.dellist},
 { method: 'POST', path: '/users/{id}/items', config: Controllers.users.additem},
-{ method: 'PUT', path: '/users/{id}/items/{itemid}', config: Controllers.users.putitem},
-    //{ method: 'DELETE', path: '/users/{id}/items/{itemid}', config: Controllers.users.delitem},
 
 
 //lists
-//{ method: 'GET', path: '/lists/{name}', config: Controllers.lists.getlistsbyname },
 { method: 'GET', path: '/lists/{id}', config: Controllers.lists.getlistsbyid },
 { method: 'GET', path: '/lists', config: Controllers.lists.getlists}, //for testing
 { method: 'POST', path: '/lists/{id}/listitems', config: Controllers.listitems.addlistitem},

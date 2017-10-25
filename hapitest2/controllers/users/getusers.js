@@ -10,10 +10,6 @@ module.exports = {
     description: 'Returns all users',
     tags: ['api', 'admin'],
     handler: async function (request, reply) {
-       // console.log(request.headers);
-        //console.log(request.auth);
-        
-
         var founduser = await this.db.users.find();
         if(!founduser) {
             throw Boom.notFound();
