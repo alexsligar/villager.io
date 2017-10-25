@@ -10,17 +10,17 @@ exports.up = function(knex, Promise) {
         usersTable.text( 'email' ).unique();
         usersTable.text( 'password' ).notNullable();
         usersTable.text( 'bio' );
-        usersTable.text( 'utype' ).notNullable().defaultTo('user');
+        usersTable.text( 'role' ).notNullable().defaultTo('user');
         
-    } ).raw("ALTER TABLE users ADD CONSTRAINT CHK_utype CHECK (utype='user' OR utype='mod' OR utype='admin')") 
+    } ).raw("ALTER TABLE users ADD CONSTRAINT CHK_role CHECK (role='user' OR role='mod' OR role='admin')") 
     .createTable( 'items', function( itemsTable ) {
         itemsTable.increments();
         itemsTable.text( 'name' ).notNullable();
         itemsTable.text( 'location' );
         itemsTable.uuid( 'owner' ).references('id').inTable('users').index().notNullable();
         itemsTable.text( 'type' ).notNullable();
-        itemsTable.integer( 'linkedgroup' ).references('id').inTable('items').index();
-        itemsTable.integer( 'linkedplace' ).references('id').inTable('items').index();
+        itemsTable.integer( 'linked_group' ).references('id').inTable('items').index();
+        itemsTable.integer( 'linked_place' ).references('id').inTable('items').index();
     } )
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
@@ -28,10 +28,10 @@ exports.up = function(knex, Promise) {
         listsTable.uuid( 'owner' ).references( 'id' ).inTable( 'users' ).index();
         listsTable.text( 'description' );
     })
-    .createTable('listitems',function(listitemTable){
+    .createTable('list_items',function(listitemTable){
         listitemTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
-        listitemTable.integer( 'itemid' ).references( 'id' ).inTable( 'items' ).index();
-        listitemTable.uuid( 'listid' ).references( 'id' ).inTable( 'lists' ).index();
+        listitemTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+        listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index();
         listitemTable.text( 'order' );  
     })
     ;

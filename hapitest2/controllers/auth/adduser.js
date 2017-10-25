@@ -32,7 +32,7 @@ module.exports = {
         await this.db.users.insert(Schema.full_users);
 
         const userid = await this.db.users.findOne({username: request.payload.username});
-        await this.db.lists.insert({id: userid.id, name: 'Stared', owner: userid.id});
+        await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});
         return reply(userid);
     }
   };

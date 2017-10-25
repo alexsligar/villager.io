@@ -10,11 +10,15 @@ module.exports = {
     description: 'Returns all users lists',
     tags: ['api', 'users'],
     handler: async function (request, reply) {
-        let id = await this.db.users.findone({username: request.params.username},["id"]);
-        var founduser = await this.db.lists.find({owner: id},["name","description"]);
-        if(!founduser) {
+        let user = await this.db.users.findOne({username: request.params.username});
+        if(!user)
+        {
+            throw Boom.notFound;
+        }
+        var userlists = await this.db.lists.find({owner: user.id},["name","description"]);
+        if(!userlists) {
             throw Boom.notFound();
         }
-        return reply(founduser);
+        return reply(userlists);
     }
   };

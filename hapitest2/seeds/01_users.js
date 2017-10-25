@@ -11,8 +11,8 @@ exports.seed = function seed( knex, Promise ) {
                 password: 'password',
                 email: 'Rob@email.com',
                 bio: 'yup',
-                utype: 'admin'
-            },
+                role: 'admin'
+            }
     
         ];
     

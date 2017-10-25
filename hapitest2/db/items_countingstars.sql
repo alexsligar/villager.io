@@ -1,5 +1,5 @@
 SELECT 
-count(listitems.id) 
+listitems.id 
 FROM listitems JOIN lists 
 ON listitems.listid = lists.id
 WHERE 
