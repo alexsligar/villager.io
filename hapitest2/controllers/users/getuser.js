@@ -10,7 +10,14 @@ module.exports = {
     description: 'Returns a user by id',
     tags: ['api', 'users'],
     handler: async function (request, reply) {
-        var founduser = await this.db.users.findOne({id: request.params.id},['id','username', 'name']);
+
+        let user = await this.db.users.findOne({username: request.params.username});
+        if(!user)
+        {
+            throw Boom.notFound;
+        }
+
+        var founduser = await this.db.users.findOne({id: user.id},['username', 'name','bio']);
        
         if(!founduser) {
             throw Boom.notFound();
