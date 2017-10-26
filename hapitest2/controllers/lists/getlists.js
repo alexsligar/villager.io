@@ -7,8 +7,8 @@ module.exports = {
     description: 'Returns all lists',
     tags: ['api', 'admin'],
     handler: async function (request, reply) {
-        var foundlists = await this.db.lists.find();
-        if (!foundlists) {
+        var foundlists = await this.db.lists.getall();
+        if (!foundlists[0]) {
             throw Boom.notFound();
         }
         return reply(foundlists);

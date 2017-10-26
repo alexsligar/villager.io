@@ -9,15 +9,18 @@ const swagger = Schema.generate();
 module.exports = {
     description: 'Add user',
     tags: ['api', 'admin'],
+    auth:false,
+    validate: {
+        payload: {
+            name: Joi.string().optional(),
+            username: Joi.string().required(),
+            password: Joi.string().required(),
+            email: Joi.string().required(),
+            bio: Joi.string().optional()
+        }
+    },
     handler: async function (request, reply) {
-        if(!request.payload.password) {
-            throw Boom.badRequest(`A password is required`);
-        }
-
-        if(!request.payload.username) {
-            throw Boom.badRequest(`A Username is required`);
-        }
-        
+                
         var takenUsername = await this.db.users.findOne({username: request.payload.username},['username']);
         if(takenUsername) {
             throw Boom.conflict(`Username ${takenUsername.username} already exists`);
@@ -27,9 +30,8 @@ module.exports = {
         if(takenEmail) {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }
-        Schema.full_users=request.payload;
-        
-        await this.db.users.insert(Schema.full_users);
+       
+        await this.db.users.insert(request.payload);
 
         const userid = await this.db.users.findOne({username: request.payload.username});
         await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});

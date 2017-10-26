@@ -5,7 +5,7 @@
     }
   },
   "auth":{
-    "secret":"hello",
+    "secret":"italmostlookslikeweknowwhatwearedoing",
     "options": {
       "algorithm": "HS256"
     }

@@ -42,40 +42,35 @@
       return { responses };
     };
    
-    const fullUser = Joi.object({
-      id: Joi.string().guid().example(uuid()),
-      name: Joi.string().example('Person McPerson'),
-      username: Joi.string().example('zerocool').allow(null),
-      bio: Joi.string().example('I am a person').allow(null),
-      email: Joi.string().example('email@email').allow(null),
-      password: Joi.string().example('shhh')
-    }).label('FullUser');
+    const user = Joi.object({
+      name: Joi.string(),
+      username: Joi.string(),
+      bio: Joi.string().allow(null),
+      email: Joi.string().allow(null),
+      password: Joi.string()
+    }).label('user');
     
-    const fullitem =Joi.object({
+    const item =Joi.object({
       name: Joi.string(),
       location: Joi.string(),
-      owner: Joi.string().guid(),
       type: Joi.string(),
       linkedgroup: Joi.string(),
       linkedplace: Joi.string(),
       staredNum: Joi.number(),
       listNum: Joi.number()
-    })
+    }).label('item');
 
-    const publicuserdata =Joi.object({
+    const list =Joi.object({
+      name: Joi.string(),
+      owner: Joi.string(),
+      description: Joi.string(),
+    }).label('list');
+
+    const publicUser =Joi.object({
       name: Joi.string().example('Person McPerson'),
       username: Joi.string().example('zerocool').allow(null),
       bio: Joi.string().example('I am a person').allow(null)      
-    })
-    const users = Joi.array().items(fullUser).label('FullUsers');
+    }).label('publicUser');
     
-    exports.user_response = Joi.object({
-      data: fullUser
-    }).label('UserResponse');
-    
-    exports.users_response = Joi.object({
-      data: users
-    }).unknown().label('UsersResponse');
-   
    
  

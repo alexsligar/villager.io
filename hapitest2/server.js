@@ -14,6 +14,7 @@ const db = new Muckraker(Config.db);
 
 // const userActivity = new UserActivity(db);
 
+
 server.connection(Config.connection.public);
 
 server.on('request-error', (err, m) => {
@@ -57,6 +58,22 @@ exports.server = server.register([{
 
   server.bind({ db });
   server.route(require('./routes'));
+
+  server.auth.strategy('jwt','jwt', {
+
+    key: Config.auth.secret,
+    verifyOptions: {
+      algorithms: [Config.auth.options.algorithm]
+    },
+    validateFunc: (decoded, request, callback) => {
+      if (decoded.card_id !== request.params.id) {
+        return callback(null, false); //invalid request
+      }
+      return callback(null, true); //valid request
+    }
+});
+
+server.auth.default('jwt');
 }).then(async () => {
 
   // coverage disabled because module.parent is always defined in tests

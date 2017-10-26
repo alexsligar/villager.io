@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
         usersTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         usersTable.text( 'name' );
         usersTable.text( 'username' ).unique().notNullable();
-        usersTable.text( 'email' ).unique();
+        usersTable.text( 'email' ).unique().notNullable();
         usersTable.text( 'password' ).notNullable();
         usersTable.text( 'bio' );
         usersTable.text( 'role' ).notNullable().defaultTo('user');
@@ -44,5 +44,5 @@ exports.down = function(knex, Promise) {
       .dropTableIfExists( 'items' )
       .dropTableIfExists( 'users' )
       .dropTableIfExists( 'lists' )
-      .dropTableIfExists( 'listitem' );
+      .dropTableIfExists( 'list_item' );
 };
