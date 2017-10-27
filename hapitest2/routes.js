@@ -14,6 +14,7 @@ module.exports = [
 { method: 'GET', path: '/users', config: Controllers.users.getusers }, //for testing
 { method: 'GET', path: '/users/{username}',config: Controllers.users.getuser},
 { method: 'GET', path: '/users/{username}/lists',config: Controllers.users.getuserslists},
+
 { method: 'POST', path: '/users/lists', config: Controllers.users.addlist},
 { method: 'POST', path: '/users/items', config: Controllers.users.additem},
 
