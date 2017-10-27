@@ -26,7 +26,7 @@ $npm run makedb
 $npm run migratedb
 $npm start
 ```
-### Reseting db
+### Resetting db
 ```sp
 $npm run resetdb
 ```
