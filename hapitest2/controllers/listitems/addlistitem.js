@@ -9,7 +9,7 @@ module.exports = {
     validate: {
         payload: {
             item_id: Joi.number().required(),
-            list_id: Joi.string().giud().required(),
+            list_id: Joi.string().guid().required(),
             order: Joi.string().required()
         }
     },

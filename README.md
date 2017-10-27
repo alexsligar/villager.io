@@ -10,15 +10,18 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 PostgresSQL
+With super user credentials
 ```
-```
-A database named testdb 
-```
-I have not figured out how to create a new database other than using the console, so for now this is the fix
 ### Installing
-
+create a new file in the config directory named local.json with the contents of development.json changing the username and password to that of your local postgres account
 ```sp
 $npm i
+```
+3 enviroment enviroment variables need to be set PGDATABASE, PGPASSWORD, PGUSER to the vaulues in the local.json file. This can be done on windows using the command below.
+```
+$node -pe require('getconfig').db.connection.user > user &&node -pe require('getconfig').db.connection.password > password && node -pe require('getconfig').db.connection.database > database && set /p PGUSER= < user && set /p PGDATABASE= < database && set /p PGPASSWORD= < password && del user password database
+```
+```
 $npm run makedb
 $npm run migratedb
 $npm start

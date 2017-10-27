@@ -1,8 +1,12 @@
 'use strict';
 
+
+
+
 const Config = require('getconfig');
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
+
 
 //const UserActivity = require('./lib/user_activity');
 const Pkg = require('./package.json');
