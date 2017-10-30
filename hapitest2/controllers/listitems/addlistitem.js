@@ -15,8 +15,6 @@ module.exports = {
     },
     handler: async function (request, reply) {
         const credentials = request.auth.credentials;
-
-        
         let foundlist = await this.db.lists.byid(request.payload.listid);
         let founditem = await this.db.items.byid(request.payload.itemid);
         if(!founditem){

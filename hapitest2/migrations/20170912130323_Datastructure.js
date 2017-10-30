@@ -11,6 +11,8 @@ exports.up = function(knex, Promise) {
         usersTable.text( 'password' ).notNullable();
         usersTable.text( 'bio' );
         usersTable.text( 'role' ).notNullable().defaultTo('user');
+        usersTable.timestamp('logout').notNullable().defaultTo(knex.raw('now()'));
+        usersTable.timestamps();
         
     } ).raw("ALTER TABLE users ADD CONSTRAINT CHK_role CHECK (role='user' OR role='mod' OR role='admin')") 
     .createTable( 'items', function( itemsTable ) {

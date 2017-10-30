@@ -11,8 +11,7 @@ module.exports = {
     validate: {
         payload: {
             name: Joi.string().required(),
-            location: Joi.string().guid().required(),
-            owner: Joi.string().guid().required(),
+            location: Joi.string().required(),
             type: Joi.string().required(),
             linked_group: Joi.string().optional(),
             linked_place: Joi.string().optional()

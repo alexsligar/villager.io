@@ -69,11 +69,17 @@ exports.server = server.register([{
     verifyOptions: {
       algorithms: [Config.auth.options.algorithm]
     },
-    validateFunc: (decoded, request, callback) => {
-      if (decoded.card_id !== request.params.id) {
-        return callback(null, false); //invalid request
-      }
-      return callback(null, true); //valid request
+    validateFunc: async (decoded, request, callback) => {
+    
+      const user = await db.users.validate(decoded);
+      const logout = Date.parse(user.logout);
+     
+      const timestamp = Date.parse(decoded.updated_at);
+
+      if (timestamp < logout) {
+          return callback(null, false); 
+        }
+      return callback(null, true);
     }
 });
 

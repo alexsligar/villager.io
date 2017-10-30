@@ -2,7 +2,10 @@ SELECT
   users.id,
   users.name,
   users.email,
-  users.username
+  users.username,
+  users.role,
+  users.bio,
+  users.logout
 FROM
   users
 WHERE

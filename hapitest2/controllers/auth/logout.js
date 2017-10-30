@@ -6,12 +6,14 @@ const Boom = require('boom');
 module.exports = {
     description: 'logout user',
     tags: ['api', 'user'],
-   
-
-        handler: function(request, reply) {
-            
-          //  request.auth.session.clear();
-            return reply('user logged out');
-        }
+    handler: async function (request, reply) {
+      
+          const user = request.auth.credentials;
+          const logout = new Date();
+      
+          await this.db.users.updateOne({ id: user.id }, { logout });
+      
+          return reply(null).code(204);
+      }
       
   };
