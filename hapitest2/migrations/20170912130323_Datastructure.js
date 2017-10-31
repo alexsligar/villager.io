@@ -19,7 +19,6 @@ exports.up = function(knex, Promise) {
         itemsTable.increments();
         itemsTable.text( 'name' ).notNullable();
         itemsTable.text( 'location' );
-        itemsTable.uuid( 'owner' ).references('id').inTable('users').index().notNullable();
         itemsTable.text( 'type' ).notNullable();
         itemsTable.integer( 'linked_group' ).references('id').inTable('items').index();
         itemsTable.integer( 'linked_place' ).references('id').inTable('items').index();
@@ -36,7 +35,12 @@ exports.up = function(knex, Promise) {
         listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index();
         listitemTable.text( 'order' );  
     })
-    ;
+    .createTable('owners',function(ownerTable){
+        ownerTable.uuid('id').defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
+        ownerTable.uuid('user_id').references('id').inTable('users').index();
+        ownerTable.integer('item_id').references('id').inTable('items').index();
+    });
+
 
 };
 
@@ -46,5 +50,6 @@ exports.down = function(knex, Promise) {
       .dropTableIfExists( 'items' )
       .dropTableIfExists( 'users' )
       .dropTableIfExists( 'lists' )
-      .dropTableIfExists( 'list_item' );
+      .dropTableIfExists( 'list_items' )
+      .dropTableIfExists( 'owners' );
 };

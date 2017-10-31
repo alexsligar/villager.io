@@ -30,8 +30,10 @@ module.exports = {
         }
         
         let item = request.payload;
-        item['owner']=credentials.id; 
-        await this.db.items.insert(item);
+        
+        let returneditem = await this.db.items.insert(item);
+    
+        await this.db.owners.insert({item_id: returneditem.id,user_id: credentials.id});
        
         return reply(item);
     }

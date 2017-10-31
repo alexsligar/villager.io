@@ -31,9 +31,9 @@ module.exports = {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }
        
-        await this.db.users.insert(request.payload);
+        const userid =await this.db.users.insert(request.payload);
 
-        const userid = await this.db.users.findOne({username: request.payload.username});
+       // const userid = await this.db.users.findOne({username: request.payload.username});
         await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});
         return reply(userid);
     }

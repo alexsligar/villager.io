@@ -1,5 +1,7 @@
 SELECT
 items.id
-items.owner
+FROM
+items
 WHERE
-items,id = ${id}
+items.name = ${name}
+items.description =${description}
