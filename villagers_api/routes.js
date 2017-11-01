@@ -10,6 +10,8 @@ module.exports = [
 //items
 { method: 'GET', path: '/items', config: Controllers.items.getitems},
 { method: 'GET', path: '/items/{id}', config: Controllers.items.getitembyid},
+{ method: 'GET', path: '/items/linked/{id}', config: Controllers.items.getitemsbylink},
+
 //users
 { method: 'GET', path: '/users', config: Controllers.users.getusers }, //for testing
 { method: 'GET', path: '/users/{username}',config: Controllers.users.getuser},
