@@ -8,7 +8,7 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Add user',
-    tags: ['api', 'admin'],
+    tags: ['api', 'auth'],
     auth:false,
     validate: {
         payload: {

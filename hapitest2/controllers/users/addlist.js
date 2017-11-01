@@ -4,7 +4,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 module.exports = {
-    description: 'Add item',
+    description: 'Add list',
     tags: ['api', 'users'],
     validate: {
         payload: {

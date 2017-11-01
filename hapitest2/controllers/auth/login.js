@@ -8,8 +8,8 @@ const swagger = Schema.generate();
 const Config = require('getconfig');
 
 module.exports = {
-    description: 'Login in user',
-    tags: ['api', 'user'],
+    description: 'Login user',
+    tags: ['api', 'auth'],
     auth: false,
     validate: {
         payload: {
@@ -18,9 +18,6 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-
-
-
         let user = await this.db.users.findOne({username: request.payload.username});
         if(!user||request.payload.password!=user.password)
         {

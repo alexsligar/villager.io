@@ -8,7 +8,7 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Returns all users',
-    tags: ['api', 'admin','public'],
+    tags: ['api', 'admin'],
     
     handler: async function (request, reply) {
 

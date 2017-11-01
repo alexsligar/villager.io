@@ -5,7 +5,7 @@ const Boom = require('boom');
 
 module.exports = {
     description: 'logout user',
-    tags: ['api', 'user'],
+    tags: ['api', 'auth'],
     handler: async function (request, reply) {
       
           const user = request.auth.credentials;
