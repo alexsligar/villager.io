@@ -5,7 +5,7 @@ const Boom = require('boom');
 
 module.exports = {
     description: 'Returns all lists',
-    tags: ['api', 'admin'],
+    tags: ['api', 'admin','public'],
     handler: async function (request, reply) {
         var foundlists = await this.db.lists.getall();
         if (!foundlists[0]) {

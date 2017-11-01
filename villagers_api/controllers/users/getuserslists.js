@@ -8,7 +8,7 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Returns users lists',
-    tags: ['api', 'users'],
+    tags: ['api', 'users', 'public'],
     auth: false,
     handler: async function (request, reply) {
         let user = await this.db.users.findOne({username: request.params.username});

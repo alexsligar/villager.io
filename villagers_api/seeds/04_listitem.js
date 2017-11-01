@@ -15,6 +15,12 @@ exports.seed = function seed( knex, Promise ) {
                 item_id: 2,
                 list_id: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
                 order: '2'
+            },
+            {
+                id: '24e155c7-76f0-4ab6-9624-fea68f072a6f',
+                item_id: 1,
+                list_id: '1a9d09e7-a27e-414d-9417-01ea01669a59',
+                order: '1'
             }
         ];
     

@@ -8,8 +8,8 @@ module.exports = [
 { method: 'GET', path: '/logout', config: Controllers.auth.logout},    
 
 //items
-{ method: 'GET', path: '/items', config: Controllers.items.getitems},//for testing
-    
+{ method: 'GET', path: '/items', config: Controllers.items.getitems},
+{ method: 'GET', path: '/items/{id}', config: Controllers.items.getitembyid},
 //users
 { method: 'GET', path: '/users', config: Controllers.users.getusers }, //for testing
 { method: 'GET', path: '/users/{username}',config: Controllers.users.getuser},

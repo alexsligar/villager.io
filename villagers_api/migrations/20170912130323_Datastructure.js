@@ -20,8 +20,8 @@ exports.up = function(knex, Promise) {
         itemsTable.text( 'name' ).notNullable();
         itemsTable.text( 'location' );
         itemsTable.text( 'type' ).notNullable();
-        itemsTable.date( 'start' ).notNullable();
-        itemsTable.date( 'end' );
+        itemsTable.date( 'start_date' );
+        itemsTable.date( 'end_date' );
         itemsTable.integer( 'linked_group' ).references('id').inTable('items').index();
         itemsTable.integer( 'linked_place' ).references('id').inTable('items').index();
     } )

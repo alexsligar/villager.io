@@ -5,7 +5,7 @@ const server = require('../../server');
 
 module.exports = {
     description: 'Returns all items',
-    tags: ['api', 'user'],
+    tags: ['api', 'users','public'],
    
     handler: async function (request, reply) {
         
