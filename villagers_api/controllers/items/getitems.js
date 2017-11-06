@@ -2,6 +2,8 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const server = require('../../server');
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns all items',
@@ -15,5 +17,8 @@ module.exports = {
             throw Boom.notFound();
         }   
         return reply(founditems);        
+    }, 
+    plugins: {
+        'hapi-swagger': swagger
     }
   };

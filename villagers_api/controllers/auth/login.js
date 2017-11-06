@@ -1,10 +1,10 @@
 'use strict';
 
 const JWT = require('jsonwebtoken');
-const Schema = require('../../lib/schema');
 const Joi = require('joi');
 const Boom = require('boom');
-const swagger = Schema.generate();
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['401']);
 const Config = require('getconfig');
 
 module.exports = {
@@ -25,5 +25,8 @@ module.exports = {
         }
         const token = JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options);
         return reply({token: token});
+    }, 
+    plugins: {
+        'hapi-swagger': swagger
     }
   };

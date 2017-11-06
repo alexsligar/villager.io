@@ -13,12 +13,17 @@ module.exports = {
     },
     auth: false,  
     handler: async function (request, reply) {
-        let exist = await this.db.lists.findOne({id: request.params.id});
-        if (!exist) {
+        let user = await this.db.user.findOne({id: request.params.id});
+        if (!user) {
             throw Boom.notFound();
         }
-        let foundlist = await this.db.list_items.by_list_id({id: request.params.id});
+        let foundlist = await this.db.list_items.by_list_id({id: user.id});
+        if(!foundlist[0]){
+            return reply("User's favorite list is empty").code(204)//code to return 404?? 204? 
+        }
+        else{
+           return reply(foundlist); 
+        }
         
-        return reply(foundlist);
     }
   };

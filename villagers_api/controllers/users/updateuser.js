@@ -4,13 +4,12 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['409']);
+const swagger = Schema.generate();
 
 module.exports = {
-    description: 'Add user',
-    tags: ['api', 'auth'],
-    auth:false,
-    validate: { 
+    description: 'update user',
+    tags: ['api', 'admin'],
+    validate: {
         payload: {
             name: Joi.string().optional(),
             username: Joi.string().required(),
@@ -20,7 +19,7 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-                
+        const credentials = request.auth.credentials;        
         var takenUsername = await this.db.users.findOne({username: request.payload.username},['username']);
         if(takenUsername) {
             throw Boom.conflict(`Username ${takenUsername.username} already exists`);
@@ -30,19 +29,12 @@ module.exports = {
         if(takenEmail) {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }
-       
-        const userid =await this.db.users.insert(request.payload);
-
-       // const userid = await this.db.users.findOne({username: request.payload.username});
-        await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});
-        return reply({data: userid});
-    },
-    response: {
-      status: {
-        200: Schema.user_response
-      }
-  }, 
-  plugins: {
-      'hapi-swagger': swagger
-  }
+        const user =await this.db.users.findOne(credentials.id);
+        if(!user){
+            throw Boom.notFound("User not found");
+        }
+        
+        user=await this.db.user.updateOne(user.id , user);
+        return reply(user);
+    }
   };

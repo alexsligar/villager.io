@@ -11,12 +11,14 @@ module.exports = {
     tags: ['api', 'users','public'],
     auth: false,
     handler: async function (request, reply) {
-       var founduser = await this.db.users.findOne({username: request.params.username},['username', 'name','bio']);
+       let user = await this.db.users.findOne({username: request.params.username},['username', 'name','bio','id']);
        
-        if(!founduser) {
+        if(!user) {
             throw Boom.notFound();
         }
-
-        return reply(founduser);
+        
+        let favorite_list = await this.db.list_items.by_list_id({id: user.id});
+        delete user.id;
+        return reply({user, favorite_list});
     }
   };
