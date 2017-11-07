@@ -36,11 +36,11 @@ module.exports = {
        // const userid = await this.db.users.findOne({username: request.payload.username});
         await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});
         return reply({data: userid});
-    },
-    response: {
-      status: {
-        200: Schema.user_response
-      }
+    // },
+    // response: {
+    //   status: {
+    //     200: Schema.user_response
+    //   }
   }, 
   plugins: {
       'hapi-swagger': swagger

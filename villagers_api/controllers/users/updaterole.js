@@ -18,7 +18,7 @@ module.exports = {
     handler: async function (request, reply) {
         const credentials = request.auth.credentials; 
        // Schema.role= request.payload;
-        
+
         if(credentials.role=="admin") {
 
         }
@@ -29,9 +29,10 @@ module.exports = {
             throw Boom.unauthorized();
         }
         let foundUser = await this.db.users.findOne({username: request.params.username});
-            
-       // user=await this.db.user.updateOne(id , request.payload.role);
-       return reply({ data: foundUser });
+
+        await this.db.users.updateOne({id: foundUser.id} , request.payload);
+        foundUser = await this.db.users.findOne({username: request.params.username});
+        return reply({ data: foundUser });
     }
 
   };

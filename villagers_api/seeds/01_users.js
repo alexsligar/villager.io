@@ -13,7 +13,8 @@ exports.seed = function seed( knex, Promise ) {
                 bio: 'yup',
                 role: 'admin',
                 created_at: new Date(),
-                updated_at: new Date()
+                updated_at: new Date(),
+                logout: new Date()
 
             }
     
