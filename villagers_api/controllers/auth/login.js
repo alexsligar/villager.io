@@ -23,9 +23,14 @@ module.exports = {
         {
             throw Boom.unauthorized("Incorrect username or password")
         }
-        const token = JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options);
-        return reply({token: token});
-    }, 
+        const token= {token: JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options)};
+        return reply({data: token});
+    },
+    response: {
+      status: {
+        200: Schema.login_response
+      }
+  }, 
     plugins: {
         'hapi-swagger': swagger
     }

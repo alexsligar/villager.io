@@ -4,11 +4,11 @@ const Joi = require('joi');
 const Boom = require('boom');
 
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate();
+const swagger = Schema.generate(['404','409']);
 
 module.exports = {
     description: 'update user',
-    tags: ['api', 'admin'],
+    tags: ['api', 'users'],
     validate: {
         payload: {
             name: Joi.string().optional(),
@@ -34,7 +34,17 @@ module.exports = {
             throw Boom.notFound("User not found");
         }
         
-        user=await this.db.user.updateOne(user.id , user);
-        return reply(user);
+        await this.db.user.updateOne(user.id , user);
+        user =await this.db.users.findOne(credentials.id);
+        
+        return reply({data: user});
+    },
+    response: {
+        status: {
+            200: Schema.private_users_response
+        }
+    },
+    plugins: {
+        'hapi-swagger': swagger
     }
   };

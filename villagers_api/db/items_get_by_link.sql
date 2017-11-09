@@ -4,7 +4,9 @@ items.name,
 items.location,
 items.type,
 items.linked_group,
-items.linked_place
+items.linked_place,
+items.start_date,
+items.end_date
 FROM 
 items
 WHERE

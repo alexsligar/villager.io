@@ -6,16 +6,16 @@ exports.seed = function seed( knex, Promise ) {
     
             {    
                 user_id: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
-                item_id: '1',
+                item_id: 2,
             },
     
             {
                 user_id: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
-                item_id: '2',
+                item_id: 2,
             },
             {
                 user_id: 'e129cc9e-460e-4e52-9573-92e3ff0007ef',
-                item_id: '3',
+                item_id: 2,
             }
     
         ];

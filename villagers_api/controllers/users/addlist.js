@@ -2,6 +2,8 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['400']);
 
 module.exports = {
     description: 'Add list',
@@ -10,7 +12,10 @@ module.exports = {
         payload: {
             name: Joi.string().required(),
             description: Joi.string().required()
-        }
+        },
+        headers: Joi.object({
+            'authorization': Joi.string().required()
+        }).unknown()
     },
     handler: async function (request, reply) {
        let credentials= request.auth.credentials;
@@ -21,6 +26,6 @@ module.exports = {
         let list=request.payload;
         list['owner']= credentials.id;
         let returnlist = await this.db.lists.insert(list);
-        return reply(returnlist);
+        return reply({data: returnlist});
     }
   };

@@ -2,28 +2,39 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['404']);
 
 module.exports = {
-    description: 'Returns items in list by id',
-    tags: ['api', 'users'],
+    description: 'Returns users favorite list',
+    tags: ['api', 'public'],
+    auth: false,
     validate: {
-        params:{
-            id: Joi.string().guid().required()
-        } 
+        params: {
+            username: Joi.string().required()
+        }
     },
     auth: false,  
     handler: async function (request, reply) {
-        let user = await this.db.user.findOne({id: request.params.id});
+        let user = await this.db.users.findOne({username: request.params.username});
         if (!user) {
-            throw Boom.notFound();
+            throw Boom.notFound("user not found");
         }
         let foundlist = await this.db.list_items.by_list_id({id: user.id});
         if(!foundlist[0]){
-            return reply("User's favorite list is empty").code(204)//code to return 404?? 204? 
+            return reply("User's favorite list is empty").code(404)//code to return 404?? 204? 
         }
         else{
-           return reply(foundlist); 
+           return reply({data: foundlist}); 
         }
         
+    },
+    response: {
+        status: {
+            200: Schema.favorite_list_response
+        }
+    },
+    plugins: {
+        'hapi-swagger': swagger
     }
   };

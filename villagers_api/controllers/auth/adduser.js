@@ -9,8 +9,8 @@ const swagger = Schema.generate(['409']);
 module.exports = {
     description: 'Add user',
     tags: ['api', 'auth'],
-    auth:false,
-    validate: { 
+    auth: false,
+    validate: {
         payload: {
             name: Joi.string().optional(),
             username: Joi.string().required(),
@@ -20,29 +20,33 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-                
-        var takenUsername = await this.db.users.findOne({username: request.payload.username},['username']);
-        if(takenUsername) {
+
+        var takenUsername = await this.db.users.findOne({ username: request.payload.username }, ['username']);
+        if (takenUsername) {
             throw Boom.conflict(`Username ${takenUsername.username} already exists`);
         }
 
-        var takenEmail = await this.db.users.findOne({email: request.payload.email},['email']);
-        if(takenEmail) {
+        var takenEmail = await this.db.users.findOne({ email: request.payload.email }, ['email']);
+        if (takenEmail) {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }
-       
-        const userid =await this.db.users.insert(request.payload);
 
-       // const userid = await this.db.users.findOne({username: request.payload.username});
-        await this.db.lists.insert({id: userid.id, name: 'Starred', owner: userid.id});
-        return reply({data: userid});
-    // },
-    // response: {
-    //   status: {
-    //     200: Schema.user_response
-    //   }
-  }, 
-  plugins: {
-      'hapi-swagger': swagger
-  }
-  };
+        const user = await this.db.users.insert(request.payload);
+        delete user.created_at;
+        delete user.updated_at;
+        delete user.logout;
+        //const users = Joi.array().items(public_user).label('PublicUsers');
+
+        // const user = await this.db.users.findOne({username: request.payload.username});
+        await this.db.lists.insert({ id: user.id, name: 'Starred', owner: user.id });
+        return reply({ data: user });
+    },
+    response: {
+        status: {
+            200: Schema.private_response
+        }
+    },
+    plugins: {
+        'hapi-swagger': swagger
+    }
+};

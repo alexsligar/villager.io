@@ -14,14 +14,14 @@ exports.seed = function seed( knex, Promise ) {
                 name: 'Robotics Club',
                 location: 'West 111',
                 type: 'group',
-                linked_place: '1',
+                linked_place: 1,
             },
             {
                 name: 'Robotics Club showcase',
                 location: 'West 111',
                 type: 'activity',
-                linked_place: '1',
-                linked_group: '2'
+                linked_place: 1,
+                linked_group: 2
             }
     
         ];

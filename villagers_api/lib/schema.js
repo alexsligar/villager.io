@@ -39,7 +39,7 @@ const deprecated = Joi.object({
 }).label('Error');
 
 const code_lookup = {
-  '400':{
+  '400': {
     description: 'Bad Request',
     schema: badrequest
   },
@@ -81,11 +81,10 @@ exports.generate = (codes) => {
 };
 
 const public_user = Joi.object({
-  name: Joi.string().optional().example('total not a robot'),
+  name: Joi.string().optional().example('totally not a robot'),
   username: Joi.string().required().example('seriously'),
-  password: Joi.string().required().example('I am'),
   email: Joi.string().required().example('real@email'),
-  role: Joi.any().valid("mod","user","admin"),
+  role: Joi.any().valid("mod", "user", "admin"),
   bio: Joi.string().optional().example('I am a real person')
 });
 const private_user = Joi.object({
@@ -93,13 +92,16 @@ const private_user = Joi.object({
   name: Joi.string().optional().example('total not a robot'),
   username: Joi.string().required().example('seriously'),
   password: Joi.string().required().example('I am'),
-  role: Joi.any().valid("mod","user","admin"),
+  role: Joi.any().valid("mod", "user", "admin"),
   email: Joi.string().required().example('real@email'),
-  bio: Joi.string().optional().example('I am a real person').allow(null)
+  bio: Joi.string().optional().example('I am a real person').allow(null),
+  logout: Joi.date().optional().allow(null),
+  created_at: Joi.date().optional().allow(null),
+  updated_at: Joi.date().optional().allow(null),
 });
 
 const users = Joi.array().items(public_user).label('PublicUsers');
-
+const private_users = Joi.array().items(private_user).label('PublicUsers');
 exports.user_response = Joi.object({
   data: public_user
 }).label('UserResponse');
@@ -108,29 +110,50 @@ exports.users_response = Joi.object({
   data: users
 }).unknown().label('UsersResponse');
 
+exports.private_response = Joi.object({
+  data: private_user
+}).unknown().label('PrivateResponse');
+
+exports.private_users_response = Joi.object({
+  data: private_users
+}).unknown().label('PrivateResponse');
+
 const item = Joi.object({
   id: Joi.number().example(3),
   name: Joi.string().required().example("name name"),
-  location: Joi.string().required().example("2710 Crimson Way, Richland, WA 99354"),
-  type: Joi.any().valid("event","place","activity","group"),
-  linked_group: Joi.string().optional().example('2'),
-  linked_place: Joi.string().optional().example('1'),
+  location: Joi.string().optional().example("2710 Crimson Way, Richland, WA 99354"),
+  type: Joi.any().valid("event", "place", "activity", "group"),
+  linked_group: Joi.number().optional().example(2).allow(null),
+  linked_place: Joi.number().optional().example(2).allow(null),
+  start_date: Joi.date().optional().allow(null),
+  end_date: Joi.date().optional().allow(null),
+  starred_number: Joi.number().optional(),
+  list_number: Joi.number().optional()
+})
+const additems = Joi.array().items(item).label('items');
+exports.additem = {
+  name: Joi.string().required(),
+  location: Joi.string().required(),
+  type: Joi.any().valid("activity", "place", "event", "group"),
+  linked_group: Joi.number().optional(),
+  linked_place: Joi.number().optional(),
   start_date: Joi.date().optional(),
   end_date: Joi.date().optional()
-})
-const items = Joi.array().items(item).label('items');
+}
+const items = Joi.array().items(item).label('lists');
 
-exports.users_response = Joi.object({
+exports.item_response = Joi.object({
   data: item
 }).unknown().label('ItemResponse');
 
-exports.users_response = Joi.object({
+exports.items_response = Joi.object({
   data: items
 }).unknown().label('ItemsResponse');
 
 const list = Joi.object({
+  id: Joi.string().guid().example(uuid()),
   name: Joi.string().required().example('mon nom est'),
-  description: Joi.string().required().example('description described descriptively')
+  description: Joi.string().required().example('description described descriptively').allow(null)
 });
 
 const lists = Joi.array().items(list).label('lists');
@@ -143,3 +166,21 @@ exports.lists_response = Joi.object({
   data: lists
 }).label('ListsResponse');
 
+
+exports.login_response = Joi.object({
+  data: { token: [Joi.string(), Joi.number()] }
+}).unknown().label('loginResponse')
+
+const list_items = Joi.array().items(item).label('listItems')
+
+//const favorite_list = Joi.array().items(item).label('favoriteList');
+
+exports.get_user_response = Joi.object({
+  data: { user: public_user, favorite_list: list_items }
+})
+exports.favorite_list_response = Joi.object({
+  data: list_items
+})
+exports.list_items_response = Joi.object({
+  data: list_items
+})
