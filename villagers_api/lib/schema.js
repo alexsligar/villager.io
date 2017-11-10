@@ -89,7 +89,7 @@ const public_user = Joi.object({
 });
 const private_user = Joi.object({
   id: Joi.string().guid().example(uuid()),
-  name: Joi.string().optional().example('total not a robot'),
+  name: Joi.string().optional().example('totally not a robot'),
   username: Joi.string().required().example('seriously'),
   password: Joi.string().required().example('I am'),
   role: Joi.any().valid("mod", "user", "admin"),
