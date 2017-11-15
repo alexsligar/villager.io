@@ -18,7 +18,8 @@ module.exports = {
     },
     handler: async function (request, reply) {
         const credentials = request.auth.credentials;
-        if (credentials.role != "admin" || credentials.role != "mod") {
+        
+        if (credentials.role == "user") {
             let owners = await this.db.owners.validate({ item_id: request.params.id, user_id: credentials.id });
             if (!owners) {
                 throw Boom.unauthorized("Not permitted to edit item");
@@ -29,8 +30,9 @@ module.exports = {
         if (!item) {
             throw Boom.notFound("Item not found");
         }
+      
         item = request.payload;
-
+       
         if (request.payload.type != "event") {
             if (!request.payload.start_date && !request.payload.end_date) { }
             else {

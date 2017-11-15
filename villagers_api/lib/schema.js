@@ -171,6 +171,12 @@ exports.login_response = Joi.object({
   data: { token: [Joi.string(), Joi.number()] }
 }).unknown().label('loginResponse')
 
+exports.user_update_repsonse = Joi.object({
+  data: { 
+    user: private_user,
+    token: [Joi.string(), Joi.number()] 
+  }
+})
 const list_items = Joi.array().items(item).label('listItems')
 
 //const favorite_list = Joi.array().items(item).label('favoriteList');
