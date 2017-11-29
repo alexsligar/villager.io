@@ -49,7 +49,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.user_update_response
+            200: Schema.user_update_repsonse
         }
     },
     plugins: {

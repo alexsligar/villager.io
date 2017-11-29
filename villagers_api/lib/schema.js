@@ -87,7 +87,7 @@ const public_user = Joi.object({
   role: Joi.any().valid("mod", "user", "admin"),
   bio: Joi.string().optional().example('I am a real person')
 });
-const private_user = Joi.object({
+const user = Joi.object({
   id: Joi.string().guid().example(uuid()),
   name: Joi.string().optional().example('totally not a robot'),
   username: Joi.string().required().example('seriously'),
@@ -101,7 +101,7 @@ const private_user = Joi.object({
 });
 
 const users = Joi.array().items(public_user).label('PublicUsers');
-const private_users = Joi.array().items(private_user).label('PublicUsers');
+const private_users = Joi.array().items(user).label('PublicUsers');
 exports.user_response = Joi.object({
   data: public_user
 }).label('UserResponse');
@@ -111,7 +111,7 @@ exports.users_response = Joi.object({
 }).unknown().label('UsersResponse');
 
 exports.private_response = Joi.object({
-  data: private_user
+  data: user
 }).unknown().label('PrivateResponse');
 
 exports.private_users_response = Joi.object({
@@ -166,16 +166,14 @@ exports.lists_response = Joi.object({
   data: lists
 }).label('ListsResponse');
 
+const token = Joi.object({ token: [Joi.string().example("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImJiZWZkYjBhLTc2YjAtNGQ5Yy05NDkwLTk3Y2YxMWJjMWE5YyIsIm5hbWUiOiJMZWlnaCIsInVzZXJuYW1lIjoiTFYiLCJlbWFpbCI6Imx2QGVtYWlsLmNvbSIsInBhc3N3b3JkIjoicCIsImJpbyI6IkJvc3MgbGFkeSIsInJvbGUiOiJ1c2VyIiwibG9nb3V0IjoiMjAxNy0xMS0yOVQyMTo1ODo1MC45MDFaIiwiY3JlYXRlZF9hdCI6IjIwMTctMTEtMjlUMjE6NTg6NTAuODk5WiIsInVwZGF0ZWRfYXQiOiIyMDE3LTExLTI5VDIxOjU4OjUwLjg5OVoifQ.u--F_TonmKdpftsjxjDRK2TVlLCfGZqSkyQhTnPeA3U"), Joi.number()] })
 
 exports.login_response = Joi.object({
-  data: { token: [Joi.string(), Joi.number()] }
+  data: token
 }).unknown().label('loginResponse')
 
 exports.user_update_repsonse = Joi.object({
-  data: { 
-    user: private_user,
-    token: [Joi.string(), Joi.number()] 
-  }
+  data: {user: user,token: [Joi.string().example("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImJiZWZkYjBhLTc2YjAtNGQ5Yy05NDkwLTk3Y2YxMWJjMWE5YyIsIm5hbWUiOiJMZWlnaCIsInVzZXJuYW1lIjoiTFYiLCJlbWFpbCI6Imx2QGVtYWlsLmNvbSIsInBhc3N3b3JkIjoicCIsImJpbyI6IkJvc3MgbGFkeSIsInJvbGUiOiJ1c2VyIiwibG9nb3V0IjoiMjAxNy0xMS0yOVQyMTo1ODo1MC45MDFaIiwiY3JlYXRlZF9hdCI6IjIwMTctMTEtMjlUMjE6NTg6NTAuODk5WiIsInVwZGF0ZWRfYXQiOiIyMDE3LTExLTI5VDIxOjU4OjUwLjg5OVoifQ.u--F_TonmKdpftsjxjDRK2TVlLCfGZqSkyQhTnPeA3U"), Joi.number()]}
 })
 const list_items = Joi.array().items(item).label('listItems')
 
