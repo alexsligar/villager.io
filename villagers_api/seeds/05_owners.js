@@ -1,6 +1,6 @@
 exports.seed = function seed( knex, Promise ) {
     
-        var tableName = 'owners';
+        var tableName = 'item_owners';
     
         var rows = [
     

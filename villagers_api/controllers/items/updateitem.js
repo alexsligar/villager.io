@@ -20,8 +20,8 @@ module.exports = {
         const credentials = request.auth.credentials;
         
         if (credentials.role == "user") {
-            let owners = await this.db.owners.validate({ item_id: request.params.id, user_id: credentials.id });
-            if (!owners) {
+            let item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
+            if (!item_owners) {
                 throw Boom.unauthorized("Not permitted to edit item");
             }
         }

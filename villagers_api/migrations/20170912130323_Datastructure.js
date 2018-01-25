@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
         usersTable.timestamp('logout').notNullable().defaultTo(knex.raw('now()'));
         usersTable.timestamps();
         
-    } ).raw("ALTER TABLE users ADD CONSTRAINT CHK_role CHECK (role='user' OR role='mod' OR role='admin')") 
+    }) 
     .createTable( 'items', function( itemsTable ) {
         itemsTable.increments();
         itemsTable.text( 'name' ).notNullable();
@@ -37,7 +37,7 @@ exports.up = function(knex, Promise) {
         listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index();
         listitemTable.text( 'order' );  
     })
-    .createTable('owners',function(ownerTable){
+    .createTable('item_owners',function(ownerTable){
         ownerTable.uuid('id').defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         ownerTable.uuid('user_id').references('id').inTable('users').index();
         ownerTable.integer('item_id').references('id').inTable('items').index();
@@ -53,5 +53,5 @@ exports.down = function(knex, Promise) {
       .dropTableIfExists( 'users' )
       .dropTableIfExists( 'lists' )
       .dropTableIfExists( 'list_items' )
-      .dropTableIfExists( 'owners' );
+      .dropTableIfExists( 'item_owners' );
 };

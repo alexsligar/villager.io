@@ -1,2 +1,0 @@
-CREATE TABLE users ( id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(), username text NOT NULL UNIQUE, email text NOT NULL UNIQUE,	password text NOT NULL,	bio text, utype text NOT NULL DEFAULT 'user', CONSTRAINT CHK_utype CHECK (utype='user' OR utype='mod' OR utype='admin')
-);

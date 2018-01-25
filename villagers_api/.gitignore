@@ -4,3 +4,4 @@ config/local.json
 user
 password
 database
+.vscode
