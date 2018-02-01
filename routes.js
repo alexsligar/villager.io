@@ -36,5 +36,5 @@ module.exports = [
 
     //tags
     { method: 'POST', path: '/tags', config: Controllers.tags.addtag },
-    { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag }
+   // { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag }
 ];
