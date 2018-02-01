@@ -4,10 +4,9 @@ SELECT
   users.email,
   users.username,
   users.role,
-  users.bio,
   users.logout
 FROM
   users
 WHERE
   users.username = ${username} AND
-  users.password = ${password}
+  users.id = ${id}

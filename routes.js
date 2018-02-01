@@ -27,11 +27,14 @@ module.exports = [
     { method: 'POST', path: '/users/lists', config: Controllers.users.addlist },
     { method: 'POST', path: '/users/items', config: Controllers.users.additem },
     
-
     //lists
     { method: 'GET', path: '/lists/{id}', config: Controllers.lists.getlistsbyid },
     { method: 'GET', path: '/lists', config: Controllers.lists.getlists },
     { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.addlistitem },
     { method: 'DELETE', path: '/lists/listitems', config: Controllers.listitems.dellistitem },
     { method: 'PUT', path: '/lists/{id}', config: Controllers.lists.updatelist },
+
+    //tags
+    { method: 'POST', path: '/tags', config: Controllers.tags.addtag },
+    { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag }
 ];

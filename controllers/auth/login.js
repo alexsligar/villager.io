@@ -18,12 +18,14 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-        let user = await this.db.users.findOne({username: request.payload.username});
-        if(!user||request.payload.password!=user.password)
+        let user = await this.db.users.findOne({username: request.payload.username},['id','username','role']);
+        let password = await this.db.users.findOne({username: request.payload.username},['password']);
+        if(!user||request.payload.password!=password.password)
         {
+        
             throw Boom.unauthorized("Incorrect username or password")
         }
-        const token= {token: JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options)};
+        const token = {token: JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options)};
         return reply({data: token});
     },
     response: {

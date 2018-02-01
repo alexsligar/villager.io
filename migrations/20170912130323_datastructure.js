@@ -13,7 +13,6 @@ exports.up = function(knex, Promise) {
         usersTable.text( 'role' ).notNullable().defaultTo('user');
         usersTable.timestamp('logout').notNullable().defaultTo(knex.raw('now()'));
         usersTable.timestamps();
-        
     }) 
     .createTable( 'items', function( itemsTable ) {
         itemsTable.increments();
@@ -22,8 +21,6 @@ exports.up = function(knex, Promise) {
         itemsTable.text( 'type' ).notNullable();
         itemsTable.date( 'start_date' );
         itemsTable.date( 'end_date' );
-        itemsTable.integer( 'linked_group' ).references('id').inTable('items').index();
-        itemsTable.integer( 'linked_place' ).references('id').inTable('items').index();
     } )
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
@@ -38,9 +35,17 @@ exports.up = function(knex, Promise) {
         listitemTable.text( 'order' );  
     })
     .createTable('item_owners',function(ownerTable){
-        ownerTable.uuid('id').defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
-        ownerTable.uuid('user_id').references('id').inTable('users').index();
-        ownerTable.integer('item_id').references('id').inTable('items').index();
+        ownerTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
+        ownerTable.uuid( 'user_id' ).references( 'id' ).inTable( 'users' ).index();
+        ownerTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+    })
+    .createTable('tags',function(tagsTable){
+        tagsTable.text( 'name' ).primary();
+    })
+    .createTable('item_tags',function(itemtagsTable){
+        itemtagsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
+        itemtagsTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+        itemtagsTable.text( 'tag_name' ).references( 'name' ).inTable( 'tags' ).index();
     });
 
 
@@ -53,5 +58,8 @@ exports.down = function(knex, Promise) {
       .dropTableIfExists( 'users' )
       .dropTableIfExists( 'lists' )
       .dropTableIfExists( 'list_items' )
-      .dropTableIfExists( 'item_owners' );
+      .dropTableIfExists( 'item_owners' )
+      .dropTableIfExists( 'tags' )
+      .dropTableIfExists( 'item_tags' );
+      
 };

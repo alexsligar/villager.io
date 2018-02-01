@@ -9,19 +9,16 @@ exports.seed = function seed( knex, Promise ) {
                 location: '2710 Crimson Way, Richland, WA 99354',
                 type: 'place'
             },
-    
+ 
             {
-                name: 'Robotics Club',
-                location: 'West 111',
-                type: 'group',
-                linked_place: 1,
+                name: 'Dinner',
+                location: '2000 Flavor Town, USA',
+                type: 'place',
             },
             {
-                name: 'Robotics Club showcase',
-                location: 'West 111',
+                name: 'Howard Amon Park',
+                location: '900 Amon Park Rd N, Richland, WA',
                 type: 'activity',
-                linked_place: 1,
-                linked_group: 2
             }
     
         ];

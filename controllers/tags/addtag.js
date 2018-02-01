@@ -65,10 +65,10 @@ module.exports = {
             }
         }
         else { //event
-            //error checking (needs to be updated for new linking ro groups or places)
-            // if (!request.payload.linked_place) {
-            //     throw Boom.badRequest("No place linked to event")
-            // }
+            //error checking
+            if (!request.payload.linked_place) {
+                throw Boom.badRequest("No place linked to event")
+            }
         }
         returneditem = await this.db.items.insert(request.payload);
 
