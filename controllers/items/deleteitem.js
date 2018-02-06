@@ -27,25 +27,23 @@ module.exports = {
         }
 
         let item = await this.db.items.findOne({ id: request.params.id });
-
+        
         // Does item exist?
         if (!item) {
             throw Boom.notFound("Item not found");
         }
 
-        item = request.payload;
-
-        let listItem = await this.db.list_items.findOne({ item_id: request.params.id });
+        let listItem = await this.db.list_items.find({ item_id: request.params.id });
 
         /* if Item on List, cannot delete */
         /* should this change for mods? */
-        if (listItem) 
+        if (listItem[0]) 
         {
             throw Boom.preconditionFailed("Cannot Delete Item on List");
         }
+ 
+        let ownerCount = await this.db.item_owners.find({ item_id: request.params.id});
 
-        let ownerCount = await this.db.item_owners.counting_owners({ id: request.params.id});
-        //console.log(ownerCount);
         /* If more than one owner, cannot delete */
         /* Should this change for mods? */
         if( ownerCount.length > 1)
