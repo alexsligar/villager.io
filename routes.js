@@ -22,6 +22,12 @@ module.exports = [
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.updateitem },
     { method: 'DELETE', path: '/items/{id}', config: Controllers.items.deleteitem },
     { method: 'POST', path: '/items', config: Controllers.items.additem },
+
+    //item_owners
+    { method: 'GET', path: '/item_owners', config: Controllers.itemowners.index },
+    { method: 'GET', path: '/item_owners/{id}', config: Controllers.itemowners.find },
+    { method: 'POST', path: '/item_owners', config: Controllers.itemowners.add },
+    { method: 'DELETE', path: '/item_owners/{id}', config: Controllers.itemowners.delete },
     
     //users
     { method: 'GET', path: '/users/{username}', config: Controllers.users.getuser },
