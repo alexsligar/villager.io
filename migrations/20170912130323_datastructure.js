@@ -21,6 +21,8 @@ exports.up = function(knex, Promise) {
         itemsTable.text( 'type' ).notNullable();
         itemsTable.date( 'start_date' );
         itemsTable.date( 'end_date' );
+        itemsTable.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
+        itemsTable.timestamp('updated_at').notNullable().defaultTo(knex.raw('now()'));
     } )
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();

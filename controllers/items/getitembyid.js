@@ -16,10 +16,11 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        var founditems = await this.db.items.byid({ id: request.params.id });
+        let founditems = await this.db.items.findOne({id: request.params.id});
         if (!founditems) {
             throw Boom.notFound();
         }
+
         let countstars = await this.db.items.countingstars({ id: founditems.id });
         let countlist = await this.db.items.countinglists({ id: founditems.id });
         founditems['starred_number'] = Number(countstars.count);
