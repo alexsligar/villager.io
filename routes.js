@@ -18,7 +18,8 @@ module.exports = [
     { method: 'GET', path: '/items/{id}', config: Controllers.items.getitembyid },
     { method: 'GET', path: '/items/linked/{id}', config: Controllers.items.getitemsbylink },
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.updateitem },
-    
+    { method: 'DELETE', path: '/items/{id}', config: Controllers.items.deleteitem },
+
     //users
     { method: 'GET', path: '/users/{username}', config: Controllers.users.getuser },
     { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.getuserfav },    

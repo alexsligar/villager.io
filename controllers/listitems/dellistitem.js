@@ -33,6 +33,6 @@ module.exports = {
         }
 
         await this.db.list_items.destroy({item_id:request.payload.item_id});
-        return reply({ message: "item inserted into list" });
+        return reply({ message: "Item deleted from list" }); 
     }
 };
