@@ -12,6 +12,8 @@ module.exports = [
     { method: 'GET', path: '/logout', config: Controllers.auth.logout },
 
     //mod
+    { method: 'POST', path: '/merge', config: Controllers.admin.mergeitems },
+    
 
     //items
     { method: 'GET', path: '/items', config: Controllers.items.getitems },
