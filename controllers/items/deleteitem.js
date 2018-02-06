@@ -1,5 +1,3 @@
-import { object } from '../../../AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/joi';
-
 'use strict';
 const Joi = require('joi');
 const Boom = require('boom');
@@ -37,23 +35,22 @@ module.exports = {
 
         item = request.payload;
 
-        let listItem = await this.db.list_items.findOne({ item_id: request.params.id })
+        let listItem = await this.db.list_items.findOne({ item_id: request.params.id });
 
         /* if Item on List, cannot delete */
         /* should this change for mods? */
         if (listItem) 
         {
-            throw Boom.preconditionFailed("Cannot Delete Item on List")
+            throw Boom.preconditionFailed("Cannot Delete Item on List");
         }
 
-        let itemOwners = await this.db.item_owners.find({ item_id: request.params.id })
-        let ownerCount = object.keys(itemOwners)
-
+        let ownerCount = await this.db.item_owners.counting_owners({ id: request.params.id});
+        //console.log(ownerCount);
         /* If more than one owner, cannot delete */
         /* Should this change for mods? */
         if( ownerCount.length > 1)
         {
-            throw Boom.preconditionFailed("Cannot Delete Item with additional Owner")
+            throw Boom.preconditionFailed("Cannot Delete Item with additional Owner");
         }
         else
         {
