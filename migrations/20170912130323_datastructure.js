@@ -32,21 +32,21 @@ exports.up = function(knex, Promise) {
     })
     .createTable('list_items',function(listitemTable){
         listitemTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
-        listitemTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+        listitemTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
         listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index();
         listitemTable.text( 'order' );  
     })
     .createTable('item_owners',function(ownerTable){
         ownerTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         ownerTable.uuid( 'user_id' ).references( 'id' ).inTable( 'users' ).index();
-        ownerTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+        ownerTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
     })
     .createTable('tags',function(tagsTable){
         tagsTable.text( 'name' ).primary();
     })
     .createTable('item_tags',function(itemtagsTable){
         itemtagsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
-        itemtagsTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index();
+        itemtagsTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
         itemtagsTable.text( 'tag_name' ).references( 'name' ).inTable( 'tags' ).index();
     });
 
