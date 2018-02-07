@@ -7,7 +7,7 @@ const swagger = Schema.generate();
 
 module.exports = {
   description: 'Add owner x item relation',
-  tags: ['api', 'itemowners'],
+  tags: ['api', 'mod'],
   validate: {
       payload: Schema.itemowners,
       headers: Joi.object({
@@ -19,12 +19,12 @@ module.exports = {
     const credentials = request.auth.credentials;
 
 // -------------------- Variables --------------------------------------------- //
-    let { user_id, item_id } = request.payload;
-    let user = null, item = null, itemowner = null;
+    let { username, item_id } = request.payload;
+    let user = null, item = null, relation = null;
 
 // -------------------- Checks if payload exists in Tables -------------------- //
     // Searches users table by id
-    user = await this.db.users.findOne({ id: user_id });
+    user = await this.db.users.findOne({ username });
     // Searches items table by id
     item = await this.db.items.findOne({ id: item_id });
 
@@ -40,17 +40,17 @@ module.exports = {
     }
 
 // -------------------- Checks if owner/item relation already exists in table -- //
-    // Searches item_owners table by user_id and item_id
-    itemowner = await this.db.item_owners.findOne({ user_id, item_id });
+    // Searches item_owners table for relation of username and item_id
+    relation = await this.db.item_owners.findOne({ username, item_id });
 
     /**
      * Checks if user/item relation exists in table and throws an error if they do.
      * Otherwise, inserts relation into table
      */
-    if (itemowner) {
-      throw Boom.conflict("User is already an owner of that item!");
+    if (relation) {
+      throw Boom.conflict(`${username} is already an owner of that item!`);
     } else {
-      await this.db.item_owners.insert({ user_id, item_id });
+      await this.db.item_owners.insert({ username, item_id });
     }
 
     return reply({ data: request.payload });

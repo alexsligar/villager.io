@@ -38,7 +38,7 @@ exports.up = function(knex, Promise) {
     })
     .createTable('item_owners',function(ownerTable){
         ownerTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
-        ownerTable.uuid( 'user_id' ).references( 'id' ).inTable( 'users' ).index().onDelete('CASCADE');
+        ownerTable.text( 'username' ).references( 'username' ).inTable( 'users' ).index().onDelete('CASCADE');
         ownerTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
     })
     .createTable('tags',function(tagsTable){

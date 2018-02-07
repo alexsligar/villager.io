@@ -7,18 +7,21 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
   description: 'Returns table of item owners',
-  tags: ['api', 'public'],
+  tags: ['api', 'mod'],
   auth: false,
   handler: async function (request, reply) {
 
-    // Searches item_owners table for item
-    let founditems = await this.db.item_owners.find();
+// -------------------- Variables --------------------------------------------- //
+    let list = null;
+
+// -------------------- Searches item_owners table for item ------------------- //
+    list = await this.db.item_owners.find();
     
-    if (!founditems) {
+    if (!list) {
         throw Boom.notFound();
     }
 
-    return reply({ data: founditems });
+    return reply({ data: list });
   },
   // response: {
   //     status: {

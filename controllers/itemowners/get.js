@@ -7,13 +7,14 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
   description: 'Returns entity containing an owner/item relation',
-  tags: ['api', 'public'],
+  tags: ['api', 'mod'],
   auth: false,
   handler: async function (request, reply) {
 
     let { id } = request.params;
-
-    let relation = await this.db.item_owners.findOne({id});
+    let relation = null;
+    
+    relation = await this.db.item_owners.findOne({id});
     
     if (!relation) {
         throw Boom.notFound();

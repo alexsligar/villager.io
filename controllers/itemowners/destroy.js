@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
   description: 'Deletes owner/item relation from table',
-  tags: ['api', 'public'],
+  tags: ['api', 'mod'],
   auth: false,
   handler: async function (request, reply) {
 
