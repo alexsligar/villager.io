@@ -17,6 +17,7 @@ module.exports = [
 
     //items
     { method: 'GET', path: '/items', config: Controllers.items.getitems },
+    { method: 'GET', path: '/items/days/{days}', config: Controllers.items.getitemsbydate },
     { method: 'GET', path: '/items/{id}', config: Controllers.items.getitembyid },
     { method: 'GET', path: '/items/linked/{id}', config: Controllers.items.getitemsbylink },
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.updateitem },
