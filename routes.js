@@ -37,6 +37,7 @@ module.exports = [
     { method: 'PUT', path: '/users/{id}', config: Controllers.users.updateuser },
     { method: 'POST', path: '/users/lists', config: Controllers.users.addlist },
     { method: 'POST', path: '/users/items', config: Controllers.users.additem },
+    { method: 'DELETE', path: '/users/{id}', config: Controllers.users.destroy },
     
     //lists
     { method: 'GET', path: '/lists/{id}', config: Controllers.lists.getlistsbyid },

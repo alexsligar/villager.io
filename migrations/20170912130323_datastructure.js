@@ -27,13 +27,13 @@ exports.up = function(knex, Promise) {
     .createTable( 'lists', function(listsTable){
         listsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         listsTable.text( 'name' ).notNullable();
-        listsTable.uuid( 'owner' ).references( 'id' ).inTable( 'users' ).index();
+        listsTable.uuid( 'owner' ).references( 'id' ).inTable( 'users' ).index().onDelete('CASCADE');
         listsTable.text( 'description' );
     })
     .createTable('list_items',function(listitemTable){
         listitemTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         listitemTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
-        listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index();
+        listitemTable.uuid( 'list_id' ).references( 'id' ).inTable( 'lists' ).index().onDelete('CASCADE');
         listitemTable.text( 'order' );  
     })
     .createTable('item_owners',function(ownerTable){
