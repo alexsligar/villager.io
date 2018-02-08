@@ -1,9 +1,3 @@
-SELECT 
-items.id,
-items.name,
-items.location,
-items.type,
-item_tags.tag_name
-FROM 
-items
-LEFT JOIN item_tags ON items.id = item_tags.item_id
+Select items.*, array_agg(item_tags.tag_name) as tags
+From items inner join item_tags on items.id = item_tags.item_id
+Group by items.id

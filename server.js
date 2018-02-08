@@ -70,15 +70,19 @@ exports.server = server.register([{
     validateFunc: async (decoded, request, callback) => {
     
       const user = await db.users.validate(decoded);
-      const logout = Date.parse(user.logout);
-     
-      const timestamp = Date.parse(decoded.updated_at);
 
+      if (!user) {
+        return callback(null, false); //user is not valid
+      }
+    
+      const logout = user.logout.getTime();
+      const timestamp = Date.parse(decoded.timestamp);
       if (timestamp < logout) {
-          return callback(null, false); 
-        }
-      return callback(null, true);
-    }
+
+        return callback(null, false); //user is not valid
+      }
+      return callback(null, true, user); //user is valid
+}
 });
 
 server.auth.default('jwt');

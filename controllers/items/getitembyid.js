@@ -16,7 +16,7 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        let founditems = await this.db.items.findOne({id: request.params.id});
+        let founditems = await this.db.items.byid({id: request.params.id});
         if (!founditems) {
             throw Boom.notFound();
         }
@@ -27,12 +27,12 @@ module.exports = {
         founditems['list_number'] = Number(countlist.count);
 
         return reply({ data: founditems });
-    },
-    response: {
-        status: {
-            200: Schema.item_response
-        }
-    },
+     },
+    // response: {
+    //     status: {
+    //         200: Schema.item_response
+    //     }
+    // },
     plugins: {
         'hapi-swagger': swagger
     }

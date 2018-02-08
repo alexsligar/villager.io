@@ -13,6 +13,8 @@ module.exports = [
 
     //mod
     { method: 'POST', path: '/merge', config: Controllers.admin.mergeitems },
+    { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag },
+    
     
 
     //items

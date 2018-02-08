@@ -47,7 +47,7 @@ exports.up = function(knex, Promise) {
     .createTable('item_tags',function(itemtagsTable){
         itemtagsTable.uuid( 'id' ).defaultTo(knex.raw( 'uuid_generate_v4()' )).primary();
         itemtagsTable.integer( 'item_id' ).references( 'id' ).inTable( 'items' ).index().onDelete('CASCADE');
-        itemtagsTable.text( 'tag_name' ).references( 'name' ).inTable( 'tags' ).index();
+        itemtagsTable.text( 'tag_name' ).references( 'name' ).inTable( 'tags' ).index().onDelete('CASCADE');
     });
 
 };

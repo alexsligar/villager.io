@@ -18,20 +18,21 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-        let user = await this.db.users.findOne({username: request.payload.username},['id','username','role']);
-        let password = await this.db.users.findOne({username: request.payload.username},['password']);
-        if(!user||request.payload.password!=password.password)
-        {
+        const find_user = await this.db.users.findOne({ username: request.payload.username,password: request.payload.password },['id']);
         
-            throw Boom.unauthorized("Incorrect username or password")
-        }
-        const token = {token: JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options)};
-        return reply({data: token});
-    },
-    response: {
-      status: {
-        200: Schema.login_response
-      }
+    if (find_user) {
+        
+        find_user.timestamp = new Date();
+        //console.log(find_user);
+
+        const token = JWT.sign({ ...find_user}, Config.auth.secret, Config.auth.options);
+        return reply({data: {token: token}});
+    }
+    // },
+    // response: {
+    //   status: {
+    //     200: Schema.login_response
+    //   }
   }, 
     plugins: {
         'hapi-swagger': swagger

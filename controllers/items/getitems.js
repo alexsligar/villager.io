@@ -12,18 +12,25 @@ module.exports = {
     handler: async function (request, reply) {
 
         var founditems = await this.db.items.getall();
-
-        
         if (!founditems[0]) {
             throw Boom.notFound();
         }
+        
+        // for(let i=0;i<founditems.length;i++){
+        //     //console.log(await this.db.item_tags.find({item_id: founditems[i].id}));
+        // founditems[i].tags = await this.db.item_tags.find({item_id: founditems[i].id},['tag_name']) 
+        //}
+        //founditems.array.forEach(item => {
+          //  console.log(await this.db.item_tags.find({item_id: founditems[i].id}));
+            
+        // });
         return reply({ data: founditems });
     },
-    response: {
-        status: {
-            200: Schema.items_response
-        }
-    },
+    // response: {
+    //     status: {
+    //         200: Schema.items_response
+    //     }
+    // },
     plugins: {
         'hapi-swagger': swagger
     }
