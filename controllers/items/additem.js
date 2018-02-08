@@ -57,7 +57,7 @@ module.exports = {
 
     let returneditem = await this.db.items.insert(payload);
 
-    await this.db.item_owners.insert({ item_id: returneditem.id, user_id: credentials.id });
+    await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
 
     return reply({ data: returneditem });
   },
