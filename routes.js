@@ -18,12 +18,13 @@ module.exports = [
     
 
     //items
-    { method: 'GET', path: '/items', config: Controllers.items.getitems },
-    { method: 'GET', path: '/items/{id}', config: Controllers.items.getitembyid },
+    { method: 'GET', path: '/items', config: Controllers.items.list },
+    { method: 'GET', path: '/items/days/{days}', config: Controllers.items.getbydate },
+    { method: 'GET', path: '/items/{id}', config: Controllers.items.get },
     { method: 'GET', path: '/items/linked/{id}', config: Controllers.items.getitemsbylink },
-    { method: 'PUT', path: '/items/{id}', config: Controllers.items.updateitem },
-    { method: 'DELETE', path: '/items/{id}', config: Controllers.items.deleteitem },
-    { method: 'POST', path: '/items', config: Controllers.items.additem },
+    { method: 'POST', path: '/items', config: Controllers.items.create },
+    { method: 'PUT', path: '/items/{id}', config: Controllers.items.update },
+    { method: 'DELETE', path: '/items/{id}', config: Controllers.items.destroy },
 
     //item_owners
     { method: 'GET', path: '/item_owners', config: Controllers.itemowners.list },
@@ -37,7 +38,7 @@ module.exports = [
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.getuserslists },
     { method: 'PUT', path: '/users/{id}', config: Controllers.users.updateuser },
     { method: 'POST', path: '/users/lists', config: Controllers.users.addlist },
-    { method: 'POST', path: '/users/items', config: Controllers.users.additem },
+    { method: 'DELETE', path: '/users/{id}', config: Controllers.users.destroy },
     
     //lists
     { method: 'GET', path: '/lists/{id}', config: Controllers.lists.getlistsbyid },
