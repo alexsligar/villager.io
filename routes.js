@@ -13,8 +13,10 @@ module.exports = [
 
     //mod
     { method: 'POST', path: '/merge', config: Controllers.admin.mergeitems },
-    { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag },
     
+    //tags
+    { method: 'POST', path: '/tags', config: Controllers.tags.create },
+    { method: 'DELETE', path: '/tags', config: Controllers.tags.destroy },
     
 
     //items
@@ -32,21 +34,21 @@ module.exports = [
     { method: 'DELETE', path: '/item_owners/{id}', config: Controllers.itemowners.destroy },
     
     //users
-    { method: 'GET', path: '/users/{username}', config: Controllers.users.getuser },
-    { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.getuserfav },    
-    { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.getuserslists },
-    { method: 'PUT', path: '/users/{id}', config: Controllers.users.updateuser },
-    { method: 'POST', path: '/users/lists', config: Controllers.users.addlist },
+    { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
+    { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.get_favorites },    
+    { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },
+    { method: 'PUT', path: '/users/{id}', config: Controllers.users.update },
     { method: 'DELETE', path: '/users/{id}', config: Controllers.users.destroy },
     
     //lists
-    { method: 'GET', path: '/lists/{id}', config: Controllers.lists.getlistsbyid },
-    { method: 'GET', path: '/lists', config: Controllers.lists.getlists },
-    { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.addlistitem },
-    { method: 'DELETE', path: '/lists/listitems', config: Controllers.listitems.dellistitem },
-    { method: 'PUT', path: '/lists/{id}', config: Controllers.lists.updatelist },
+    { method: 'GET', path: '/lists/{id}', config: Controllers.lists.get },
+    { method: 'GET', path: '/lists', config: Controllers.lists.list },
+    { method: 'POST', path: '/lists', config: Controllers.lists.create },   
+    { method: 'PUT', path: '/lists/{id}', config: Controllers.lists.update },
 
-    //tags
-    { method: 'POST', path: '/tags', config: Controllers.tags.addtag },
-   // { method: 'DELETE', path: '/tags', config: Controllers.tags.deltag }
+    //list items 
+    { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.create },
+    { method: 'DELETE', path: '/lists/listitems', config: Controllers.listitems.destroy }
+
+
 ];
