@@ -39,7 +39,7 @@ module.exports = {
         /* should this change for mods? */
         if (listItem[0]) 
         {
-            throw Boom.preconditionFailed("Cannot Delete Item on List");
+            throw Boom.preconditionFailed("Unable to delete item. Item in a list.");
         }
  
         let ownerCount = await this.db.item_owners.find({ item_id: request.params.id});

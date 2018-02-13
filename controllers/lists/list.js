@@ -9,19 +9,19 @@ module.exports = {
     tags: ['api','public'],
     auth: false,
     handler: async function (request, reply) {
-        var foundlists = await this.db.lists.getall();
+        let foundlists = await this.db.lists.getall();
         if (!foundlists[0]) {
             throw Boom.notFound();
         }
-       
+
         return reply({data: foundlists});
     },
-    response: {
-        status: {
-            200: Schema.lists_response
-        }
-    },
+    // response: {
+    //     status: {
+    //         200: Schema.lists_response
+    //     }
+    // },
     plugins: {
         'hapi-swagger': swagger
     }
-  };
+};
