@@ -25,7 +25,6 @@
   "license": "ISC",
   "dependencies": {
     "boom": "^6.0.0",
-    "deasync": "^0.1.12",
     "getconfig": "^3.1.0",
     "hapi": "^16.6.0",
     "hapi-auth-jwt2": "^7.4.1",
@@ -35,6 +34,7 @@
     "jsonwebtoken": "^8.1.1",
     "keyfob": "^1.0.0",
     "knex": "^0.13.0",
+    "lab": "^15.2.1",
     "muckraker": "^3.4.0",
     "pg": "^7.4.1",
     "vision": "^4.1.1"

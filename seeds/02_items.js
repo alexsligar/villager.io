@@ -9,12 +9,6 @@ exports.seed = function seed( knex, Promise ) {
                 location: '2710 Crimson Way, Richland, WA 99354',
                 type: 'place'
             },
-            
-            {    
-                name: 'WSUTC',
-                location: '2710 Crimson Way, Richland, WA 99354',
-                type: 'place'
-            },
  
             {
                 name: 'Dinner',
