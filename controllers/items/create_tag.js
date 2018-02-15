@@ -5,7 +5,7 @@ const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
-    description: 'Update tag',
+    description: 'Add tag to an item',
     tags: ['api', 'mod'],
     validate: {
         params: Joi.object({
@@ -17,15 +17,8 @@ module.exports = {
     },
     handler: async function (request, reply) {
         const credentials = request.auth.credentials;
-        
-        if (credentials.role == "user") {
-                throw Boom.unauthorized("Not permitted to edit tags");
-        }
-        let tag = await this.db.tags.findOne({ name: request.params.name})
-        if (tag){
-            throw Boom.conflict("That tag already exists")
-        }
-        const user = await this.db.tag_items.insert(request.payload);
+      
+       
 
     },
     plugins: {
