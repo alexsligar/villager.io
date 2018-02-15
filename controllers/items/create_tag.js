@@ -22,18 +22,12 @@ module.exports = {
                 throw Boom.unauthorized("Not permitted to edit tags");
         }
         let tag = await this.db.tags.findOne({ name: request.params.name})
-        if (!tag){
-            throw Boom.notFound("No tag by that name")
+        if (tag){
+            throw Boom.conflict("That tag already exists")
         }
-        //tag = await this.db.item_tags.updateOne({ tag_name: request.params.name }, {tag_name: request.payload.name});
-        
-        tag = await this.db.tags.updateOne({ name: request.params.name }, {name: request.payload.name});
+        const user = await this.db.tag_items.insert(request.payload);
 
-
-       // tag = await this.db.tags.findOne({ name: request.params.name})
-        return reply({ data: tag });
     },
-   
     plugins: {
         'hapi-swagger': swagger
     }

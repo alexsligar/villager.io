@@ -17,6 +17,7 @@ module.exports = [
     //tags
     { method: 'POST', path: '/tags', config: Controllers.tags.create },
     { method: 'DELETE', path: '/tags', config: Controllers.tags.destroy },
+    { method: 'PUT', path: '/tags/{name}', config: Controllers.tags.update },
     
 
     //items
@@ -26,6 +27,10 @@ module.exports = [
     { method: 'POST', path: '/items', config: Controllers.items.create },
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.update },
     { method: 'DELETE', path: '/items/{id}', config: Controllers.items.destroy },
+    { method: 'POST', path: '/items/tags/{id}', config: Controllers.items.create_tag },
+    //{ method: 'DELETE', path: '/items/{id}/{tag_name}', config: Controllers.items.destroy_tag },
+    
+    
 
     //item_owners
     { method: 'GET', path: '/item_owners', config: Controllers.itemowners.list },
