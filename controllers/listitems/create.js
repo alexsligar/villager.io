@@ -20,7 +20,7 @@ module.exports = {
     handler: async function (request, reply) {
         const credentials = request.auth.credentials;
         let foundlist = await this.db.lists.findOne({ id: request.payload.list_id });
-        let founditem = await this.db.items.byid({ id: request.payload.item_id });
+        let founditem = await this.db.items.findOne({ id: request.payload.item_id });
 
         if (!founditem) {
             throw Boom.notFound("Item not found");

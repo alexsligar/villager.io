@@ -18,8 +18,9 @@ module.exports = {
     },
     handler: async function (request, reply) {
         const credentials = request.auth.credentials;
-        let foundlist = await this.db.lists.findOne({ id: request.payload.list_id });
-        let founditem = await this.db.items.byid({ id: request.payload.item_id });
+        let { list_id, item_id } = request.payload;
+        let foundlist = await this.db.lists.findOne({ id: list_id });
+        let founditem = await this.db.items.findOne({ id: item_id });
 
         if (!founditem) {
             throw Boom.notFound("Item not found");
@@ -32,7 +33,9 @@ module.exports = {
             throw Boom.forbidden();
         }
 
-        await this.db.list_items.destroy({item_id:request.payload.item_id});
+        let foundlistitem = await this.db.list_items.findOne({ item_id, list_id });
+
+        await this.db.list_items.destroy({ id: foundlistitem.id });
         return reply({ message: "Item deleted from list" }); 
     }
 };
