@@ -8,32 +8,27 @@ module.exports = {
     description: 'Update tag',
     tags: ['api', 'mod'],
     validate: {
-        params: Joi.object({
-            'name': Joi.string().required()
-        }),
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
+        params: Joi.object({ 'name': Joi.string().required() }),
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
     handler: async function (request, reply) {
+
         const credentials = request.auth.credentials;
-        
-        if (credentials.role == "user") {
-                throw Boom.unauthorized("Not permitted to edit tags");
+
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Not permitted to edit tags');
         }
-        let tag = await this.db.tags.findOne({ name: request.params.name})
+        let tag = await this.db.tags.findOne({ name: request.params.name });
         if (!tag){
-            throw Boom.notFound("No tag by that name")
+            throw Boom.notFound('No tag by that name');
         }
         //tag = await this.db.item_tags.updateOne({ tag_name: request.params.name }, {tag_name: request.payload.name});
-        
-        tag = await this.db.tags.updateOne({ name: request.params.name }, {name: request.payload.name});
 
+        tag = await this.db.tags.updateOne({ name: request.params.name }, { name: request.payload.name });
 
-       // tag = await this.db.tags.findOne({ name: request.params.name})
+        // tag = await this.db.tags.findOne({ name: request.params.name})
         return reply({ data: tag });
     },
-   
     plugins: {
         'hapi-swagger': swagger
     }

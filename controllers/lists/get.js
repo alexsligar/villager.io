@@ -11,17 +11,18 @@ module.exports = {
     validate: {
         params:{
             id: Joi.string().guid().required()
-        } 
+        }
     },
-    auth: false,  
+    auth: false,
     handler: async function (request, reply) {
-        let exist = await this.db.lists.findOne({id: request.params.id});
+
+        const exist = await this.db.lists.findOne({ id: request.params.id });
         if (!exist) {
             throw Boom.notFound();
         }
-        let foundlist = await this.db.list_items.by_list_id({id: request.params.id});
-        
-        return reply({data: foundlist});
+        const foundlist = await this.db.list_items.by_list_id({ id: request.params.id });
+
+        return reply({ data: foundlist });
     },
     response: {
         status: {
@@ -31,4 +32,4 @@ module.exports = {
     plugins: {
         'hapi-swagger': swagger
     }
-  };
+};

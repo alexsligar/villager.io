@@ -1,20 +1,22 @@
 'use strict';
 
-const Joi = require('joi');
+// const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
+
 module.exports = {
     description: 'Returns all lists',
     tags: ['api','public'],
     auth: false,
     handler: async function (request, reply) {
-        let foundlists = await this.db.lists.getall();
+
+        const foundlists = await this.db.lists.getall();
         if (!foundlists[0]) {
             throw Boom.notFound();
         }
 
-        return reply({data: foundlists});
+        return reply({ data: foundlists });
     },
     // response: {
     //     status: {
