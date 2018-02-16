@@ -1,6 +1,5 @@
 'use strict';
 
-
 const Config = require('getconfig');
 const Hapi = require('hapi');
 const Muckraker = require('muckraker');
@@ -21,96 +20,95 @@ server.connection(Config.connection.public);
 
 server.on('request-error', (err, m) => {
 
-  console.log(m.stack);
+    console.log(m.stack);
+
 });
 //$lab:coverage:on$
 
 exports.db = db; //For tests to pick up
 exports.server = server.register([{
-  register: require('inert')
+    register: require('inert')
 }, {
-  register: require('vision')
+    register: require('vision')
 }, {
-  register: require('hapi-swagger'),
-  options: {
-    grouping: 'tags',
-    //This may just all need to go in config instead
-    info: {
-      title: Pkg.description,
-      version: Pkg.version,
-      contact: {
-        name: 'Villagers'
-      },
-      license: {
-        name: Pkg.license
-        
-      }
-    },
-    tags: [
-      { name: 'public', description: 'Routes that do not require authentication' }
-    ]
-  }
+    register: require('hapi-swagger'),
+    options: {
+        grouping: 'tags',
+        //This may just all need to go in config instead
+        info: {
+            title: Pkg.description,
+            version: Pkg.version,
+            contact: {
+                name: 'Villagers'
+            },
+            license: {
+                name: Pkg.license
+            }
+        },
+        tags: [
+            { name: 'public', description: 'Routes that do not require authentication' }
+        ]
+    }
 }, {
-  register: require('hapi-auth-jwt2')
-} 
+    register: require('hapi-auth-jwt2')
+}
 // ,{
 //   register: require('./lib/log_user')
-// }, 
+// },
 ]).then(async () => {
 
-  server.bind({ db });
-  server.route(require('./routes'));
+    server.bind({ db });
+    server.route(require('./routes'));
 
-  server.auth.strategy('jwt','jwt', {
+    server.auth.strategy('jwt','jwt', {
 
-    key: Config.auth.secret,
-    verifyOptions: {
-      algorithms: [Config.auth.options.algorithm]
-    },
-    validateFunc: async (decoded, request, callback) => {
-    
-      const user = await db.users.validate(decoded);
+        key: Config.auth.secret,
+        verifyOptions: {
+            algorithms: [Config.auth.options.algorithm]
+        },
+        validateFunc: async (decoded, request, callback) => {
 
-      if (!user) {
-        return callback(null, false); //user is not valid
-      }
-    
-      const logout = user.logout.getTime();
-      const timestamp = Date.parse(decoded.timestamp);
-      if (timestamp < logout) {
+            const user = await db.users.validate(decoded);
+            if (!user) {
+                return callback(null, false); //user is not valid
+            }
 
-        return callback(null, false); //user is not valid
-      }
-      return callback(null, true, user); //user is valid
-}
-});
+            const logout = user.logout.getTime();
+            const timestamp = Date.parse(decoded.timestamp);
+            if (timestamp < logout) {
 
-server.auth.default('jwt');
+                return callback(null, false); //user is not valid
+            }
+            return callback(null, true, user); //user is valid
+        }
+    });
+
+    server.auth.default('jwt');
 }).then(async () => {
 
-  // coverage disabled because module.parent is always defined in tests
-  // $lab:coverage:off$
-  if (module.parent) {
-    await server.initialize();
+    // coverage disabled because module.parent is always defined in tests
+    // $lab:coverage:off$
+    if (module.parent) {
+        await server.initialize();
 
-    return server;
-  }
- 
-  await server.start();
-  //Disable CSP for this content that is not user controlled
-  const doc_route = server.match('get', '/documentation');
-  server.connections.forEach((connection) => {
-    console.log(`${connection.info.uri}`);
-    server.log(['info', 'startup'], `${connection.info.uri} ${connection.settings.labels}`);
-  });
-  
-  
-  // $lab:coverage:on$
+        return server;
+    }
+
+    await server.start();
+    //Disable CSP for this content that is not user controlled
+    //const doc_route = server.match('get', '/documentation');
+    server.connections.forEach((connection) => {
+
+        console.log(`${connection.info.uri}`);
+        server.log(['info', 'startup'], `${connection.info.uri} ${connection.settings.labels}`);
+    });
+    // $lab:coverage:on$
 }).catch((err) => {
 
-  // coverage disabled due to difficulty in faking a throw
-  // $lab:coverage:off$
-  console.error(err.stack || err);
-  process.exit(1);
-  // $lab:coverage:on$
+    // coverage disabled due to difficulty in faking a throw
+    // $lab:coverage:off$
+    console.error(err.stack || err);
+    process.exit(1);
+    // $lab:coverage:on$
+
 });

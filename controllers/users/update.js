@@ -1,10 +1,9 @@
 'use strict';
+
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
-
 const Joi = require('joi');
 const Boom = require('boom');
-
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404', '409']);
 
@@ -21,31 +20,32 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
+
         const credentials = request.auth.credentials;
-        var user = await this.db.users.findOne({id: credentials.id});
-        
+        let user = await this.db.users.findOne({ id: credentials.id });
+
         if (!user) {
-            throw Boom.notFound("User not found");
+            throw Boom.notFound('User not found');
         }
-        user=request.payload;
-    
-        if (user.username) {           
-            var takenUsername = await this.db.users.findOne({ username: user.username }, ['username']);
+        user = request.payload;
+
+        if (user.username) {
+            const takenUsername = await this.db.users.findOne({ username: user.username }, ['username']);
             if (takenUsername) {
-                throw Boom.conflict(`Username ${takenUsername.username} already exists`);
+                throw Boom.conflict(`Username ${ takenUsername.username } already exists`);
             }
         }
         if (user.email) {
-            var takenEmail = await this.db.users.findOne({ email: user.email }, ['email']);
+            const takenEmail = await this.db.users.findOne({ email: user.email }, ['email']);
             if (takenEmail) {
-                throw Boom.conflict(`Email ${takenEmail.email} already exists`);
+                throw Boom.conflict(`Email ${ takenEmail.email } already exists`);
             }
         }
-        
+
         await this.db.users.updateOne({ id: credentials.id }, user);
-        user = await this.db.users.findOne({id: credentials.id});
-        let token= JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options);        
-        return reply({ data: {user,token} });
+        user = await this.db.users.findOne({ id: credentials.id });
+        const token = JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options);
+        return reply({ data: { user, token } });
     },
     response: {
         status: {

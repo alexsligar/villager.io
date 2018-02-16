@@ -14,20 +14,19 @@ module.exports = {
             username: Joi.string().required()
         }
     },
-    auth: false,  
+    auth: false,
     handler: async function (request, reply) {
-        let user = await this.db.users.findOne({username: request.params.username});
+
+        const user = await this.db.users.findOne({ username: request.params.username });
         if (!user) {
-            throw Boom.notFound("user not found");
+            throw Boom.notFound('user not found');
         }
-        let foundlist = await this.db.list_items.by_list_id({id: user.id});
-        if(!foundlist[0]){
-            return reply("User's favorite list is empty").code(404)//code to return 404?? 204? 
+        const foundlist = await this.db.list_items.by_list_id({ id: user.id });
+
+        if (!foundlist[0]) {
+            return reply('User\'s favorite list is empty').code(404); //code to return 404?? 204?
         }
-        else{
-           return reply({data: foundlist}); 
-        }
-        
+        return reply({ data: foundlist });
     },
     response: {
         status: {
@@ -37,4 +36,4 @@ module.exports = {
     plugins: {
         'hapi-swagger': swagger
     }
-  };
+};

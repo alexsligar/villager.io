@@ -16,11 +16,12 @@ module.exports = {
         }
     },
     handler: async function (request, reply) {
-        let user = await this.db.users.findOne({ username: request.params.username });
+
+        const user = await this.db.users.findOne({ username: request.params.username });
         if (!user) {
             throw Boom.notFound();
         }
-        var userlists = await this.db.lists.find({ owner: user.id }, ["name", "description"]);
+        const userlists = await this.db.lists.find({ owner: user.id }, ['name', 'description']);
         if (!userlists) {
             throw Boom.notFound();
         }
@@ -34,5 +35,4 @@ module.exports = {
     plugins: {
         'hapi-swagger': swagger
     }
-
 };

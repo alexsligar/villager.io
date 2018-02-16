@@ -9,9 +9,9 @@
       }
     },
     "connection": {
-      "public": {
-      "port": 8080,
-      "labels": "public"
-      }
-    }
+    "public": {
+    "port": 8080,
+    "labels": "public"
+  }
+}
 } 

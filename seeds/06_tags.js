@@ -1,25 +1,29 @@
-exports.seed = function seed( knex, Promise ) {
-    
-    var tableName = 'tags';
+'use strict';
 
-    var rows = [
+exports.seed = function seed(knex, Promise) {
 
-        {    
-            name: 'kid-friendly',
+    const tableName = 'tags';
+    const rows = [
+        {
+            name: 'kid-friendly'
         },
         {
-            name: 'Food',
+            name: 'Food'
         },
         {
-            name: 'outdoors',
+            name: 'outdoors'
         }
-
     ];
 
-    return knex( tableName )
-        .del()
-        .then( function() {
-            return knex.insert( rows ).into( tableName );
-        });
+    return (
+        knex(tableName)
+            .del()
+            .then(() => {
 
+                return (
+                    knex.insert(rows)
+                        .into(tableName)
+                );
+            })
+    );
 };

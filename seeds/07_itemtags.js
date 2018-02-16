@@ -1,34 +1,39 @@
-exports.seed = function seed( knex, Promise ) {
-    
-    var tableName = 'item_tags';
+'use strict';
 
-    var rows = [
+exports.seed = function seed(knex, Promise) {
 
-        {    
+    const tableName = 'item_tags';
+    const rows = [
+        {
             tag_name: 'kid-friendly',
-            item_id: 1,
+            item_id: 1
         },
-
         {
             tag_name: 'Food',
-            item_id: 2,
+            item_id: 2
         },
-        
         {
             tag_name: 'outdoors',
-            item_id: 3,
+            item_id: 3
         },
-        {    
+        {
             tag_name: 'kid-friendly',
-            item_id: 3,
-        },
+            item_id: 3
+        }
 
     ];
 
-    return knex( tableName )
-        .del()
-        .then( function() {
-            return knex.insert( rows ).into( tableName );
-        });
+    return (
+        knex(tableName)
+            .del()
+            .then(() => {
+
+                return (
+                    knex.insert( rows )
+                        .into( tableName )
+                );
+            })
+    );
+
 
 };

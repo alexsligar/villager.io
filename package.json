@@ -13,7 +13,7 @@
     "migratedb": "knex migrate:latest && npm run seeddb",
     "seeddb": "knex seed:run",
     "knex": "knex",
-    "test": "Test",
+    "test": "lab test -a code -L -v -e test",
     "start": "node server.js",
     "setenv": "set NODE_ENV=development && set GETCONFIG_ROOT=./config"
   },
