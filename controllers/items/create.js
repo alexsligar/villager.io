@@ -16,59 +16,68 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-      const credentials = request.auth.credentials;
+        const credentials = request.auth.credentials;
+        const payload = request.payload;
+        const inTable = await this.db.items.find({ name: payload.name });
 
-      let payload = request.payload;
+        if (inTable.length > 0) {
+            throw Boom.conflict(`Item ${ inTable } already exists`);
+        }
 
-      let inTable = await this.db.items.find({name: payload.name});
+        if (!request.payload.name) {
+            throw Boom.badRequest('No name given');
+        }
+        else if (request.payload.type !== 'place' && request.payload.type !== 'group' && request.payload.type !== 'activity' && request.payload.type !== 'event') {
+            throw Boom.badRequest('Invalid type');
+        }
 
-      if (inTable.length > 0) {
-          throw Boom.conflict(`Item ${inTable} already exists`);
-      }
+        if (request.payload.start_date && request.payload.end_date) {
+            throw Boom.badRequest('Only event can have start and end dates');
+        }
 
-      if (!request.payload.name) {
-        throw Boom.badRequest("No name given");
-      } else if (request.payload.type != "place" && request.payload.type != "group" && request.payload.type != "activity" && request.payload.type != "event") {
-        throw Boom.badRequest("Invalid type");
-      }
+        switch (request.payload.type) {
+            case 'event':
+                if (!request.payload.start_date) {
+                    throw Boom.badRequest('Event must have a start date');
+                }
+                break;
 
-      if (request.payload.start_date && request.payload.end_date) throw Boom.badRequest("Only event can have start and end dates");
+            case 'place':
+                if (request.payload.linked_place) {
+                    throw Boom.badRequest('Can\'t link to place');
+                }
+                if (request.payload.linked_group) {
+                    throw Boom.badRequest('Can\'t link to group');
+                }
+                break;
 
-      switch(request.payload.type) {
-        case "event":
-          if (!request.payload.start_date) throw Boom.badRequest("Event must have a start date");
-          break;
-        
-        case "place":
-          if (request.payload.linked_place)  throw Boom.badRequest("Can't link to place");
-          if (request.payload.linked_group)  throw Boom.badRequest("Can't link to group");
-          break;
+            case 'activity':
+                if (request.payload.linked_group) {
+                    throw Boom.badRequest('Can\'t link to group');
+                }
+                break;
 
-        case "activity":
-          if (request.payload.linked_group) throw Boom.badRequest("Can't link to group");
+            case 'group':
+                if (request.payload.linked_group) {
+                    throw Boom.badRequest('Can\'t link to group');
+                }
+                break;
+        }
 
-          break;
+        const returneditem = await this.db.items.insert(payload);
 
-        case "group":
-          if (request.payload.linked_group) throw Boom.badRequest("Can't link to group");
+        await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
 
-          break;
-      }
+        return reply({ data: returneditem });
+    },
 
-    let returneditem = await this.db.items.insert(payload);
+    response: {
+        status: {
+            200: Schema.item_response
+        }
+    },
 
-    await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
-
-    return reply({ data: returneditem });
-  },
-
-  response: {
-    status: {
-      200: Schema.item_response
+    plugins: {
+        'hapi-swagger': swagger
     }
-  },
-
-  plugins: {
-    'hapi-swagger': swagger
-  }
 };

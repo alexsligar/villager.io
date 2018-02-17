@@ -21,12 +21,12 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        var takenUsername = await this.db.users.findOne({ username: request.payload.username }, ['username']);
+        const takenUsername = await this.db.users.findOne({ username: request.payload.username }, ['username']);
         if (takenUsername) {
             throw Boom.conflict(`Username ${takenUsername.username} already exists`);
         }
 
-        var takenEmail = await this.db.users.findOne({ email: request.payload.email }, ['email']);
+        const takenEmail = await this.db.users.findOne({ email: request.payload.email }, ['email']);
         if (takenEmail) {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }

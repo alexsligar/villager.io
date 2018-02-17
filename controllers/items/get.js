@@ -1,7 +1,7 @@
 'use strict';
 const Joi = require('joi');
 const Boom = require('boom');
-const server = require('../../server');
+// const server = require('../../server');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
 
@@ -16,18 +16,19 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        let founditems = await this.db.items.byid({id: request.params.id});
+        const founditems = await this.db.items.byid({ id: request.params.id });
         if (!founditems) {
             throw Boom.notFound();
         }
 
-        let countstars = await this.db.items.countingstars({ id: founditems.id });
-        let countlist = await this.db.items.countinglists({ id: founditems.id });
-        founditems['starred_number'] = Number(countstars.count);
-        founditems['list_number'] = Number(countlist.count);
+        const countstars = await this.db.items.countingstars({ id: founditems.id });
+        const countlist = await this.db.items.countinglists({ id: founditems.id });
+
+        founditems.starred_number = Number(countstars.count);
+        founditems.list_number = Number(countlist.count);
 
         return reply({ data: founditems });
-     },
+    },
     // response: {
     //     status: {
     //         200: Schema.item_response

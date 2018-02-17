@@ -8,43 +8,36 @@ module.exports = {
     description: 'Merge item',
     tags: ['api', 'admin'],
     validate: {
-    
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
     handler: async function (request, reply) {
-        
-    const credentials = await this.db.users.findOne({id: request.auth.credentials.id})
-    if (credentials.role == "user") {
-            throw Boom.unauthorized("Not permitted use this feature");
-    }
-    //let numItems = request.payload.ids.length();
-    var item_id = request.payload.item_id;
 
-    await this.db.list_items.update({item_id: item_id[1]},{item_id: item_id[0]})
-    await this.db.item_owners.update({item_id: item_id[1]},{item_id: item_id[0]})
-    
-    await this.db.item_tags.destroy({item_id: item_id[1]})
+        const credentials = await this.db.users.findOne({ id: request.auth.credentials.id });
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Not permitted use this feature');
+        }
+        //let numItems = request.payload.ids.length();
+        const item_id = request.payload.item_id;
 
-    console.log( await this.db.list_items.find({item_id: 2}))
-    console.log( await this.db.items.find({id: 2}))
-    await this.db.items.destroy({id: item_id[1]})
+        await this.db.list_items.update({ item_id: item_id[1] },{ item_id: item_id[0] });
+        await this.db.item_owners.update({ item_id: item_id[1] },{ item_id: item_id[0] });
+        await this.db.item_tags.destroy({ item_id: item_id[1] });
 
-    // async function asyncForEach(array, callback) {
-    //     for (let index = 0; index < array.length; index++) {
-    //       await callback(array[index], index, array)
-    //     }
-    //   }
+        // console.log( await this.db.list_items.find({item_id: 2}))
+        // console.log( await this.db.items.find({id: 2}))
+        await this.db.items.destroy({ id: item_id[1] });
 
-    // asyncForEach(item_id, async (id) => {
-    //     await this.db.list_items.update(id, {item_id: item_id[0]});
-    //   })
+        // async function asyncForEach(array, callback) {
+        //     for (let index = 0; index < array.length; index++) {
+        //       await callback(array[index], index, array)
+        //     }
+        //   }
 
-   
-    
+        // asyncForEach(item_id, async (id) => {
+        //     await this.db.list_items.update(id, {item_id: item_id[0]});
+        //   })
 
-    return reply({ data: "Items Merged" });
+        return reply({ data: 'Items Merged' });
     },
     // response: {
     //     status: {

@@ -2,20 +2,20 @@
 
 const Joi = require('joi');
 const Schema = require('../../lib/schema');
-const Config = require('getconfig');
+// const Config = require('getconfig');
 const swagger = Schema.generate(['401']);
 
 module.exports = {
-description: 'Log out',
-tags: ['api', 'auth'],
-handler: async function (request, reply) {
+    description: 'Log out',
+    tags: ['api', 'auth'],
+    handler: async function (request, reply) {
 
-    const user = request.auth.credentials;
-    const logout = new Date();
+        const user = request.auth.credentials;
+        const logout = new Date();
 
-    await this.db.users.updateOne({ id: user.id }, { logout });
+        await this.db.users.updateOne({ id: user.id }, { logout });
 
-    return reply(null).code(204);
+        return reply(null).code(204);
     },
     response: {
         status: {
@@ -24,5 +24,5 @@ handler: async function (request, reply) {
     },
     plugins: {
         'hapi-swagger': swagger
-        }
-}
+    }
+};

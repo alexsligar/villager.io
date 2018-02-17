@@ -9,24 +9,21 @@ const swagger = Schema.generate();
 module.exports = {
     description: 'Returns all users',
     tags: ['api', 'admin'],
-    validate: {
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
-    },
-    
+    validate: { headers: Joi.object({ 'authorization': Joi.string().required() }).unknown() },
+
     handler: async function (request, reply) {
 
-        if(request.auth.credentials.role=='user')
-        {
+        if (request.auth.credentials.role === 'user') {
             throw Boom.unauthorized();
         }
 
-        var founduser = await this.db.users.find();
-        if(!founduser) {
+        const founduser = await this.db.users.find();
+
+        if (!founduser) {
             throw Boom.notFound();
         }
-        return reply({data: founduser});
+
+        return reply({ data: founduser });
     },
     response: {
         status: {
@@ -36,4 +33,4 @@ module.exports = {
     plugins: {
         'hapi-swagger': swagger
     }
-  };
+};

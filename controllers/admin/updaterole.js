@@ -14,7 +14,7 @@ module.exports = {
             username: Joi.string().required()
         },
         payload: {
-            role: Joi.any().valid("mod", "user", "admin")
+            role: Joi.any().valid('mod', 'user', 'admin')
         },
         headers: Joi.object({
             'authorization': Joi.string().required()
@@ -22,23 +22,25 @@ module.exports = {
     },
 
     handler: async function (request, reply) {
+
         const credentials = request.auth.credentials;
 
-        if (credentials.role == "admin") {
-
+        if (credentials.role === 'admin') {
         }
-        else if (credentials.role == "mod") {
-            if (request.payload.role = "admin") {
+        else if (credentials.role === 'mod') {
+            if (request.payload.role === 'admin') {
                 throw Boom.unauthorized();
             }
         }
         else {
             throw Boom.unauthorized();
         }
-        var foundUser = await this.db.users.findOne({ username: request.params.username });
+
+        let foundUser = await this.db.users.findOne({ username: request.params.username });
         if (!foundUser) {
-            throw Boom.notFound()
+            throw Boom.notFound();
         }
+
         await this.db.users.updateOne({ id: foundUser.id }, request.payload);
         foundUser = await this.db.users.get_public_by_username({ username: request.params.username });
 
@@ -52,5 +54,4 @@ module.exports = {
     plugins: {
         'hapi-swagger': swagger
     }
-
 };

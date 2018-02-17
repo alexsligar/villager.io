@@ -1,5 +1,5 @@
 'use strict';
-const Joi = require('joi');
+// const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['401', '404', '400']);
@@ -17,45 +17,44 @@ module.exports = {
     //     }).unknown()
     // },
     handler: async function (request, reply) {
+
         const credentials = request.auth.credentials;
 
-        if (credentials.role == "user") {
-            let item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
+        if (credentials.role === 'user') {
+            const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
+
             if (!item_owners) {
-                throw Boom.unauthorized("Not permitted to edit item");
+                throw Boom.unauthorized('Not permitted to edit item');
             }
         }
 
-        let item = await this.db.items.findOne({ id: request.params.id });
-        
+        const item = await this.db.items.findOne({ id: request.params.id });
+
         // Does item exist?
         if (!item) {
-            throw Boom.notFound("Item not found");
+            throw Boom.notFound('Item not found');
         }
 
-        let listItem = await this.db.list_items.find({ item_id: request.params.id });
+        const listItem = await this.db.list_items.find({ item_id: request.params.id });
 
         /* if Item on List, cannot delete */
         /* should this change for mods? */
-        if (listItem[0]) 
-        {
-            throw Boom.preconditionFailed("Unable to delete item. Item in a list.");
+        if (listItem[0]) {
+            throw Boom.preconditionFailed('Unable to delete item. Item in a list.');
         }
- 
-        let ownerCount = await this.db.item_owners.find({ item_id: request.params.id});
+
+        const ownerCount = await this.db.item_owners.find({ item_id: request.params.id });
 
         /* If more than one owner, cannot delete */
         /* Should this change for mods? */
-        if( ownerCount.length > 1)
-        {
-            throw Boom.preconditionFailed("Cannot Delete Item with additional Owner");
+        if ( ownerCount.length > 1) {
+            throw Boom.preconditionFailed('Cannot Delete Item with additional Owner');
         }
-        else
-        {
+        else {
             await this.db.items.destroy({ id: request.params.id });
-            return reply({ message: "Item deleted" });
+            return reply({ message: 'Item deleted' });
         }
-        
+
     },
     // response: {
     //     status: {

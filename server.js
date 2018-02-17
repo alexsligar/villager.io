@@ -20,8 +20,10 @@ server.connection(Config.connection.public);
 
 server.on('request-error', (err, m) => {
 
-    console.log(m.stack);
-
+    if (err) {
+        console.log(err.stack);
+        console.log(m.stack);
+    }
 });
 //$lab:coverage:on$
 
@@ -57,8 +59,8 @@ exports.server = server.register([{
 // },
 ]).then(async () => {
 
-    server.bind({ db });
-    server.route(require('./routes'));
+    await server.bind({ db });
+    await server.route(require('./routes'));
 
     server.auth.strategy('jwt','jwt', {
 
