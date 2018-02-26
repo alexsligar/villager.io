@@ -10,7 +10,7 @@ exports.seed = function seed( knex, Promise ) {
             username: 'Robfrikaans',
             password: 'password',
             email: 'Rob@email.com',
-            bio: 'yup',
+            //bio: 'yup',
             role: 'admin',
             created_at: new Date(),
             updated_at: new Date(),
