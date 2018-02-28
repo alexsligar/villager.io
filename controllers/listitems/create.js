@@ -10,8 +10,7 @@ module.exports = {
     validate: {
         payload: {
             item_id: Joi.number().required(),
-            list_id: Joi.string().guid().required(),
-            order: Joi.string().required()
+            list_id: Joi.string().guid().required()
         },
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
@@ -28,7 +27,6 @@ module.exports = {
             throw Boom.notFound('List not found');
         }
         if (foundlist.owner !== credentials.id) {
-            console.log(foundlist.owner + '--' + credentials.id);
             throw Boom.forbidden();
         }
 

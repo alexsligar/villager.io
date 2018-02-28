@@ -1,5 +1,5 @@
 'use strict';
-// const Joi = require('joi');
+const Joi = require('joi');
 const Boom = require('boom');
 // const Server = require('../../server');
 const Schema = require('../../lib/schema');
@@ -11,43 +11,28 @@ module.exports = {
     handler: async function (request, reply) {
 
         // -------------------- Variables --------------------------------------------- //
-        const credentials = await this.db.users.findOne({ id: request.auth.credentials.id });
-        const { id } = request.params;
-        let user = null;
+        const credentials = request.auth.credentials;
+        let user = await this.db.users.findOne({username: request.params.username},['id']);
+        
         // -------------------- Checks if user exists in table ------------------- //
-        try {
-
-            user = await this.db.users.findOne({ id });
+        if (!credentials) {
+            throw Boom.notFound();
         }
-        catch (err) {
-            throw Boom.notFound('Invalid input!');
-        }
+        
 
-        if (credentials.role === 'admin' || credentials.id === id) {
-
-            /**
-             * If user does not exist, throw an error.
-             * Else, remove user from the table and output a message.
-             */
-            if (!user) {
-                throw Boom.notFound();
-            }
-            else {
-                await this.db.users.destroy({ id });
-                return reply({ message: 'User was deleted' });
-            }
-
+        if (credentials.role === 'admin' || credentials.id === user.id) {     
+                await this.db.users.destroy(user.id);
+                return reply(null).code(204);
         }
         else {
             throw Boom.unauthorized('The user is not permitted to delete this user!');
         }
-
     },
-    // response: {
-    //     status: {
-    //         200: Schema.items_response
-    //     }
-    // },
+    response: {
+        status: {
+            204: Joi.only(null).label('Null')
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

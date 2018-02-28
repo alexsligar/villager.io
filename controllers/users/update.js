@@ -12,23 +12,29 @@ module.exports = {
     tags: ['api', 'users'],
     validate: {
         payload: {
-            name: Joi.string().optional(),
-            username: Joi.string().optional(),
-            password: Joi.string().optional(),
-            email: Joi.string().optional(),
-            bio: Joi.string().optional()
+            name: Joi.string().optional().example('totally not a robot'),
+            username: Joi.string().optional().example('seriously'),
+            email: Joi.string().optional().example('real@email'),
+            password: Joi.string().optional().example('password')
         }
     },
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
-        let user = await this.db.users.findOne({ id: credentials.id });
+        let user = await this.db.users.findOne({ username: credentials.username });
 
         if (!user) {
             throw Boom.notFound('User not found');
         }
-        user = request.payload;
+        if (credentials.id === user.id) {     
+            await this.db.users.destroy(user.id);
+            return reply(null).code(204);
+    }
+    else {
+        throw Boom.unauthorized('The user is not permitted to delete this user!');
+    }
 
+        user = request.payload;
         if (user.username) {
             const takenUsername = await this.db.users.findOne({ username: user.username }, ['username']);
             if (takenUsername) {
@@ -41,11 +47,11 @@ module.exports = {
                 throw Boom.conflict(`Email ${ takenEmail.email } already exists`);
             }
         }
+        //might have to logout user if they change password 
 
         await this.db.users.updateOne({ id: credentials.id }, user);
         user = await this.db.users.findOne({ id: credentials.id });
-        const token = JWT.sign( JSON.stringify(user) , Config.auth.secret, Config.auth.options);
-        return reply({ data: { user, token } });
+        return reply({ data: { user } });
     },
     response: {
         status: {

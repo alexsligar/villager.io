@@ -2,8 +2,7 @@ SELECT
 users.name,
 users.username,
 users.email,
-users.role,
-users.bio
+users.role
 FROM 
 users
 WHERE   

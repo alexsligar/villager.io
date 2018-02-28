@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
+const uuid = require('uuid').v4;
 
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate();
@@ -21,7 +22,7 @@ module.exports = {
         if (!user) {
             throw Boom.notFound();
         }
-        const userlists = await this.db.lists.find({ owner: user.id }, ['name', 'description']);
+        const userlists = await this.db.lists.getAllByOwner({ owner: user.id });
         if (!userlists) {
             throw Boom.notFound();
         }
@@ -29,7 +30,11 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.lists_response
+            200: {data: Joi.array().items(Joi.object({
+                id: Joi.string().guid().example(uuid()),
+                name: Joi.string().required().example('mon nom est'),
+                description: Joi.string().required().example('description described descriptively').allow(null)
+            }))}
         }
     },
     plugins: {

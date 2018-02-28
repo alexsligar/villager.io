@@ -26,8 +26,7 @@ module.exports = {
             throw Boom.notFound('List not found');
         }
         if (foundlist.owner !== credentials.id) {
-            console.log(foundlist.owner + '--' + credentials.id);
-            throw Boom.forbidden();
+            throw Boom.unauthorized();
         }
 
         const foundlistitem = await this.db.list_items.findOne({ item_id, list_id });

@@ -39,8 +39,8 @@ module.exports = [
     { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
     { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.get_favorites },
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },
-    { method: 'PUT', path: '/users/{id}', config: Controllers.users.update },
-    { method: 'DELETE', path: '/users/{id}', config: Controllers.users.destroy },
+    { method: 'PUT', path: '/users/{username}', config: Controllers.users.update },
+    { method: 'DELETE', path: '/users/{username}', config: Controllers.users.destroy },
 
     //lists
     { method: 'GET', path: '/lists/{id}', config: Controllers.lists.get },

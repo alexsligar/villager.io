@@ -17,13 +17,11 @@ module.exports = {
     handler: async function (request, reply) {
 
         const user = await this.db.users.get_public_by_username({ username: request.params.username });
-
+        const user_id = await this.db.users.findOne({username: request.params.username },['id'])
         if (!user) {
             throw Boom.notFound();
         }
-
-        const favorite_list = await this.db.list_items.by_list_id({ id: user.id });
-        delete user.id;
+        const favorite_list = await this.db.list_items.by_list_id({ id: user_id.id });
         return reply({ data: { user, favorite_list } });
     },
     response: {

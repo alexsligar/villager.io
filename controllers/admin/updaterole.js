@@ -46,11 +46,7 @@ module.exports = {
 
         return reply({ data: foundUser });
     },
-    response: {
-        status: {
-            200: Schema.user_response
-        }
-    },
+   
     plugins: {
         'hapi-swagger': swagger
     }

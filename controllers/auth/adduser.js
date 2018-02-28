@@ -1,5 +1,8 @@
 'use strict';
 
+const uuid = require('uuid').v4;
+
+
 const Joi = require('joi');
 const Boom = require('boom');
 
@@ -7,16 +10,15 @@ const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['409']);
 
 module.exports = {
-    description: 'Add user',
+    description: 'Create a new user',
     tags: ['api', 'auth'],
     auth: false,
     validate: {
         payload: {
-            name: Joi.string().optional(),
-            username: Joi.string().required(),
-            password: Joi.string().required(),
-            email: Joi.string().required(),
-            bio: Joi.string().optional()
+            name: Joi.string().optional().example('totally not a robot'),
+            username: Joi.string().required().example('seriously'),
+            email: Joi.string().required().example('real@email'),
+            password: Joi.string().required().example('password')
         }
     },
     handler: async function (request, reply) {
@@ -32,21 +34,29 @@ module.exports = {
         }
 
         const user = await this.db.users.insert(request.payload);
-        delete user.created_at;
-        delete user.updated_at;
-        delete user.logout;
-        //const users = Joi.array().items(public_user).label('PublicUsers');
-
-        // const user = await this.db.users.findOne({username: request.payload.username});
         await this.db.lists.insert({ id: user.id, name: 'Starred', owner: user.id });
+       
         return reply({ data: user });
     },
     response: {
         status: {
-            200: Schema.private_response
+            200: Joi.object({
+                data: {
+                    id: Joi.string().guid().example(uuid()),
+                    name: Joi.string().optional().example('totally not a robot'),
+                    username: Joi.string().required().example('seriously'),
+                    password: Joi.string().required().example('I am'),
+                    role: Joi.any().valid('mod', 'user', 'admin'),
+                    email: Joi.string().required().example('real@email'),
+                    logout: Joi.date().timestamp().allow(null),
+                    created_at: Joi.date().timestamp(),
+                    updated_at: Joi.date().timestamp()
+                }
+            })
         }
     },
     plugins: {
         'hapi-swagger': swagger
     }
 };
+

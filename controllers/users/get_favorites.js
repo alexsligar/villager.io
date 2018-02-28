@@ -21,12 +21,12 @@ module.exports = {
         if (!user) {
             throw Boom.notFound('user not found');
         }
-        const foundlist = await this.db.list_items.by_list_id({ id: user.id });
+        const favorite_list = await this.db.list_items.by_list_id({ id: user.id });
 
-        if (!foundlist[0]) {
-            return reply('User\'s favorite list is empty').code(404); //code to return 404?? 204?
+        if (!favorite_list[0]) {
+            return reply('User\'s favorite list is empty').code(404);
         }
-        return reply({ data: foundlist });
+        return reply({ data: favorite_list });
     },
     response: {
         status: {
