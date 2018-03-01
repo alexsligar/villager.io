@@ -23,11 +23,12 @@ module.exports = [
     { method: 'GET', path: '/items', config: Controllers.items.list },
     { method: 'GET', path: '/items/days/{days}', config: Controllers.items.getbydate },
     { method: 'GET', path: '/items/{id}', config: Controllers.items.get },
+    { method: 'GET', path: '/items/tags/{name}', config: Controllers.items.listbytag },
     { method: 'POST', path: '/items', config: Controllers.items.create },
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.update },
     { method: 'DELETE', path: '/items/{id}', config: Controllers.items.destroy },
-    { method: 'POST', path: '/items/tags/{id}', config: Controllers.items.create_tag },
-    //{ method: 'DELETE', path: '/items/{id}/{tag_name}', config: Controllers.items.destroy_tag },
+    { method: 'POST', path: '/items/{id}/tags', config: Controllers.items.create_tag },
+    { method: 'DELETE', path: '/items/{id}/tags', config: Controllers.items.destroy_tag },
 
     //item_owners
     { method: 'GET', path: '/item_owners', config: Controllers.itemowners.list },
