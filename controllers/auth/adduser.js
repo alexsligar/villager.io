@@ -35,7 +35,6 @@ module.exports = {
 
         const user = await this.db.users.insert(request.payload);
         await this.db.lists.insert({ id: user.id, name: 'Starred', owner: user.id });
-       
         return reply({ data: user });
     },
     response: {

@@ -30,11 +30,13 @@ module.exports = {
     },
     response: {
         status: {
-            200: {data: Joi.array().items(Joi.object({
-                id: Joi.string().guid().example(uuid()),
-                name: Joi.string().required().example('mon nom est'),
-                description: Joi.string().required().example('description described descriptively').allow(null)
-            }))}
+            200: {
+                data: Joi.array().items(Joi.object({
+                    id: Joi.string().guid().example(uuid()),
+                    name: Joi.string().required().example('mon nom est'),
+                    description: Joi.string().required().example('description described descriptively').allow(null)
+                }))
+            }
         }
     },
     plugins: {

@@ -46,7 +46,6 @@ module.exports = {
 
         return reply({ data: foundUser });
     },
-   
     plugins: {
         'hapi-swagger': swagger
     }

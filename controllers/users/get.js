@@ -17,7 +17,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const user = await this.db.users.get_public_by_username({ username: request.params.username });
-        const user_id = await this.db.users.findOne({username: request.params.username },['id'])
+        const user_id = await this.db.users.findOne({ username: request.params.username },['id']);
         if (!user) {
             throw Boom.notFound();
         }

@@ -12,21 +12,18 @@ module.exports = {
 
         // -------------------- Variables --------------------------------------------- //
         const credentials = request.auth.credentials;
-        let user = await this.db.users.findOne({username: request.params.username},['id']);
-        
+        const user = await this.db.users.findOne({ username: request.params.username },['id']);
         // -------------------- Checks if user exists in table ------------------- //
         if (!credentials) {
             throw Boom.notFound();
         }
-        
-
-        if (credentials.role === 'admin' || credentials.id === user.id) {     
-                await this.db.users.destroy(user.id);
-                return reply(null).code(204);
+        if (credentials.role !== 'admin' || credentials.id !== user.id) {
+            await this.db.users.destroy(user.id);
         }
         else {
             throw Boom.unauthorized('The user is not permitted to delete this user!');
         }
+        return reply(null).code(204);
     },
     response: {
         status: {

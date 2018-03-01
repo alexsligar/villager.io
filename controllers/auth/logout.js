@@ -11,7 +11,6 @@ module.exports = {
     handler: async function (request, reply) {
 
         const user = request.auth.credentials;
-        
         const logout = new Date();
 
         await this.db.users.updateOne({ id: user.id }, { logout });
