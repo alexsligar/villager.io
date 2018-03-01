@@ -3,7 +3,7 @@
       "client": "postgresql",
       "connection": {
         "host": "localhost",
-        "database": "testdb",
+        "database": "labdb",
         "user": "postgres",
         "password": "p"
       }
