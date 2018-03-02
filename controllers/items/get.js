@@ -27,6 +27,9 @@ module.exports = {
         founditems.starred_number = Number(countstars.count);
         founditems.list_number = Number(countlist.count);
 
+        const links = await this.db.links.getlinks({ id: founditems.id },['name']);
+        founditems.linked_items = links.linked_item;
+
         return reply({ data: founditems });
     },
     // response: {

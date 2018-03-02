@@ -1,5 +1,5 @@
 'use strict';
-
+const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
@@ -9,7 +9,7 @@ module.exports = {
     description: 'Add item',
     tags: ['api', 'items'],
     validate: {
-        payload: Schema.additem,
+        //payload: Schema.additem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()
@@ -18,6 +18,9 @@ module.exports = {
 
         const credentials = request.auth.credentials;
         const payload = request.payload;
+        const linked_items = payload.linked_items;
+        const tags = payload.tags;
+
         const inTable = await this.db.items.find({ name: payload.name });
 
         if (inTable.length > 0) {
@@ -63,19 +66,27 @@ module.exports = {
                 }
                 break;
         }
-
         const returneditem = await this.db.items.insert(payload);
-
         await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
+        await forEach(tags, async (tag) => {
 
+            await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
+        });
+
+        await forEach(linked_items, async (item) => {
+
+            await this.db.links.insert({ item_id: returneditem.id, linked_item_id: item.id });
+        });
+        returneditem.links = linked_items;
+        returneditem.tags = tags;
         return reply({ data: returneditem });
     },
 
-    response: {
-        status: {
-            200: Schema.item_response
-        }
-    },
+    // response: {
+    //     status: {
+    //         200: Schema.item_response
+    //     }
+    // },
 
     plugins: {
         'hapi-swagger': swagger
