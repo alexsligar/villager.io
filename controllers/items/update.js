@@ -1,4 +1,5 @@
 'use strict';
+const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
@@ -19,10 +20,11 @@ module.exports = {
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
-       
+        const tags = request.payload.tags;
+        const linked_items = request.payload.linked_items;
 
         if (credentials.role === 'user') {
-            const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
+            const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, username: credentials.username });
             if (!item_owners) {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
@@ -86,14 +88,30 @@ module.exports = {
 
         await this.db.items.updateOne({ id: request.params.id }, item);
         const returneditem = await this.db.items.byid({ id: request.params.id });
-        // await forEach(tags, async (tag) => {
+        await forEach(tags, async (tag) => {
 
-        //     await this.db.item_tags.updateOne({ item_id: returneditem.id, tag_name: tag.name });
-        // });
-        // await forEach(linked_items, async (item) => {
+            const found_tag = await this.db.item_tags.findOne({ item_id: returneditem.id, tag_name: tag.name });
+            if(found_tag) {
+                await this.db.item_tags.destroy({ item_id: returneditem.id, tag_name: tag.name });
+            }
+            else {
+                await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
+            }
+        });
+        await forEach(linked_items, async (item) => {
 
-        //     await this.db.links.updateOne({ item_id: returneditem.id, linked_item_id: item.id });
-        // });
+            const found_link = await this.db.links.findOne({ item_id: returneditem.id, linked_item_id: item.id });
+            if(found_link) {
+                await this.db.links.destroy({ item_id: returneditem.id, linked_item_id: item.id });
+            }
+            else {
+                await this.db.links.insert({ item_id: returneditem.id, linked_item_id: item.id });
+            }
+        });
+
+        const founditems = await this.db.items.byid({ id: returneditem.id });
+        const links = await this.db.links.getlinks({ id: founditems.id },['name']);
+        returneditem.linked_items = links.linked_item;
 
         return reply({ data: returneditem });
     },

@@ -3,7 +3,7 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 
 module.exports = [
     //admin
-    { method: 'PUT', path: '/admin/{username}/role', config: Controllers.admin.updaterole },
+    { method: 'PUT', path: '/{username}/role', config: Controllers.admin.updaterole },
     { method: 'GET', path: '/users', config: Controllers.admin.getusers }, //for testing
 
     //Authentication
