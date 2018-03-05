@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns item by id',
-    tags: ['api', 'public'],
+    tags: ['api', 'items' ,'public'],
     auth: false,
     validate: {
         params: {

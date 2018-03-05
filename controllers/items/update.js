@@ -6,12 +6,12 @@ const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
     description: 'Update item',
-    tags: ['api', 'users'],
+    tags: ['api', 'items'],
     validate: {
         params: {
             id: Joi.number().required()
         },
-        payload: Schema.additem,
+        //payload: Schema.additem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()
@@ -19,6 +19,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
+       
 
         if (credentials.role === 'user') {
             const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
@@ -34,43 +35,43 @@ module.exports = {
 
         item = request.payload;
 
-        if (request.payload.type !== 'event') {
-            if (!request.payload.start_date && !request.payload.end_date) {
+        if (item.type !== 'event') {
+            if (!item.start_date && !item.end_date) {
             }
             else {
                 throw Boom.badrequest('Only event can have start and end dates');
             }
         }
         else {
-            if (!request.payload.start_date) {
+            if (!item.start_date) {
                 throw Boom.badrequest('Event must have a start date');
             }
         }
-        if (request.payload.type === 'place') {
+        if (item.type === 'place') {
             //error checking
-            if (!request.payload.linked_place) {
+            if (!item.linked_place) {
             }
             else {
                 throw Boom.badrequest('Can\'t link to place');
             }
-            if (!request.payload.linked_group) {
+            if (!item.linked_group) {
             }
             else {
                 throw Boom.badrequest('Can\'t link to group');
             }
 
         }
-        else if (request.payload.type === 'activity') {
+        else if (item.type === 'activity') {
             //error checking
-            if (!request.payload.linked_group) {
+            if (!item.linked_group) {
             }
             else {
                 throw Boom.badrequest('Can\'t link to group');
             }
         }
-        else if (request.payload.type === 'group') {
+        else if (item.type === 'group') {
             //error checking
-            if (!request.payload.linked_group) {
+            if (!item.linked_group) {
             }
             else {
                 throw Boom.badrequest('Can\'t link to group');
@@ -78,13 +79,21 @@ module.exports = {
         }
         else { //event
             //error checking
-            if (!request.payload.linked_place) {
+            if (!item.linked_place) {
                 throw Boom.badrequest('No place linked to event');
             }
         }
 
         await this.db.items.updateOne({ id: request.params.id }, item);
         const returneditem = await this.db.items.byid({ id: request.params.id });
+        // await forEach(tags, async (tag) => {
+
+        //     await this.db.item_tags.updateOne({ item_id: returneditem.id, tag_name: tag.name });
+        // });
+        // await forEach(linked_items, async (item) => {
+
+        //     await this.db.links.updateOne({ item_id: returneditem.id, linked_item_id: item.id });
+        // });
 
         return reply({ data: returneditem });
     },

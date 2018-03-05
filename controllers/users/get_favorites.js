@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns users favorite list',
-    tags: ['api', 'public'],
+    tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
         params: {

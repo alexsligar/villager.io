@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns a user by username',
-    tags: ['api','public'],
+    tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
         params: {

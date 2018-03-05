@@ -8,7 +8,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns all items created within time period given.',
-    tags: ['api', 'public'],
+    tags: ['api', 'items', 'public'],
     handler: async function (request, reply) {
 
         const { days } = request.params;

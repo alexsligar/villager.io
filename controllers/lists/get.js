@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns items in list by id',
-    tags: ['api', 'public'],
+    tags: ['api', 'lists', 'public'],
     validate: {
         params:{
             id: Joi.string().guid().required()

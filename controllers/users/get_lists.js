@@ -9,7 +9,7 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Returns users lists',
-    tags: ['api', 'public'],
+    tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
         params: {

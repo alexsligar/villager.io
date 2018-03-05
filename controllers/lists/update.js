@@ -7,7 +7,7 @@ const swagger = Schema.generate(['400','400']);
 
 module.exports = {
     description: 'Add list',
-    tags: ['api', 'users'],
+    tags: ['api', 'lists'],
     validate: {
         payload: { name: Joi.string().required(), description: Joi.string().required() },
         params:{ id: Joi.string().guid() }

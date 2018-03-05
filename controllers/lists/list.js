@@ -7,7 +7,7 @@ const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns all lists',
-    tags: ['api','public'],
+    tags: ['api', 'lists', 'public'],
     auth: false,
     handler: async function (request, reply) {
 

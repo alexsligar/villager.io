@@ -6,7 +6,7 @@ const Boom = require('boom');
 // const swagger = Schema.generate(['403','404']);
 module.exports = {
     description: 'Add list item',
-    tags: ['api', 'users'],
+    tags: ['api', 'lists'],
     validate: {
         payload: {
             item_id: Joi.number().required(),

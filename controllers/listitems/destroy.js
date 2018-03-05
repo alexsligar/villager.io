@@ -7,7 +7,7 @@ const Boom = require('boom');
 
 module.exports = {
     description: 'Add list item',
-    tags: ['api', 'users'],
+    tags: ['api', 'lists'],
     validate: {
         payload: { item_id: Joi.number().required(), list_id: Joi.string().guid().required() },
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
