@@ -23,8 +23,8 @@ module.exports = {
 
         const inTable = await this.db.items.find({ name: payload.name });
 
-        if (inTable.length > 0) {
-            throw Boom.conflict(`Item ${ inTable } already exists`);
+        if (inTable[0]) {
+            throw Boom.conflict(`Item already exists`);
         }
 
         if (!request.payload.name) {

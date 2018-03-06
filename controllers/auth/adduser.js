@@ -15,9 +15,10 @@ module.exports = {
     auth: false,
     validate: {
         payload: {
-            name: Joi.string().optional().example('totally not a robot'),
+            name: Joi.string().optional().example('totally not a robot').allow(null),
             username: Joi.string().required().example('seriously'),
             email: Joi.string().required().example('real@email'),
+            bio: Joi.string().optional().example('I am a real person').allow(null),
             password: Joi.string().required().example('password')
         }
     },
@@ -47,6 +48,7 @@ module.exports = {
                     password: Joi.string().required().example('I am'),
                     role: Joi.any().valid('mod', 'user', 'admin'),
                     email: Joi.string().required().example('real@email'),
+                    bio: Joi.string().optional().example('I am a real person').allow(null),
                     logout: Joi.date().timestamp().allow(null),
                     created_at: Joi.date().timestamp(),
                     updated_at: Joi.date().timestamp()

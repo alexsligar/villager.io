@@ -5,8 +5,8 @@ exports.seed = function seed(knex, Promise) {
     const tableName = 'links';
     const rows = [
         {
-            item_id: 3,
-            linked_item_id: 2
+            item_id: 4,
+            linked_item_id: 1
         },
         {
             item_id: 3,

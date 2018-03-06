@@ -15,6 +15,7 @@ module.exports = {
             name: Joi.string().optional().example('totally not a robot'),
             username: Joi.string().optional().example('seriously'),
             email: Joi.string().optional().example('real@email'),
+            bio: Joi.string().optional().example('seriously i am not a robot'),
             password: Joi.string().optional().example('password')
         }
     },

@@ -15,6 +15,22 @@ exports.seed = function seed(knex, Promise) {
         {
             username: 'Robfrikaans',
             item_id: 3
+        },
+        {
+            username: 'Robfrikaans',
+            item_id: 4
+        },
+        {
+            username: 'Randolphin',
+            item_id: 5
+        },
+        {
+            username: 'Randolphin',
+            item_id: 6
+        },
+        {
+            username: 'Randolphin',
+            item_id: 7
         }
 
     ];

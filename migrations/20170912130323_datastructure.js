@@ -11,6 +11,7 @@ exports.up = function (knex, Promise) {
                 usersTable.text('username').unique().notNullable();
                 usersTable.text('email').unique().notNullable();
                 usersTable.text('password').notNullable();
+                usersTable.text('bio');
                 usersTable.text('role').notNullable().defaultTo('user');
                 usersTable.timestamp('logout').notNullable().defaultTo(knex.raw('now()'));
                 usersTable.timestamps();

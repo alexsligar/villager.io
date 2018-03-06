@@ -9,7 +9,7 @@ exports.seed = function seed(knex, Promise) {
             item_id: 1
         },
         {
-            tag_name: 'Food',
+            tag_name: 'restaurants',
             item_id: 2
         },
         {
@@ -19,7 +19,33 @@ exports.seed = function seed(knex, Promise) {
         {
             tag_name: 'kid-friendly',
             item_id: 3
+        },
+        {
+            tag_name: 'university',
+            item_id: 4
+        },
+        {
+            tag_name: 'university',
+            item_id: 1
+        },
+        {
+            tag_name: 'restaurants',
+            item_id: 5
+        },
+        {
+            tag_name: 'restaurants',
+            item_id: 6
+        },
+        {
+            tag_name: 'restaurants',
+            item_id: 7
+        },
+        {
+            tag_name: 'kid-friendly',
+            item_id: 5
         }
+
+        
 
     ];
 

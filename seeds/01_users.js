@@ -10,8 +10,32 @@ exports.seed = function seed( knex, Promise ) {
             username: 'Robfrikaans',
             password: 'password',
             email: 'Rob@email.com',
-            //bio: 'yup',
+            bio: 'yup',
             role: 'admin',
+            created_at: new Date(),
+            updated_at: new Date(),
+            logout: new Date()
+        },
+        {
+            id: '8865b22c-a732-4381-9ba6-e9bc32fc9b99',
+            name: 'Radnolph',
+            username: 'Randolphin',
+            password: 'password',
+            email: 'Randolph@email.com',
+            bio: 'A connoisseur of the finer things in life',
+            role: 'user',
+            created_at: new Date(),
+            updated_at: new Date(),
+            logout: new Date()
+        },
+        {
+            id: 'c06f747f-81cd-4033-8752-d284cd1c1706',
+            name: 'Leif',
+            username: 'modérateur',
+            password: 'password',
+            email: 'Leif@email.com',
+            bio: 'I\'m sworn to carry your burdens',
+            role: 'mod',
             created_at: new Date(),
             updated_at: new Date(),
             logout: new Date()

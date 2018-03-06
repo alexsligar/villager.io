@@ -8,10 +8,13 @@ exports.seed = function seed(knex, Promise) {
             name: 'kid-friendly'
         },
         {
-            name: 'Food'
+            name: 'restaurants'
         },
         {
             name: 'outdoors'
+        },
+        {
+            name: 'university'
         }
     ];
 

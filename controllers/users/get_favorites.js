@@ -14,7 +14,7 @@ module.exports = {
             username: Joi.string().required()
         }
     },
-    auth: false,
+    auth: false, 
     handler: async function (request, reply) {
 
         const user = await this.db.users.findOne({ username: request.params.username });
