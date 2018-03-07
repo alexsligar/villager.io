@@ -21,8 +21,7 @@ module.exports = {
             const links = await this.db.links.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
         });
-       
-         /* Add pagination */
+        /* Add pagination */
         return reply({ data: founditems });
     },
     response: {

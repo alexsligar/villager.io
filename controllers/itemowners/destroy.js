@@ -1,22 +1,28 @@
 'use strict';
 
-// const Joi = require('joi');
+const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['404']);
+const swagger = Schema.generate(['404','401']);
 
 module.exports = {
     description: 'Deletes owner/item relation from table',
     tags: ['api', 'mod'],
-    auth: false,
+    validate: {
+        payload: Schema.itemowner,
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+    },
     handler: async function (request, reply) {
 
         // -------------------- Variables --------------------------------------------- //
-        const { id } = request.params;
-
+        const { item_id, username } = request.payload;
+        const credentials = request.auth.credentials;
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Not permitted use this feature');
+        }
         // -------------------- Checks if relation exists in Tables ------------------- //
-        const relation = await this.db.item_owners.findOne({ id });
+        const relation = await this.db.item_owners.findOne({ username, item_id });
 
         /**
          * If relation does not exist, throw an error.
@@ -26,15 +32,15 @@ module.exports = {
             throw Boom.notFound();
         }
         else {
-            await this.db.item_owners.destroy({ id });
+            await this.db.item_owners.destroy({ username, item_id });
             return reply({ message: 'Relation was deleted' });
         }
     },
-    // response: {
-    //     status: {
-    //         200: Schema.items_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.message_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

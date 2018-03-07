@@ -31,7 +31,14 @@ describe('POST /create_account', () => {
         return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
 
             expect(res.statusCode).to.equal(200);
-            return res.result;
+        });
+    });
+    it('Create user duplicate', () => {
+
+        const payload = user;
+        return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
+
+            expect(res.statusCode).to.equal(409);
         });
     });
 });

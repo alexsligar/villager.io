@@ -3,13 +3,13 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate();
+const swagger = Schema.generate(['409','401']);
 
 module.exports = {
     description: 'Add owner x item relation',
     tags: ['api', 'mod'],
     validate: {
-        payload: Schema.itemowners,
+        payload: Schema.itemowner,
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
     handler: async function (request, reply) {
@@ -21,6 +21,10 @@ module.exports = {
         let item = null;
         let relation = null;
         let user = null;
+        const credentials = request.auth.credentials;
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Not permitted use this feature');
+        }
 
         // -------------------- Checks if payload exists in Tables -------------------- //
         // Searches users table by id
@@ -56,14 +60,14 @@ module.exports = {
             await this.db.item_owners.insert({ username, item_id });
         }
 
-        return reply({ data: request.payload });
+        return reply({ message: 'Relation was added' });
     },
 
-    // response: {
-    //   status: {
-    //     200: Schema.item_response
-    //   }
-    // },
+    response: {
+        status: {
+            200: Schema.message_response
+        }
+    },
 
     plugins: {
         'hapi-swagger': swagger

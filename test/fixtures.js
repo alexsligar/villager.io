@@ -20,6 +20,18 @@ exports.user = function (attrs, id) {
 
     return Object.assign(defaults, attrs);
 };
+exports.user_id = function (attrs, id) {
+
+    const defaults = {
+        id: Faker.random.uuid(),
+        username: Faker.internet.userName(),
+        name: Faker.name.firstName(),
+        email: Faker.internet.email(),
+        password: Faker.internet.password()
+    };
+
+    return Object.assign(defaults, attrs);
+};
 
 // Build and export a fake event
 exports.event = function (attrs, id) {

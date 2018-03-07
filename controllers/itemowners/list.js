@@ -1,34 +1,38 @@
 'use strict';
-
-// const Joi = require('joi');
+const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['404']);
+const swagger = Schema.generate(['404','401']);
 
 module.exports = {
-    description: 'Returns table of item owners',
+    description: 'Returns all owners of an item',
     tags: ['api', 'mod'],
-    auth: false,
+    validate: {
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown(),
+        params: { id: Joi.number().required() }
+    },
     handler: async function (request, reply) {
 
-        // -------------------- Variables --------------------------------------------- //
-        let list = null;
+        const { id } = request.params;
 
-        // -------------------- Searches item_owners table for item ------------------- //
-        list = await this.db.item_owners.find();
+        const relation = await this.db.item_owners.findOne({ id },['username']);
+        const credentials = request.auth.credentials;
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Not permitted use this feature');
+        }
 
-        if (!list) {
+        if (!relation) {
             throw Boom.notFound();
         }
 
-        return reply({ data: list });
+        return reply({ data: relation });
     },
-    // response: {
-    //     status: {
-    //         200: Schema.items_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.usernames
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

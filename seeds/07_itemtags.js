@@ -45,8 +45,6 @@ exports.seed = function seed(knex, Promise) {
             item_id: 5
         }
 
-        
-
     ];
 
     return (

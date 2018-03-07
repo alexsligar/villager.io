@@ -31,7 +31,7 @@ module.exports = {
             const links = await this.db.links.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
         });
-        
+
         return reply({ data: foundlist });
     },
     response: {

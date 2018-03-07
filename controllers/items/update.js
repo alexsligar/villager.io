@@ -29,13 +29,13 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        let itemInDB = await this.db.items.findOne({ id: request.params.id });
+        const itemInDB = await this.db.items.findOne({ id: request.params.id });
 
         if (!itemInDB) {
             throw Boom.notFound('Item not found');
         }
 
-        let item = request.payload;
+        const item = request.payload;
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
@@ -53,7 +53,7 @@ module.exports = {
             if (item.linked_place) {
                 throw Boom.badrequest('Can\'t link to place');
             }
-            
+
             if (item.linked_group) {
                 throw Boom.badrequest('Can\'t link to group');
             }
@@ -83,21 +83,21 @@ module.exports = {
         await forEach(tags, async (tag) => {
 
             const found_tag = await this.db.item_tags.findOne({ item_id: returneditem.id, tag_name: tag.name });
-            if(found_tag) {
+            if (found_tag) {
                 await this.db.item_tags.destroy({ item_id: returneditem.id, tag_name: tag.name });
             }
             else {
                 await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
             }
         });
-        await forEach(linked_items, async (item) => {
+        await forEach(linked_items, async (link_item) => {
 
-            const found_link = await this.db.links.findOne({ item_id: returneditem.id, linked_item_id: item.id });
-            if(found_link) {
-                await this.db.links.destroy({ item_id: returneditem.id, linked_item_id: item.id });
+            const found_link = await this.db.links.findOne({ item_id: returneditem.id, linked_item_id: link_item.id });
+            if (found_link) {
+                await this.db.links.destroy({ item_id: returneditem.id, linked_item_id: link_item.id });
             }
             else {
-                await this.db.links.insert({ item_id: returneditem.id, linked_item_id: item.id });
+                await this.db.links.insert({ item_id: returneditem.id, linked_item_id: link_item.id });
             }
         });
 

@@ -8,6 +8,9 @@ const swagger = Schema.generate(['401']);
 module.exports = {
     description: 'Log out',
     tags: ['api', 'auth'],
+    validate: {
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+    },
     handler: async function (request, reply) {
 
         const user = request.auth.credentials;
