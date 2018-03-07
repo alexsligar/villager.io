@@ -34,9 +34,7 @@ module.exports = {
             throw Boom.badRequest('Invalid type');
         }
 
-        if (request.payload.start_date && request.payload.end_date) {
-            throw Boom.badRequest('Only event can have start and end dates');
-        }
+        
 
         switch (request.payload.type) {
             case 'event':

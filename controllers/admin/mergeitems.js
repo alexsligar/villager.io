@@ -8,7 +8,8 @@ module.exports = {
     description: 'Merge item',
     tags: ['api', 'mod'],
     validate: {
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown(),
+        payload: Joi.object({ 'item_id': Joi.array().items(Joi.number())})
     },
     handler: async function (request, reply) {
 
