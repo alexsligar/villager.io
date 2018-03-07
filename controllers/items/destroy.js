@@ -1,27 +1,26 @@
 'use strict';
-// const Joi = require('joi');
+const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
     description: 'Delete item',
-    tags: ['api', 'items'],
-    // validate: {
-    //     params: {
-    //         id: Joi.number().required()
-    //     },
-    //     payload: Schema.additem,
-    //     headers: Joi.object({
-    //         'authorization': Joi.string().required()
-    //     }).unknown()
-    // },
+    tags: ['api', 'users'],
+    validate: {
+        params: {
+            id: Joi.number().required()
+        },
+        headers: Joi.object({
+            'authorization': Joi.string().required()
+        }).unknown()
+    },
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
 
         if (credentials.role === 'user') {
-            const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, user_id: credentials.id });
+            const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, username: credentials.username });
 
             if (!item_owners) {
                 throw Boom.unauthorized('Not permitted to edit item');
@@ -47,6 +46,7 @@ module.exports = {
 
         /* If more than one owner, cannot delete */
         /* Should this change for mods? */
+        /* Maybe should offer the option to delete User as Owner */
         if ( ownerCount.length > 1) {
             throw Boom.preconditionFailed('Cannot Delete Item with additional Owner');
         }
@@ -56,11 +56,11 @@ module.exports = {
         }
 
     },
-    // response: {
-    //     status: {
-    //         200: Schema.item_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.item_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

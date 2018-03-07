@@ -22,11 +22,9 @@ module.exports = {
         if (!tag){
             throw Boom.notFound('No tag by that name');
         }
-        //tag = await this.db.item_tags.updateOne({ tag_name: request.params.name }, {tag_name: request.payload.name});
 
         tag = await this.db.tags.updateOne({ name: request.params.name }, { name: request.payload.name });
 
-        // tag = await this.db.tags.findOne({ name: request.params.name})
         return reply({ data: tag });
     },
     plugins: {

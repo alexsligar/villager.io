@@ -30,11 +30,18 @@ module.exports = {
         if (!request.payload.name) {
             throw Boom.badRequest('No name given');
         }
+
         else if (request.payload.type !== 'place' && request.payload.type !== 'group' && request.payload.type !== 'activity' && request.payload.type !== 'event') {
             throw Boom.badRequest('Invalid type');
         }
 
+<<<<<<< HEAD
         
+=======
+        if (request.payload.type !== 'event' && request.payload.start_date && request.payload.end_date) {
+            throw Boom.badRequest('Only event can have start and end dates');
+        }
+>>>>>>> 69c4073fc0ddd87eaf6652b21b442c5ce1bb24a0
 
         switch (request.payload.type) {
             case 'event':

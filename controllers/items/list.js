@@ -21,14 +21,8 @@ module.exports = {
             const links = await this.db.links.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
         });
-        // for(let i=0;i<founditems.length;i++){
-        //     //console.log(await this.db.item_tags.find({item_id: founditems[i].id}));cls
-        // founditems[i].tags = await this.db.item_tags.find({item_id: founditems[i].id},['tag_name'])
-        //}
-        //founditems.array.forEach(item => {
-        //  console.log(await this.db.item_tags.find({item_id: founditems[i].id}));
-        // });
-
+       
+         /* Add pagination */
         return reply({ data: founditems });
     },
     response: {

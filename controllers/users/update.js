@@ -50,7 +50,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.user_update_repsonse
+            200: Schema.user_update_response
         }
     },
     plugins: {

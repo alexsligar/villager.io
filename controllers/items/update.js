@@ -29,53 +29,45 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        let item = await this.db.items.findOne({ id: request.params.id });
+        let itemInDB = await this.db.items.findOne({ id: request.params.id });
 
-        if (!item) {
+        if (!itemInDB) {
             throw Boom.notFound('Item not found');
         }
 
-        item = request.payload;
+        let item = request.payload;
 
         if (item.type !== 'event') {
-            if (!item.start_date && !item.end_date) {
-            }
-            else {
+            if (item.start_date || item.end_date) {
                 throw Boom.badrequest('Only event can have start and end dates');
             }
         }
         else {
             if (!item.start_date) {
-                throw Boom.badrequest('Event must have a start date');
+                throw Boom.badrequest('Event must have at least a start date');
             }
         }
+        // why is this the way that it is
         if (item.type === 'place') {
             //error checking
-            if (!item.linked_place) {
-            }
-            else {
+            if (item.linked_place) {
                 throw Boom.badrequest('Can\'t link to place');
             }
-            if (!item.linked_group) {
-            }
-            else {
+            
+            if (item.linked_group) {
                 throw Boom.badrequest('Can\'t link to group');
             }
 
         }
         else if (item.type === 'activity') {
             //error checking
-            if (!item.linked_group) {
-            }
-            else {
+            if (item.linked_group) {
                 throw Boom.badrequest('Can\'t link to group');
             }
         }
         else if (item.type === 'group') {
             //error checking
-            if (!item.linked_group) {
-            }
-            else {
+            if (item.linked_group) {
                 throw Boom.badrequest('Can\'t link to group');
             }
         }
