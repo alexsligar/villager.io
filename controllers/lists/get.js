@@ -17,13 +17,16 @@ module.exports = {
     auth: false,
     handler: async function (request, reply) {
 
-        const user = await this.db.lists.findOne({ id: request.params.id });
-        if (!user) {
-            throw Boom.notFound('user not found');
-        }
-        const foundlist = await this.db.list_items.by_list_id({ id: user.id });
+        let list = await this.db.lists.findOne({ id: request.params.id });
 
-        if (!foundlist[0]) {
+        if (!list) {
+            throw Boom.notFound('List was not found.');
+        }
+        else {
+            list = await this.db.list_items.by_list_id({ id: list.id });
+        }
+
+        if (list.length < 1) {
             return reply('List is empty').code(404);
         }
         await forEach(foundlist, async (item) => {

@@ -12,6 +12,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const foundlists = await this.db.lists.getall();
+
         if (!foundlists[0]) {
             throw Boom.notFound();
         }
