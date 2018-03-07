@@ -10,7 +10,7 @@ exports.seed = function seed(knex, Promise) {
             type: 'place'
         },
         {//2
-            name: 'Dive in Dinner',
+            name: 'Dive in Diner',
             location: '2000 Fire ln, Flavor Town, USA',
             type: 'place'
         },
@@ -36,6 +36,11 @@ exports.seed = function seed(knex, Promise) {
         },
         {//7
             name: 'Fiesta Mexican Restaurant & Catering',
+            location: '8524 W Gage Blvd #130, Kennewick, WA 99336',
+            type: 'place'
+        },
+        {//8
+            name: 'Fiesta Mexican Restaurant',
             location: '8524 W Gage Blvd #130, Kennewick, WA 99336',
             type: 'place'
         }

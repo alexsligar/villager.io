@@ -12,7 +12,7 @@ module.exports = [
     { method: 'GET', path: '/logout', config: Controllers.auth.logout },
 
     //mod
-    { method: 'POST', path: '/merge', config: Controllers.admin.mergeitems },
+    { method: 'PUT', path: '/merge', config: Controllers.admin.mergeitems },
 
     //tags
     { method: 'POST', path: '/tags', config: Controllers.tags.create },

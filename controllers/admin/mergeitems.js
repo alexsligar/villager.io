@@ -6,7 +6,7 @@ const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
     description: 'Merge item',
-    tags: ['api', 'admin'],
+    tags: ['api', 'mod'],
     validate: {
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
@@ -37,7 +37,7 @@ module.exports = {
         //     await this.db.list_items.update(id, {item_id: item_id[0]});
         //   })
 
-        return reply({ data: 'Items Merged' });
+        return reply({ message: 'Items Merged' });
     },
     // response: {
     //     status: {

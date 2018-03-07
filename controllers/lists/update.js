@@ -9,7 +9,7 @@ module.exports = {
     description: 'Add list',
     tags: ['api', 'lists'],
     validate: {
-        payload: { name: Joi.string().required(), description: Joi.string().required() },
+        payload: { name: Joi.string().optional(), description: Joi.string().optional() },
         params:{ id: Joi.string().guid() }
     },
     handler: async function (request, reply) {
