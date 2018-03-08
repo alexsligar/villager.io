@@ -29,13 +29,13 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        const itemInDB = await this.db.items.findOne({ id: request.params.id });
+        const item = await this.db.items.findOne({ id: request.params.id });
 
-        if (!itemInDB) {
+        if (!item) {
             throw Boom.notFound('Item not found');
         }
 
-        const item = request.payload;
+        item = request.payload;
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
