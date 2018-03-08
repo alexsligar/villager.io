@@ -29,13 +29,15 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        const item = await this.db.items.findOne({ id: request.params.id });
+        let item = await this.db.items.findOne({ id: request.params.id });
 
         if (!item) {
             throw Boom.notFound('Item not found');
         }
-
-        item = request.payload;
+        console.log(item)
+        
+        item[0] = request.payload;
+        console.log(item)
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
@@ -79,7 +81,7 @@ module.exports = {
             }
         }
 
-        await this.db.items.updateOne({ id: request.params.id }, item);
+        await this.db.items.updateOne({ id: request.params.id }, item[0]);
         const returneditem = await this.db.items.byid({ id: request.params.id });
         await forEach(tags, async (tag) => {
 
