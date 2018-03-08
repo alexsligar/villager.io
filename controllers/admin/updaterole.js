@@ -25,20 +25,21 @@ module.exports = {
 
         const credentials = request.auth.credentials;
 
-        if (credentials.role === 'admin') {
+        if (credentials.role === 'user') {
+            throw Boom.unauthorized('Unauthorized to change roles of users.');
         }
         else if (credentials.role === 'mod') {
             if (request.payload.role === 'admin') {
-                throw Boom.unauthorized();
+                throw Boom.unauthorized('Unauthorized to set role of admin.');
             }
-        }
-        else {
-            throw Boom.unauthorized();
         }
 
         let foundUser = await this.db.users.findOne({ username: request.params.username });
         if (!foundUser) {
-            throw Boom.notFound();
+            throw Boom.notFound('Username not found.');
+        }
+        else if (foundUser.role === 'admin') {
+            throw Boom.unauthorized('Unauthorized to change role of admins.');
         }
 
         await this.db.users.updateOne({ id: foundUser.id }, request.payload);
