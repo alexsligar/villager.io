@@ -7,7 +7,7 @@ const db = Fixtures.db;
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
-describe('POST /create_account', () => {
+describe('POST /login', () => {
 
     let server;
     const user = Fixtures.user();

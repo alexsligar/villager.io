@@ -36,7 +36,7 @@ module.exports = [
     { method: 'DELETE', path: '/item_owners', config: Controllers.itemowners.destroy },
 
     //users
-    { method: 'GET', path: '/users/profile', config: Controllers.users.getme },
+    { method: 'GET', path: '/users/profile', config: Controllers.users.get_profile },
     { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
     { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.get_favorites },
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },

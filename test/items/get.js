@@ -8,7 +8,7 @@ const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
 
-describe('POST /items', () => {
+describe('GET /items/id', () => {
 
     let server;
     const event = Fixtures.event();
@@ -26,19 +26,17 @@ describe('POST /items', () => {
     after(async () => {
 
         await Promise.all([
-            db.items.destroy({ id: newEvent[0].id })
+            db.items.destroy(newEvent[0])
         ]);
     });
 
-    it('Create items', async () => {
+    it('get item', async () => {
 
         const query = {
             method: 'GET',
-            url:    `/items`
+            url:    `/items/${newEvent[0].id}`
         };
-
         const response = await server.inject(query);
-
         expect(response.statusCode).to.equal(200);
     });
 });

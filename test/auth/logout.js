@@ -32,15 +32,14 @@ describe('GET /logout', () => {
     it('logout', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        return server.inject({ method: 'get', url: '/users/profile', credentials: user, headers: { 'Authorization': token } }).then((res) => {
+        return server.inject({ method: 'get', url: '/users/profile', headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(200);
             return server.inject({ method: 'get', url: '/logout', headers: { 'Authorization': token } });
         }).then((res) => {
 
             expect(res.statusCode).to.equal(204);
-            return server.inject({ method: 'get', url: '/users/profile', credentials: user, headers: { 'Authorization': token } });
-
+            return server.inject({ method: 'get', url: '/users/profile', headers: { 'Authorization': token } });
         }).then((res) => {
 
             expect(res.statusCode).to.equal(401);
