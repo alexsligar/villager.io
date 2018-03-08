@@ -3,7 +3,8 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['403','404']);
+const swagger = Schema.generate(['400','404']);
+
 module.exports = {
     description: 'Add list item',
     tags: ['api', 'lists'],
