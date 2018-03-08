@@ -58,7 +58,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.item_response
+            200: Schema.message_response
         }
     },
     plugins: {

@@ -44,6 +44,11 @@ module.exports = {
             return reply({ message: 'Tag Successfully added' });
         }
     },
+    response: {
+        status: {
+            200: Schema.message_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

@@ -3,7 +3,7 @@ const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400']);
+const swagger = Schema.generate(['401', '404', '400']); 
 
 module.exports = {
     description: 'Update item',
@@ -12,7 +12,7 @@ module.exports = {
         params: {
             id: Joi.number().required()
         },
-        //payload: Schema.additem,
+        payload: Schema.updateitem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()
@@ -39,42 +39,43 @@ module.exports = {
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
-                throw Boom.badrequest('Only event can have start and end dates');
+                throw Boom.badRequest('Only event can have start and end dates');
             }
         }
         else {
             if (!item.start_date) {
-                throw Boom.badrequest('Event must have at least a start date');
+                throw Boom.badRequest('Event must have at least a start date');
             }
         }
         // why is this the way that it is
         if (item.type === 'place') {
             //error checking
             if (item.linked_place) {
-                throw Boom.badrequest('Can\'t link to place');
+                throw Boom.badRequest('Can\'t link to place');
             }
 
             if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                throw Boom.badRequest('Can\'t link to group');
             }
 
         }
         else if (item.type === 'activity') {
             //error checking
             if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                
+                throw Boom.badRequest('Can\'t link to group');
             }
         }
         else if (item.type === 'group') {
             //error checking
             if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                throw Boom.badRequest('Can\'t link to group');
             }
         }
         else { //event
             //error checking
             if (!item.linked_place) {
-                throw Boom.badrequest('No place linked to event');
+                throw Boom.badRequest('No place linked to event');
             }
         }
 

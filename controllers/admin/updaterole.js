@@ -45,7 +45,12 @@ module.exports = {
         await this.db.users.updateOne({ id: foundUser.id }, request.payload);
         foundUser = await this.db.users.get_public_by_username({ username: request.params.username });
 
-        return reply({ data: foundUser });
+        return reply({ message: 'Role updated' });
+    },
+    response: {
+        status: {
+            200: Schema.message_response
+        }
     },
     plugins: {
         'hapi-swagger': swagger

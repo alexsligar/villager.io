@@ -9,7 +9,7 @@ module.exports = {
     description: 'Add item',
     tags: ['api', 'items'],
     validate: {
-        //payload: Schema.additem,
+        payload: Schema.additem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()
@@ -83,11 +83,11 @@ module.exports = {
         return reply({ data: returneditem });
     },
 
-    // response: {
-    //     status: {
-    //         200: Schema.item_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.item_response
+        }
+    },
 
     plugins: {
         'hapi-swagger': swagger

@@ -17,7 +17,8 @@ module.exports = {
             email: Joi.string().optional().example('real@email'),
             bio: Joi.string().optional().example('seriously i am not a robot'),
             password: Joi.string().optional().example('password')
-        }
+        },
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
     },
     handler: async function (request, reply) {
 

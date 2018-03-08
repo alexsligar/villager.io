@@ -1,6 +1,6 @@
 'use strict';
 
-//const Joi = require('joi');
+const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
@@ -8,6 +8,9 @@ const swagger = Schema.generate(['404']);
 module.exports = {
     description: 'Returns private user profile',
     tags: ['api', 'users'],
+    validate: {
+        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+    },
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
