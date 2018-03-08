@@ -2,8 +2,8 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
-// const Schema = require('../../lib/schema');
-// const swagger = Schema.generate(['403','404']);
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['403','404']);
 module.exports = {
     description: 'Add list item',
     tags: ['api', 'lists'],
@@ -32,5 +32,13 @@ module.exports = {
 
         await this.db.list_items.insert(request.payload);
         return reply({ message: 'item inserted into list' });
+    },
+    // response: {
+    //     status: {
+    //         200: Schema.list_response
+    //     }
+    // },
+    plugins: {
+        'hapi-swagger': swagger
     }
 };
