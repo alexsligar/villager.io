@@ -15,8 +15,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const { id } = request.params;
-
-        const relation = await this.db.item_owners.findOne({ id },['username']);
+        const relation = await this.db.item_owners.find({ item_id: id },['username']);
         const credentials = request.auth.credentials;
         if (credentials.role === 'user') {
             throw Boom.unauthorized('Not permitted use this feature');
@@ -28,11 +27,11 @@ module.exports = {
 
         return reply({ data: relation });
     },
-    response: {
-        status: {
-            200: Schema.usernames
-        }
-    },
+    // response: {
+    //     status: {
+    //         200: Schema.usernames
+    //     }
+    // },
     plugins: {
         'hapi-swagger': swagger
     }

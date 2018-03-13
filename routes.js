@@ -31,7 +31,7 @@ module.exports = [
     { method: 'DELETE', path: '/items/{id}/tags', config: Controllers.items.destroy_tag },
 
     //item_owners
-    { method: 'GET', path: '/item_owners', config: Controllers.itemowners.list },
+    { method: 'GET', path: '/item_owners/{id}', config: Controllers.itemowners.list },
     { method: 'POST', path: '/item_owners', config: Controllers.itemowners.create },
     { method: 'DELETE', path: '/item_owners', config: Controllers.itemowners.destroy },
 
