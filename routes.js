@@ -48,7 +48,10 @@ module.exports = [
     { method: 'GET', path: '/lists', config: Controllers.lists.list },
     { method: 'POST', path: '/lists', config: Controllers.lists.create },
     { method: 'PUT', path: '/lists/{id}', config: Controllers.lists.update },
+<<<<<<< HEAD
     { method: 'DELETE', path: '/lists/{id}', config: Controllers.lists.destroy },
+=======
+>>>>>>> 0d79395884e4000ce7fd6d6327a1b09af218455f
 
     //list items
     { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.create },
