@@ -1,0 +1,43 @@
+'use strict';
+const Joi = require('joi');
+const Boom = require('boom');
+// const server = require('../../server');
+const Schema = require('../../lib/schema');
+const swagger = Schema.generate(['404']);
+
+module.exports = {
+    description: 'Returns item by id',
+    tags: ['api', 'items' ,'public'],
+    auth: false,
+    validate: {
+        params: {
+            id: Joi.number().required()
+        }
+    },
+    handler: async function (request, reply) {
+
+        const founditems = await this.db.items.byid({ id: request.params.id });
+        if (!founditems) {
+            throw Boom.notFound();
+        }
+
+        const countstars = await this.db.items.countingstars({ id: founditems.id });
+        const countlist = await this.db.items.countinglists({ id: founditems.id });
+
+        founditems.starred_number = Number(countstars.count);
+        founditems.list_number = Number(countlist.count);
+
+        const links = await this.db.links.getlinks({ id: founditems.id },['name']);
+        founditems.linked_items = links.linked_item;
+
+        return reply({ data: founditems });
+    },
+    // response: {
+    //     status: {
+    //         200: Schema.item_response
+    //     }
+    // },
+    plugins: {
+        'hapi-swagger': swagger
+    }
+};

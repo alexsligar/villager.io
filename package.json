@@ -1,0 +1,48 @@
+{
+  "name": "hapitest2",
+  "version": "0.0.1",
+  "description": "Villagers API Prototype",
+  "main": "server.js",
+  "scripts": {
+    "resetdb": "npm run unmakedb  && npm run makedb &&  npm run migratedb",
+    "dropdb": "dropdb --if-exists %PGDATABASE%",
+    "unmakedb": "npm run dropdb",
+    "createdb": "createdb %PGDATABASE%",
+    "makedb": "npm run createdb && npm run uuiddb",
+    "uuiddb": "psql -d %PGDATABASE% -U %PGUSER% -f ./extension",
+    "migratedb": "knex migrate:latest && npm run seeddb",
+    "seeddb": "knex seed:run",
+    "knex": "knex",
+    "testcoverage": "lab test -a code -L -v -c -e test",
+    "test": "lab test -a code -L -v -c -e test",
+    "start": "node server.js",
+    "setenv": "set NODE_ENV=development && set GETCONFIG_ROOT=./config"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robpierini/villagers/tree/master/hapitest2"
+  },
+  "author": "Villagers",
+  "license": "ISC",
+  "dependencies": {
+    "boom": "^6.0.0",
+    "getconfig": "^3.1.0",
+    "hapi": "^16.6.3",
+    "hapi-auth-jwt2": "^7.4.1",
+    "hapi-swagger": "^7.10.0",
+    "inert": "^4.2.1",
+    "joi": "^11.3.4",
+    "jsonwebtoken": "^8.2.0",
+    "keyfob": "^1.0.0",
+    "knex": "^0.13.0",
+    "muckraker": "^3.4.0",
+    "p-iteration": "^1.1.5",
+    "pg": "^7.4.1",
+    "vision": "^4.1.1"
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "faker": "^4.1.0",
+    "lab": "^15.2.2"
+  }
+}

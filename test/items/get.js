@@ -1,0 +1,42 @@
+'use strict';
+
+const Fixtures = require('../fixtures');
+const Server = Fixtures.server;
+const db = Fixtures.db;
+
+const { after, before, describe, it } = exports.lab = require('lab').script();
+const { expect } = require('code');
+
+
+describe('GET /items/id', () => {
+
+    let server;
+    const event = Fixtures.event();
+    let newEvent;
+
+    before(async () => {
+
+        server = await Server;
+
+        newEvent = await Promise.all([
+            db.items.insert(event)
+        ]);
+    });
+
+    after(async () => {
+
+        await Promise.all([
+            db.items.destroy(newEvent[0])
+        ]);
+    });
+
+    it('get item', async () => {
+
+        const query = {
+            method: 'GET',
+            url:    `/items/${newEvent[0].id}`
+        };
+        const response = await server.inject(query);
+        expect(response.statusCode).to.equal(200);
+    });
+});
