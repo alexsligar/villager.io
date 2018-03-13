@@ -6,7 +6,7 @@ const Schema = require('../../lib/schema');
 const swagger = Schema.generate();
 
 module.exports = {
-    description: 'Add tags',
+    description: 'Add a category to tag items with',
     tags: ['api', 'mod'],
     validate: {
         payload: Joi.object({ 'name': Joi.string().required() }),
@@ -19,7 +19,7 @@ module.exports = {
             throw Boom.unauthorized();
         }
         if (await this.db.tags.findOne(request.payload)) {
-            throw Boom.conflict(`Username ${ request.payload.name } already exists`);
+            throw Boom.conflict(`Tag ${ request.payload.name } already exists`);
         }
         await this.db.tags.insert(request.payload);
 
@@ -27,7 +27,7 @@ module.exports = {
     },
     // response: {
     //     status: {
-    //         200: Schem
+    //         200: Schema
     //     }
     // },
     plugins: {

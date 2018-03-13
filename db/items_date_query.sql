@@ -1,3 +1,3 @@
 SELECT *
 FROM  items
-WHERE created_at > ${from_date}
+WHERE created_at > ${fromDate}

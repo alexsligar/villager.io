@@ -57,11 +57,11 @@ exports.up = function (knex, Promise) {
                 itemtagsTable.integer('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
                 itemtagsTable.text('tag_name').references('name').inTable('tags').index().onDelete('CASCADE').onUpdate('CASCADE');
             })
-            .createTable('links', (linksTable) => {
+            .createTable('linked_items', (linkedItemsTable) => {
 
-                linksTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
-                linksTable.integer('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
-                linksTable.integer('linked_item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
+                linkedItemsTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
+                linkedItemsTable.integer('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
+                linkedItemsTable.integer('linked_item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
             })
     );
 };
@@ -77,6 +77,6 @@ exports.down = function (knex, Promise) {
             .dropTableIfExists('item_owners')
             .dropTableIfExists('tags')
             .dropTableIfExists('item_tags')
-            .dropTableIfExists('links')
+            .dropTableIfExists('linked_items')
     );
 };

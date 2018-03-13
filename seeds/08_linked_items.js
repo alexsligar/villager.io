@@ -2,7 +2,7 @@
 
 exports.seed = function seed(knex, Promise) {
 
-    const tableName = 'links';
+    const tableName = 'linked_items';
     const rows = [
         {
             item_id: 4,

@@ -1,29 +1,36 @@
 'use strict';
 
-// const Joi = require('joi');
-// const Boom = require('boom');
+const Joi = require('joi');
+const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
 
 module.exports = {
     description: 'Returns all items created within time period given.',
-    tags: ['api', 'items', 'public'],
+    tags: ['api', 'public'],
+    auth: false,
+    validate: {
+        params: {
+            days: Joi.number().required()
+        }
+    },
     handler: async function (request, reply) {
 
         const { days } = request.params;
-        const from_date = new Date();
-        from_date.setDate(from_date.getDate() - days);
+        const fromDate = new Date();
+        fromDate.setDate(fromDate.getDate() - days);
 
-        const founditems = await this.db.items.date_query({ from_date });
+        const foundItems = await this.db.items.date_query({ fromDate });
 
-        return reply({ data: founditems });
+        /* Add pagination here */
+        return reply({ data: foundItems });
     },
-    response: {
+    /*response: {
         status: {
             200: Schema.items_response
         }
-    },
+    },*/
     plugins: {
         'hapi-swagger': swagger
     }

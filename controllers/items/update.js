@@ -12,16 +12,23 @@ module.exports = {
         params: {
             id: Joi.number().required()
         },
-        //payload: Schema.additem,
+        payload: Schema.additem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()
     },
     handler: async function (request, reply) {
 
-        const credentials = request.auth.credentials;
+    
         const tags = request.payload.tags;
         const linked_items = request.payload.linked_items;
+
+        const credentials = request.auth.credentials;
+        let temp = request.payload;
+        delete temp.linked_items;
+        delete temp.tags;
+        let update_item = temp;
+        
 
         if (credentials.role === 'user') {
             const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, username: credentials.username });
@@ -29,82 +36,132 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        const item = await this.db.items.findOne({ id: request.params.id });
+        let item = await this.db.items.findOne({ id: request.params.id });
 
         if (!item) {
             throw Boom.notFound('Item not found');
         }
 
-        item = request.payload;
+        if (temp.location) {
+            item.location = temp.location;
+        }
+        if (temp.start_date) {
+            item.start_date = temp.start_date;
+         }
+        if (temp.end_date) {
+            item.end_date = temp.end_date;
+        }
+        if (temp.type){
+            item.type = temp.type;
+        }
+        if (temp.name) {
+            item.name = temp.name;
+        }
+        
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
-                throw Boom.badrequest('Only event can have start and end dates');
+                throw Boom.badRequest('Only event can have start and end dates');
             }
         }
-        else {
-            if (!item.start_date) {
-                throw Boom.badrequest('Event must have at least a start date');
+
+        let placeLinked = false;
+
+        if (linked_items) {
+            await forEach(linked_items, async (linkedItem) => {
+
+            const foundItem = await this.db.items.findOne({ id: linkedItem });
+
+            if(!foundItem)
+            {
+                throw Boom.notFound('Attempting to link item that does not exist')
             }
-        }
-        // why is this the way that it is
+           
+            if (foundItem.type === 'place')
+            {
+                placeLinked = true;
+            }
+
         if (item.type === 'place') {
             //error checking
-            if (item.linked_place) {
-                throw Boom.badrequest('Can\'t link to place');
+                if (placeLinked) {
+                    throw Boom.badRequest('Can\'t link place to place');
             }
 
-            if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                if (foundItem.type === 'group') {
+                    throw Boom.badRequest('Can\'t link place to group');
             }
 
         }
-        else if (item.type === 'activity') {
+
+           if (item.type === 'activity') {
             //error checking
-            if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                if (foundItem.type === 'group') {
+                    throw Boom.badRequest('Can\'t link activity to group');
             }
         }
-        else if (item.type === 'group') {
+            
+            if (item.type === 'group') {
             //error checking
-            if (item.linked_group) {
-                throw Boom.badrequest('Can\'t link to group');
+                if (foundItem.type === 'group') {
+                    throw Boom.badRequest('Can\'t link group to group');
+                }
             }
         }
-        else { //event
+        );
+        
+
+        if (item.type === 'event') { 
             //error checking
-            if (!item.linked_place) {
-                throw Boom.badrequest('No place linked to event');
+            if (!placeLinked) {
+                throw Boom.badRequest('No place linked to event');
             }
+        }
         }
 
         await this.db.items.updateOne({ id: request.params.id }, item);
-        const returneditem = await this.db.items.byid({ id: request.params.id });
+        
+        let returneditem = await this.db.items.byid({ id: request.params.id });
+
+        if(tags){
         await forEach(tags, async (tag) => {
+            const check_tags = await this.db.tags.findOne({name: tag})
+            if(!check_tags){
+                throw Boom.badRequest(`Tag ${tag} does not exist`);
+            }
 
-            const found_tag = await this.db.item_tags.findOne({ item_id: returneditem.id, tag_name: tag.name });
-            if (found_tag) {
-                await this.db.item_tags.destroy({ item_id: returneditem.id, tag_name: tag.name });
-            }
-            else {
-                await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
-            }
-        });
+            const found_tag = await this.db.item_tags.findOne({ item_id: returneditem.id, tag_name: tag });
+                if (found_tag) {
+                    await this.db.item_tags.destroy({ item_id: returneditem.id, tag_name: tag });
+                }
+                else {
+                    await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag });
+                }
+            });
+        }
+        if(linked_items){
         await forEach(linked_items, async (link_item) => {
+            // FIX THIS. Needs to update links, instead of toggling existence
+            // Could end up deleting place required from event
+            const check_link = await this.db.items.findOne({ id: link_item })
+            if (!check_link) {
+                throw Boom.badRequest(`Attempting to link item that does not exist`);
 
-            const found_link = await this.db.links.findOne({ item_id: returneditem.id, linked_item_id: link_item.id });
+            }
+            const found_link = await this.db.linked_items.findOne({ item_id: returneditem.id, linked_item_id: link_item });
             if (found_link) {
-                await this.db.links.destroy({ item_id: returneditem.id, linked_item_id: link_item.id });
+                await this.db.linked_items.destroy({ item_id: returneditem.id, linked_item_id: link_item });
             }
             else {
-                await this.db.links.insert({ item_id: returneditem.id, linked_item_id: link_item.id });
+                await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: link_item });
             }
-        });
+            });
+        }
 
-        const founditems = await this.db.items.byid({ id: returneditem.id });
-        const links = await this.db.links.getlinks({ id: founditems.id },['name']);
-        returneditem.linked_items = links.linked_item;
-
+        const returned_links = await this.db.linked_items.getlinks({ id: returneditem.id});
+        const returned_tags = await this.db.tags.gettags({ id: returneditem.id });
+        returneditem.linked_items = returned_links.linked_items;
+        returneditem.tags = returned_tags.tags;
         return reply({ data: returneditem });
     },
     response: {

@@ -9,9 +9,9 @@ module.exports = {
     description: 'Add item',
     tags: ['api', 'items'],
     validate: {
-        //payload: Schema.additem,
+        payload: Schema.additem,
         headers: Joi.object({
-            'authorization': Joi.string().required()
+            'authorization': Joi.string().required(),
         }).unknown()
     },
     handler: async function (request, reply) {
@@ -76,18 +76,18 @@ module.exports = {
 
         await forEach(linked_items, async (item) => {
 
-            await this.db.links.insert({ item_id: returneditem.id, linked_item_id: item.id });
+            await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: item.id });
         });
-        returneditem.links = linked_items;
+        returneditem.linked_items = linked_items;
         returneditem.tags = tags;
         return reply({ data: returneditem });
     },
 
-    // response: {
-    //     status: {
-    //         200: Schema.item_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.item_response
+        }
+    },
 
     plugins: {
         'hapi-swagger': swagger

@@ -16,21 +16,22 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        const founditems = await this.db.items.byid({ id: request.params.id });
-        if (!founditems) {
+        const foundItems = await this.db.items.byid({ id: request.params.id });
+        
+        if (!foundItems) {
             throw Boom.notFound();
         }
 
-        const countstars = await this.db.items.countingstars({ id: founditems.id });
-        const countlist = await this.db.items.countinglists({ id: founditems.id });
+        const starsCount = await this.db.items.countingstars({ id: foundItems.id });
+        const listCount = await this.db.items.countinglists({ id: foundItems.id });
 
-        founditems.starred_number = Number(countstars.count);
-        founditems.list_number = Number(countlist.count);
+        foundItems.starred_number = Number(starsCount.count);
+        foundItems.list_number = Number(listCount.count);
 
-        const links = await this.db.links.getlinks({ id: founditems.id },['name']);
-        founditems.linked_items = links.linked_item;
+        const links = await this.db.linked_items.getlinks({ id: foundItems.id },['name']);
+        foundItems.linked_items = links.linked_item;
 
-        return reply({ data: founditems });
+        return reply({ data: foundItems });
     },
     response: {
         status: {

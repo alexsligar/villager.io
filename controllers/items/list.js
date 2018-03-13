@@ -18,17 +18,17 @@ module.exports = {
         }
         await forEach(founditems, async (item) => {
 
-            const links = await this.db.links.getlinks({ id: item.id },['name']);
+            const links = await this.db.linked_items.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
         });
         /* Add pagination */
         return reply({ data: founditems });
     },
-    response: {
+    /*response: {
         status: {
             200: Schema.items_response
         }
-    },
+    },*/
     plugins: {
         'hapi-swagger': swagger
     }

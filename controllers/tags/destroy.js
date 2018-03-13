@@ -6,7 +6,7 @@ const Schema = require('../../lib/schema');
 const swagger = Schema.generate();
 
 module.exports = {
-    description: 'Del tags',
+    description: 'Delete tag category from use and all items',
     tags: ['api', 'mod'],
     validate: {
         payload: Joi.object({ 'name': Joi.string().required() }),
@@ -19,7 +19,7 @@ module.exports = {
             throw Boom.unauthorized();
         }
         if (!await this.db.tags.findOne({ name: request.payload.name })) {
-            throw Boom.notFound('Tag doesn\'t exists');
+            throw Boom.notFound('Tag doesn\'t exist');
         }
 
         await this.db.tags.destroy({ name: request.payload.name });
@@ -28,7 +28,7 @@ module.exports = {
     },
     // response: {
     //     status: {
-    //         200: Schem
+    //         200: Schema
     //     }
     // },
     plugins: {
