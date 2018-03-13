@@ -55,6 +55,15 @@ describe('POST /item_owners', () => {
             expect(res.statusCode).to.equal(200);
         });
     });
+    it('Create owner as user', () => {
+
+        const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
+        const payload = { username: user.username, item_id: newEvent[0].id };
+        return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
+
+            expect(res.statusCode).to.equal(401);
+        });
+    });
     it('Create owner duplicate', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
@@ -62,6 +71,26 @@ describe('POST /item_owners', () => {
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(409);
+        });
+    });
+    it('Create owner fake item', () => {
+
+
+        const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
+        const payload = { username: user.username, item_id: 66 };
+        return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
+
+            expect(res.statusCode).to.equal(404);
+        });
+    });
+    it('Create owner fake user', () => {
+
+        const fake = Fixtures.user_id();
+        const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
+        const payload = { username: fake.username, item_id: newEvent[0].id };
+        return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
+
+            expect(res.statusCode).to.equal(404);
         });
     });
 });
