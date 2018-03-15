@@ -36,13 +36,13 @@ describe('POST /item_owners', () => {
     after(async () => {
 
         await Promise.all([
-            db.items.destroy(newEvent[0])
+            db.items.destroy({ id: newEvent[0].id })
         ]);
         await Promise.all([
-            db.users.destroy(user)
+            db.users.destroy({ id: user.id })
         ]);
         await Promise.all([
-            db.users.destroy(admin)
+            db.users.destroy({ id: admin.id })
         ]);
     });
 

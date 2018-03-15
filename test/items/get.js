@@ -26,7 +26,7 @@ describe('GET /items/id', () => {
     after(async () => {
 
         await Promise.all([
-            db.items.destroy(newEvent[0])
+            db.items.destroy({ id: newEvent[0].id })
         ]);
     });
 

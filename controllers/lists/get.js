@@ -29,13 +29,13 @@ module.exports = {
         if (list.length < 1) {
             return reply('List is empty').code(404);
         }
-        await forEach(foundlist, async (item) => {
+        await forEach(list, async (item) => {
 
             const links = await this.db.links.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
         });
 
-        return reply({ data: foundlist });
+        return reply({ data: list });
     },
     response: {
         status: {

@@ -23,7 +23,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
-        let user = await this.db.users.findOne({ username: credentials.username });
+        let user = await this.db.users.findOne({ username: request.params.username });
 
         if (!user) {
             throw Boom.notFound('User not found');

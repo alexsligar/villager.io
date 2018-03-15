@@ -21,17 +21,17 @@ module.exports = {
             throw Boom.unauthorized('Not permitted use this feature');
         }
 
-        if (!relation) {
+        if (!relation[0]) {
             throw Boom.notFound();
         }
 
         return reply({ data: relation });
     },
-    // response: {
-    //     status: {
-    //         200: Schema.usernames
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.usernames_reponse
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

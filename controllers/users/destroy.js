@@ -14,11 +14,12 @@ module.exports = {
         const credentials = request.auth.credentials;
         const user = await this.db.users.findOne({ username: request.params.username },['id']);
         // -------------------- Checks if user exists in table ------------------- //
-        if (!credentials) {
+
+        if (!user) {
             throw Boom.notFound();
         }
-        if (credentials.role !== 'admin' || credentials.id !== user.id) {
-            await this.db.users.destroy(user.id);
+        if (credentials.role === 'admin' || credentials.id === user.id) {
+            await this.db.users.destroy({ id: user.id });
         }
         else {
             throw Boom.unauthorized('The user is not permitted to delete this user!');

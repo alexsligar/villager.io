@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const Boom = require('boom');
+//const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
 
@@ -15,10 +15,6 @@ module.exports = {
 
         const credentials = request.auth.credentials;
         const user = await this.db.users.findOne({ username: credentials.username });
-
-        if (!user) {
-            throw Boom.notFound();
-        }
 
         return reply({ data: user });
     },
