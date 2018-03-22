@@ -18,7 +18,6 @@ module.exports = {
 
         const credentials = request.auth.credentials;
         const list = await this.db.lists.findOne({ id: request.params.id });
-        let listItems = [];
 
         if (!list) {
             throw Boom.notFound('List was not found.');
@@ -28,11 +27,7 @@ module.exports = {
             throw Boom.unauthorized('Unauthorized to delete list.');
         }
 
-        listItems = await this.db.list_items.by_list_id({ id: list.id });
-
-        if (listItems.length > 0) {
-            throw Boom.conflict('List is not empty.');
-        }
+        list.items = await this.db.list_items.by_list_id({ id: list.id });
 
         await this.db.lists.destroy({ id: list.id });
         return reply();

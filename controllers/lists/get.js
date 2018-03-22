@@ -17,19 +17,19 @@ module.exports = {
     auth: false,
     handler: async function (request, reply) {
 
-        let list = await this.db.lists.findOne({ id: request.params.id });
+        const list = await this.db.lists.findOne({ id: request.params.id });
 
         if (!list) {
             throw Boom.notFound('List was not found.');
         }
         else {
-            list = await this.db.list_items.by_list_id({ id: list.id });
+            list.items = await this.db.list_items.by_list_id({ id: list.id });
         }
 
-        if (list.length < 1) {
-            return reply('List is empty').code(404);
-        }
-        await forEach(list, async (item) => {
+        // if (list.items.length < 1) {
+        //     return reply('List is empty').code(404);
+        // }
+        await forEach(list.items, async (item) => {
 
             const links = await this.db.links.getlinks({ id: item.id },['name']);
             item.linked_items = links.linked_item;
@@ -39,7 +39,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.list_items_response
+            200: Schema.list_response
         }
     },
     plugins: {
