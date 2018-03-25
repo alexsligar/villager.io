@@ -17,7 +17,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const foundItems = await this.db.items.byid({ id: request.params.id });
-        
+
         if (!foundItems) {
             throw Boom.notFound();
         }

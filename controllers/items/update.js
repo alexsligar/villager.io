@@ -3,7 +3,7 @@ const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400']); 
+const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
     description: 'Update item',
@@ -19,16 +19,11 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-    
         const tags = request.payload.tags;
         const linked_items = request.payload.linked_items;
 
         const credentials = request.auth.credentials;
-        let temp = request.payload;
-        delete temp.linked_items;
-        delete temp.tags;
-        let update_item = temp;
-        
+        const temp = request.payload;
 
         if (credentials.role === 'user') {
             const item_owners = await this.db.item_owners.validate({ item_id: request.params.id, username: credentials.username });
@@ -36,7 +31,8 @@ module.exports = {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
-        let item = await this.db.items.findOne({ id: request.params.id });
+
+        const item = await this.db.items.findOne({ id: request.params.id });
 
         if (!item) {
             throw Boom.notFound('Item not found');
@@ -47,7 +43,7 @@ module.exports = {
         }
         if (temp.start_date) {
             item.start_date = temp.start_date;
-         }
+        }
         if (temp.end_date) {
             item.end_date = temp.end_date;
         }
@@ -57,7 +53,6 @@ module.exports = {
         if (temp.name) {
             item.name = temp.name;
         }
-        
 
         if (item.type !== 'event') {
             if (item.start_date || item.end_date) {
@@ -70,99 +65,97 @@ module.exports = {
         if (linked_items) {
             await forEach(linked_items, async (linkedItem) => {
 
-            const foundItem = await this.db.items.findOne({ id: linkedItem });
+                const foundItem = await this.db.items.findOne({ id: linkedItem });
 
-            if(!foundItem)
-            {
-                throw Boom.notFound('Attempting to link item that does not exist')
-            }
-           
-            if (foundItem.type === 'place')
-            {
-                placeLinked = true;
-            }
+                if (!foundItem) {
+                    throw Boom.notFound('Attempting to link item that does not exist');
+                }
 
-        if (item.type === 'place') {
-            //error checking
-                if (placeLinked) {
-                    throw Boom.badRequest('Can\'t link place to place');
-            }
+                if (foundItem.type === 'place') {
+                    placeLinked = true;
+                }
 
-                if (foundItem.type === 'group') {
-                    throw Boom.badRequest('Can\'t link place to group');
-            }
+                if (item.type === 'place') {
+                //error checking
+                    if (placeLinked) {
+                        throw Boom.badRequest('Can\'t link place to place');
+                    }
 
-        }
+                    if (foundItem.type === 'group') {
+                        throw Boom.badRequest('Can\'t link place to group');
+                    }
+                }
 
-           if (item.type === 'activity') {
-            //error checking
-                if (foundItem.type === 'group') {
-                    throw Boom.badRequest('Can\'t link activity to group');
-            }
-        }
-            
-            if (item.type === 'group') {
-            //error checking
-                if (foundItem.type === 'group') {
-                    throw Boom.badRequest('Can\'t link group to group');
+                if (item.type === 'activity') {
+                //error checking
+                    if (foundItem.type === 'group') {
+                        throw Boom.badRequest('Can\'t link activity to group');
+                    }
+                }
+
+                if (item.type === 'group') {
+                //error checking
+                    if (foundItem.type === 'group') {
+                        throw Boom.badRequest('Can\'t link group to group');
+                    }
                 }
             }
-        }
-        );
-        
+            );
 
-        if (item.type === 'event') { 
+            if (item.type === 'event') {
             //error checking
-            if (!placeLinked) {
-                throw Boom.badRequest('No place linked to event');
+                if (!placeLinked) {
+                    throw Boom.badRequest('No place linked to event');
+                }
             }
-        }
         }
 
         await this.db.items.updateOne({ id: request.params.id }, item);
-        
-        let returneditem = await this.db.items.byid({ id: request.params.id });
 
-        if(tags){
-        await forEach(tags, async (tag) => {
-            const check_tags = await this.db.tags.findOne({name: tag})
-            if(!check_tags){
-                throw Boom.badRequest(`Tag ${tag} does not exist`);
-            }
+        const returnedItem = await this.db.items.byid({ id: request.params.id });
 
-            const found_tag = await this.db.item_tags.findOne({ item_id: returneditem.id, tag_name: tag });
+        if (tags) {
+            await forEach(tags, async (tag) => {
+
+                const check_tags = await this.db.tags.findOne({ name: tag });
+                if (!check_tags) {
+                    throw Boom.badRequest(`Tag ${tag} does not exist`);
+                }
+
+                const found_tag = await this.db.item_tags.findOne({ item_id: returnedItem.id, tag_name: tag });
                 if (found_tag) {
-                    await this.db.item_tags.destroy({ item_id: returneditem.id, tag_name: tag });
+                    await this.db.item_tags.destroy({ item_id: returnedItem.id, tag_name: tag });
                 }
                 else {
-                    await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag });
+                    await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
                 }
             });
         }
-        if(linked_items){
-        await forEach(linked_items, async (link_item) => {
-            // FIX THIS. Needs to update links, instead of toggling existence
-            // Could end up deleting place required from event
-            const check_link = await this.db.items.findOne({ id: link_item })
-            if (!check_link) {
-                throw Boom.badRequest(`Attempting to link item that does not exist`);
 
-            }
-            const found_link = await this.db.linked_items.findOne({ item_id: returneditem.id, linked_item_id: link_item });
-            if (found_link) {
-                await this.db.linked_items.destroy({ item_id: returneditem.id, linked_item_id: link_item });
-            }
-            else {
-                await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: link_item });
-            }
+        if (linked_items) {
+            await forEach(linked_items, async (link_item) => {
+                // FIX THIS. Needs to update links, instead of toggling existence
+                // Could end up deleting place required from event
+                const check_link = await this.db.items.findOne({ id: link_item });
+                if (!check_link) {
+                    throw Boom.badRequest(`Attempting to link item that does not exist`);
+                }
+
+                const found_link = await this.db.linked_items.findOne({ item_id: returnedItem.id, linked_item_id: link_item });
+                if (found_link) {
+                    await this.db.linked_items.destroy({ item_id: returnedItem.id, linked_item_id: link_item });
+                }
+                else {
+                    await this.db.linked_items.insert({ item_id: returnedItem.id, linked_item_id: link_item });
+                }
             });
         }
 
-        const returned_links = await this.db.linked_items.getlinks({ id: returneditem.id});
-        const returned_tags = await this.db.tags.gettags({ id: returneditem.id });
-        returneditem.linked_items = returned_links.linked_items;
-        returneditem.tags = returned_tags.tags;
-        return reply({ data: returneditem });
+        const returned_links = await this.db.linked_items.getlinks({ id: returnedItem.id });
+        const returned_tags = await this.db.tags.gettags({ id: returnedItem.id });
+        returnedItem.linked_items = returned_links.linked_items;
+        returnedItem.tags = returned_tags.tags;
+        return reply({ data: returnedItem });
     },
     response: {
         status: {

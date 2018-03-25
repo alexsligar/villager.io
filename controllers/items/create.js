@@ -11,7 +11,7 @@ module.exports = {
     validate: {
         payload: Schema.additem,
         headers: Joi.object({
-            'authorization': Joi.string().required(),
+            'authorization': Joi.string().required()
         }).unknown()
     },
     handler: async function (request, reply) {
