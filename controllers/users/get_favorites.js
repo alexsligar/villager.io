@@ -24,8 +24,12 @@ module.exports = {
         const favorite_list = await this.db.list_items.by_list_id({ id: user.id });
 
         if (!favorite_list[0]) {
-            return reply('User\'s favorite list is empty').code(404);
+            return reply({ data: 'User\'s favorite list is empty' }).code(404);
         }
+        const links = await this.db.links.getlinks({ id: favorite_list.id },['name']);
+        favorite_list[0].linked_items = links.linked_item;
+
+
         return reply({ data: favorite_list });
     },
     response: {

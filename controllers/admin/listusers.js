@@ -13,17 +13,13 @@ module.exports = {
 
     handler: async function (request, reply) {
 
-        if (request.auth.credentials.role === 'user') {
+        if (request.auth.credentials.role !== 'admin') {
             throw Boom.unauthorized();
         }
 
-        const founduser = await this.db.users.find();
+        const users = await this.db.users.getall();
 
-        if (!founduser) {
-            throw Boom.notFound();
-        }
-
-        return reply({ data: founduser });
+        return reply({ data: users });
     },
     response: {
         status: {

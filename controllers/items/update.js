@@ -3,7 +3,7 @@ const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400']);
+const swagger = Schema.generate(['401', '404', '400']); 
 
 module.exports = {
     description: 'Update item',
@@ -12,7 +12,7 @@ module.exports = {
         params: {
             id: Joi.number().required()
         },
-        payload: Schema.additem,
+        payload: Schema.updateitem,
         headers: Joi.object({
             'authorization': Joi.string().required()
         }).unknown()

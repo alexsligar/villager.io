@@ -40,11 +40,11 @@ module.exports = {
 
         return reply({ message: 'Items Merged' });
     },
-    // response: {
-    //     status: {
-    //         200: Schema.item_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.message_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

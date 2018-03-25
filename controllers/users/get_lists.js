@@ -23,8 +23,8 @@ module.exports = {
             throw Boom.notFound();
         }
         const userlists = await this.db.lists.getAllByOwner({ owner: user.id });
-        if (!userlists) {
-            throw Boom.notFound();
+        if (!userlists[0]) {
+            throw Boom.notFound('User has no lists');
         }
         return reply({ data: userlists });
     },

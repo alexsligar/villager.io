@@ -4,7 +4,7 @@ const Controllers = require('keyfob').load({ path: './controllers', fn: require 
 module.exports = [
     //admin
     { method: 'PUT', path: '/{username}/role', config: Controllers.admin.updaterole },
-    { method: 'GET', path: '/users', config: Controllers.admin.getusers }, //for testing
+    { method: 'GET', path: '/users', config: Controllers.admin.listusers }, //for testing
 
     //Authentication
     { method: 'POST', path: '/create_account', config: Controllers.auth.adduser },
@@ -31,12 +31,12 @@ module.exports = [
     { method: 'DELETE', path: '/items/{id}/tags', config: Controllers.items.destroy_tag },
 
     //item_owners
-    { method: 'GET', path: '/item_owners', config: Controllers.itemowners.list },
+    { method: 'GET', path: '/item_owners/{id}', config: Controllers.itemowners.list },
     { method: 'POST', path: '/item_owners', config: Controllers.itemowners.create },
     { method: 'DELETE', path: '/item_owners', config: Controllers.itemowners.destroy },
 
     //users
-    { method: 'GET', path: '/users/profile', config: Controllers.users.getme },
+    { method: 'GET', path: '/users/profile', config: Controllers.users.get_profile },
     { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
     { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.get_favorites },
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },
@@ -48,6 +48,7 @@ module.exports = [
     { method: 'GET', path: '/lists', config: Controllers.lists.list },
     { method: 'POST', path: '/lists', config: Controllers.lists.create },
     { method: 'PUT', path: '/lists/{id}', config: Controllers.lists.update },
+    { method: 'DELETE', path: '/lists/{id}', config: Controllers.lists.destroy },
 
     //list items
     { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.create },

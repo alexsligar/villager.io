@@ -38,14 +38,16 @@ module.exports = {
         if (!foundUser) {
             throw Boom.notFound('Username not found.');
         }
-        else if (foundUser.role === 'admin') {
-            throw Boom.unauthorized('Unauthorized to change role of admins.');
-        }
 
         await this.db.users.updateOne({ id: foundUser.id }, request.payload);
         foundUser = await this.db.users.get_public_by_username({ username: request.params.username });
 
         return reply({ data: foundUser });
+    },
+    response: {
+        status: {
+            200: Schema.user_response
+        }
     },
     plugins: {
         'hapi-swagger': swagger

@@ -33,12 +33,12 @@ module.exports = {
         }
         else {
             await this.db.item_owners.destroy({ username, item_id });
-            return reply({ message: 'Relation was deleted' });
+            return reply(null).code(204);
         }
     },
     response: {
         status: {
-            200: Schema.message_response
+            204: Joi.only(null).label('Null')
         }
     },
     plugins: {

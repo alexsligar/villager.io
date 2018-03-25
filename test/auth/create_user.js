@@ -41,4 +41,13 @@ describe('POST /create_account', () => {
             expect(res.statusCode).to.equal(409);
         });
     });
+    it('Create user duplicate email', () => {
+
+        const payload = Fixtures.user();
+        payload.email = user.email;
+        return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
+
+            expect(res.statusCode).to.equal(409);
+        });
+    });
 });

@@ -35,14 +35,11 @@ module.exports = {
         /**
          * Checks if user/item exists in their table and throws an error if they do not.
          */
-        if (!user && !item) {
-            throw Boom.conflict('User and item does not exist!');
-        }
-        else if (!user) {
-            throw Boom.conflict('User does not exist!');
+        if (!user) {
+            throw Boom.notFound('User does not exist!');
         }
         else if (!item) {
-            throw Boom.conflict('Item does not exist!');
+            throw Boom.notFound('Item does not exist!');
         }
 
         // -------------------- Checks if owner/item relation already exists in table -- //
@@ -60,12 +57,13 @@ module.exports = {
             await this.db.item_owners.insert({ username, item_id });
         }
 
-        return reply({ message: 'Relation was added' });
+        return reply({ data: request.payload });
     },
-
     response: {
         status: {
-            200: Schema.message_response
+            200: {
+                data: Schema.itemowner
+            }
         }
     },
 

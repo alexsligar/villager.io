@@ -33,11 +33,11 @@ module.exports = {
 
         return reply({ data: foundItems });
     },
-    response: {
-        status: {
-            200: Schema.item_response
-        }
-    },
+    // response: {
+    //     status: {
+    //         200: Schema.item_response
+    //     }
+    // },
     plugins: {
         'hapi-swagger': swagger
     }

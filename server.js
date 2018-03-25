@@ -17,7 +17,7 @@ const db = new Muckraker(Config.db);
 
 
 server.connection(Config.connection.public);
-
+//$lab:coverage:off$
 server.on('request-error', (err, m) => {
 
     if (err) {
@@ -71,10 +71,11 @@ exports.server = server.register([{
         validateFunc: async (decoded, request, callback) => {
 
             const user = await db.users.validate(decoded);
+            //$lab:coverage:off$
             if (!user) {
                 return callback(null, false); //user is not valid
             }
-
+            //$lab:coverage:on$
             const logout = user.logout.getTime();
             const timestamp = Date.parse(decoded.timestamp);
             if (timestamp < logout) {
