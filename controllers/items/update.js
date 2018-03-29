@@ -114,6 +114,36 @@ module.exports = {
 
         const returnedItem = await this.db.items.byid({ id: request.params.id });
 
+        var seenDuplicatetag = false;
+        var seenDuplicatelink = false;
+        var testObject = {};
+
+        // if (tags) {
+        //     tags.map(function(item) {
+        //         var tag_name = item['tags'];
+        //         if (tag_name in testObject) {
+        //         testObject[tag_name].duplicate = true;
+        //         item.duplicate = true;
+        //         seenDuplicatetag = true;
+        //         }
+        //         else {
+        //         throw Boom.badRequest('Duplicate tag');
+        //         }
+        //     });
+        // }
+        // if(linked_items) {
+        //     linked_items.map(function(item) {
+        //     var link = item['linked_items'];
+        //     if (link in testObject) {
+        //         testObject[link].duplicate = true;
+        //         item.duplicate = true;
+        //         seenDuplicatelink = true;
+        //     }
+        //     else {
+        //         throw Boom.badRequest('Duplicate linked_item');
+        //     }
+        //     });
+        // }
         if (tags) {
             await forEach(tags, async (tag) => {
 
@@ -121,14 +151,9 @@ module.exports = {
                 if (!check_tags) {
                     throw Boom.badRequest(`Tag ${tag} does not exist`);
                 }
+                await this.db.item_tags.destroy({ item_id: returnedItem.id });
+                await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
 
-                const found_tag = await this.db.item_tags.findOne({ item_id: returnedItem.id, tag_name: tag });
-                if (found_tag) {
-                    await this.db.item_tags.destroy({ item_id: returnedItem.id, tag_name: tag });
-                }
-                else {
-                    await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
-                }
             });
         }
 
