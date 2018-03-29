@@ -112,52 +112,54 @@ module.exports = {
 
         await this.db.items.updateOne({ id: request.params.id }, item);
 
-        const returnedItem = await this.db.items.byid({ id: request.params.id });
+        const returnedItem = await this.db.items.byid({ id: request.params.id });        
 
-        var seenDuplicatetag = false;
-        var seenDuplicatelink = false;
-        var testObject = {};
-
-        // if (tags) {
-        //     tags.map(function(item) {
-        //         var tag_name = item['tags'];
-        //         if (tag_name in testObject) {
-        //         testObject[tag_name].duplicate = true;
-        //         item.duplicate = true;
-        //         seenDuplicatetag = true;
-        //         }
-        //         else {
-        //         throw Boom.badRequest('Duplicate tag');
-        //         }
-        //     });
-        // }
-        // if(linked_items) {
-        //     linked_items.map(function(item) {
-        //     var link = item['linked_items'];
-        //     if (link in testObject) {
-        //         testObject[link].duplicate = true;
-        //         item.duplicate = true;
-        //         seenDuplicatelink = true;
-        //     }
-        //     else {
-        //         throw Boom.badRequest('Duplicate linked_item');
-        //     }
-        //     });
-        // }
         if (tags) {
+            var seenDuplicate = false,
+            testObject = {};
+
+            tags.map(function(item) {
+                var itemPropertyName = item;
+                if (itemPropertyName in testObject) {
+                    throw Boom.badRequest('Duplicate tags');
+                }
+                else {
+                testObject[itemPropertyName] = item;
+                }
+            });
+        }
+        if (linked_items) {
+            var seenDuplicate2 = false,
+            testObject2 = {};
+
+            linked_items.map(function(item) {
+                var itemPropertyName2 = item;
+                if (itemPropertyName2 in testObject) {
+                    throw Boom.badRequest('Duplicate link');
+                }
+                else {
+                testObject[itemPropertyName2] = item;
+                }
+            });
+        }
+
+        if (tags) {
+            await this.db.item_tags.destroy({ item_id: returnedItem.id });
+            
             await forEach(tags, async (tag) => {
 
                 const check_tags = await this.db.tags.findOne({ name: tag });
                 if (!check_tags) {
                     throw Boom.badRequest(`Tag ${tag} does not exist`);
                 }
-                await this.db.item_tags.destroy({ item_id: returnedItem.id });
                 await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
-
             });
         }
+        
 
         if (linked_items) {
+            await this.db.linked_items.destroy({ item_id: returnedItem.id });
+            
             await forEach(linked_items, async (link_item) => {
                 // FIX THIS. Needs to update links, instead of toggling existence
                 // Could end up deleting place required from event
@@ -166,11 +168,8 @@ module.exports = {
                     throw Boom.badRequest(`Attempting to link item that does not exist`);
                 }
 
-                const found_link = await this.db.linked_items.findOne({ item_id: returnedItem.id, linked_item_id: link_item });
+                const found_link = await this.db.items.findOne({ id: link_item });
                 if (found_link) {
-                    await this.db.linked_items.destroy({ item_id: returnedItem.id, linked_item_id: link_item });
-                }
-                else {
                     await this.db.linked_items.insert({ item_id: returnedItem.id, linked_item_id: link_item });
                 }
             });
