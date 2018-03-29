@@ -2,7 +2,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400']);
+const swagger = Schema.generate(['401', '404', '400', '412']);
 
 module.exports = {
     description: 'Delete item',
