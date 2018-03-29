@@ -15,6 +15,7 @@ module.exports = [
     { method: 'PUT', path: '/merge', config: Controllers.admin.mergeitems },
 
     //tags
+    { method: 'GET', path: '/tags', config: Controllers.tags.list },
     { method: 'POST', path: '/tags', config: Controllers.tags.create },
     { method: 'DELETE', path: '/tags', config: Controllers.tags.destroy },
     { method: 'PUT', path: '/tags/{name}', config: Controllers.tags.update },
