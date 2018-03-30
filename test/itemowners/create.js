@@ -75,9 +75,10 @@ describe('POST /item_owners', () => {
     });
     it('Create owner fake item', () => {
 
+        const notExist = newEvent[0].id + 100;
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: 66 };
+        const payload = { username: user.username, item_id: notExist };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(404);
