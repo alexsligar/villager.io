@@ -1,6 +1,6 @@
 'use strict';
 const Joi = require('joi');
-const Boom = require('boom');
+//const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
@@ -18,9 +18,6 @@ module.exports = {
 
         const name = request.params.name;
         const founditems = await this.db.items.getbytag({ name });
-        if (!founditems[0]) {
-            throw Boom.notFound();
-        }
 
         return reply({ data: founditems });
     },

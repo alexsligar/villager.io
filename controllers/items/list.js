@@ -1,7 +1,7 @@
 'use strict';
 // const Joi = require('joi');
 const { forEach } = require('p-iteration');
-const Boom = require('boom');
+//const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
@@ -13,9 +13,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const founditems = await this.db.items.getall();
-        if (!founditems[0]) {
-            throw Boom.notFound();
-        }
+
         await forEach(founditems, async (item) => {
 
             const links = await this.db.linked_items.getlinks({ id: item.id },['name']);
