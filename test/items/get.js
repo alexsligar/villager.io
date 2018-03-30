@@ -30,7 +30,7 @@ describe('GET /items/id', () => {
         ]);
     });
 
-    it('get item', async () => {
+    it('Get Item', async () => {
 
         const query = {
             method: 'GET',
@@ -38,5 +38,17 @@ describe('GET /items/id', () => {
         };
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
+    });
+
+    it('Get Item - Does not exist', async () => {
+
+        const notExist = newEvent[0].id + 100;
+
+        const query = {
+            method: 'GET',
+            url: `/items/${notExist}`
+        };
+        const response = await server.inject(query);
+        expect(response.statusCode).to.equal(404);
     });
 });
