@@ -6,7 +6,7 @@ const Server = Fixtures.server;
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
-describe('POST Lists:', () => {
+describe('LIST tags:', () => {
 
     let server;
 
