@@ -31,11 +31,7 @@ module.exports = {
             throw Boom.badRequest('No name given');
         }
 
-        else if (request.payload.type !== 'place' && request.payload.type !== 'group' && request.payload.type !== 'activity' && request.payload.type !== 'event') {
-            throw Boom.badRequest('Invalid type');
-        }
-
-        if (request.payload.type !== 'event' && request.payload.start_date && request.payload.end_date) {
+        if (request.payload.type !== 'event' && (request.payload.start_date || request.payload.end_date)) {
             throw Boom.badRequest('Only event can have start and end dates');
         }
 
@@ -66,7 +62,11 @@ module.exports = {
                     throw Boom.badRequest('Can\'t link to group');
                 }
                 break;
+
+            default:
+                throw Boom.badRequest('Invalid type');
         }
+
         const returneditem = await this.db.items.insert(payload);
         await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
         if ( tags ){

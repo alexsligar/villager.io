@@ -14,14 +14,13 @@ describe('POST Items:', () => {
     const event = Fixtures.event();
     let server;
     const user = Fixtures.user_id();
-    const user2 = Fixtures.user_id();
     let token;
+    let eventID;
 
     before(async () => {
 
         await Promise.all([
-            db.users.insert(user),
-            db.users.insert(user2)
+            db.users.insert(user)
         ]);
 
         server = await Server;
@@ -30,9 +29,9 @@ describe('POST Items:', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ user_id: user.id }),
-            db.users.destroy({ user_id: user2.id }),
-            db.items.destroy({ name: event.name })
+            db.users.destroy({ id: user.id }),
+            db.items.destroy({ id: eventID })//,
+            // db.items.destroy({ name: event.name += 'a' })
         ]);
     });
 
@@ -40,17 +39,18 @@ describe('POST Items:', () => {
 
         token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
 
-        const query1 = {
+        const query = {
             method: 'POST',
             url: '/items',
-            headers: { 'authorization': token },
+            headers: { 'Authorization': token },
             payload: event
         };
 
         return (
-            server.inject(query1)
+            server.inject(query)
                 .then((response) => {
 
+                    eventID = response.result.data.id;
                     expect(response.statusCode).to.equal(200);
                 })
         );
@@ -58,12 +58,10 @@ describe('POST Items:', () => {
 
     it('Create item duplicate', () => {
 
-        token = JWT.sign({ id: user2.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-
         const query2 = {
             method: 'POST',
             url: `/items`,
-            headers: { 'authorization': token },
+            headers: { 'Authorization': token },
             payload: event
         };
 
@@ -75,15 +73,16 @@ describe('POST Items:', () => {
                 })
         );
     });
-/*
-    it('Create list no name', () => {
 
-        list.name = null;
+    it('Create Item: Not Event, With Dates', () => {
+
+        event.name += 'a';
+        event.type = 'place';
         const query = {
             method: 'POST',
-            url: `/lists`,
-            headers: { 'authorization': token },
-            payload: list
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: event
         };
 
         return (
@@ -93,5 +92,47 @@ describe('POST Items:', () => {
                     expect(response.statusCode).to.equal(400);
                 })
         );
-    });*/
+    });
+
+    it('Create Item: Wrong Type', () => {
+
+        event.type = 'carnival';
+        event.startDate = null;
+        event.endDate = null;
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: event
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Create Item: No Name', () => {
+
+        event.type = null;
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: event
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
 });
