@@ -3,7 +3,7 @@ const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate();
+const swagger = Schema.generate(['409']);
 
 module.exports = {
     description: 'Add item',
@@ -69,17 +69,26 @@ module.exports = {
         }
         const returneditem = await this.db.items.insert(payload);
         await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
-        await forEach(tags, async (tag) => {
+        if ( tags ){
 
-            await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
-        });
+            await forEach(tags, async (tag) => {
 
-        await forEach(linked_items, async (item) => {
+                await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
+            });
 
-            await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: item.id });
-        });
-        returneditem.linked_items = linked_items;
-        returneditem.tags = tags;
+            returneditem.tags = tags;
+        }
+
+        if ( linked_items ){
+
+            await forEach(linked_items, async (item) => {
+
+                await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: item.id });
+            });
+
+            returneditem.linked_items = linked_items;
+        }
+
         return reply({ data: returneditem });
     },
 
