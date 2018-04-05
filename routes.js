@@ -28,8 +28,6 @@ module.exports = [
     { method: 'POST', path: '/items', config: Controllers.items.create },
     { method: 'PUT', path: '/items/{id}', config: Controllers.items.update },
     { method: 'DELETE', path: '/items/{id}', config: Controllers.items.destroy },
-    { method: 'POST', path: '/items/{id}/tags', config: Controllers.items.create_tag },
-    { method: 'DELETE', path: '/items/{id}/tags', config: Controllers.items.destroy_tag },
 
     //item_owners
     { method: 'GET', path: '/item_owners/{id}', config: Controllers.itemowners.list },
