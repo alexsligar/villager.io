@@ -68,7 +68,8 @@ exports.event = function (attrs, id) {
         location: Faker.address.streetAddress(),
         type: 'event',
         start_date: Faker.date.past(),
-        end_date: Faker.date.future()
+        end_date: Faker.date.future(),
+        linked_items: [1]
     };
     return Object.assign(defaults, attrs);
 };
@@ -79,9 +80,7 @@ exports.activity = function (attrs, id) {
     const defaults = {
         name: Faker.lorem.word(),
         location: Faker.address.streetAddress(),
-        type: 'activity',
-        start_date: Faker.date.past(),
-        end_date: Faker.date.future()
+        type: 'activity'
     };
     return Object.assign(defaults, attrs);
 };
@@ -92,9 +91,7 @@ exports.place = function (attrs, id) {
     const defaults = {
         name: Faker.lorem.word(),
         location: Faker.address.streetAddress(),
-        type: 'place',
-        start_date: Faker.date.past(),
-        end_date: Faker.date.future()
+        type: 'place'
     };
     return Object.assign(defaults, attrs);
 };

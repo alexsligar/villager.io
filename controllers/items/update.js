@@ -54,10 +54,22 @@ module.exports = {
             item.name = temp.name;
         }
 
-        if (item.type !== 'event') {
-            if (item.start_date || item.end_date) {
-                throw Boom.badRequest('Only event can have start and end dates');
-            }
+        switch (item.type) {
+            case 'event':
+                if (!item.start_date) {
+                    throw Boom.badRequest('Event must have a start date');
+                }
+                break;
+            case 'place':
+            case 'group':
+            case 'activity':
+                if (item.start_date || item.end_date) {
+                    throw Boom.badRequest('Only event can have start and end dates');
+                }
+                break;
+            default:
+                // throw Boom.badRequest('Item must be "event", "place", "activity", or "group"');
+                // break;
         }
 
         let placeLinked = false;
@@ -77,37 +89,39 @@ module.exports = {
 
                 if (item.type === 'place') {
                 //error checking
-                    if (placeLinked) {
-                        throw Boom.badRequest('Can\'t link place to place');
-                    }
-
-                    if (foundItem.type === 'group') {
-                        throw Boom.badRequest('Can\'t link place to group');
-                    }
+                    throw Boom.badRequest('Can\'t link place to other Items');
                 }
 
                 if (item.type === 'activity') {
                 //error checking
-                    if (foundItem.type === 'group') {
-                        throw Boom.badRequest('Can\'t link activity to group');
+                    if (foundItem.type !== 'place') {
+                        throw Boom.badRequest('Can\'t link activity to anything but Place');
                     }
                 }
 
                 if (item.type === 'group') {
                 //error checking
-                    if (foundItem.type === 'group') {
-                        throw Boom.badRequest('Can\'t link group to group');
+                    if (foundItem.type !== 'place') {
+                        throw Boom.badRequest('Can\'t link group to anything but Place');
+                    }
+                }
+
+                if (item.type === 'event') {
+                    //error checking
+                    if (foundItem.type === 'event' | foundItem.type === 'activity') {
+                        throw Boom.badRequest('Can\'t link Event to Item type');
                     }
                 }
             }
             );
 
             if (item.type === 'event') {
-            //error checking
+                //error checking
                 if (!placeLinked) {
                     throw Boom.badRequest('No place linked to event');
                 }
             }
+
         }
 
         await this.db.items.updateOne({ id: request.params.id }, item);
@@ -138,15 +152,7 @@ module.exports = {
 
             await forEach(uniqueLinks, async (link_item) => {
 
-                const check_link = await this.db.items.findOne({ id: link_item });
-                if (!check_link) {
-                    throw Boom.badRequest(`Attempting to link item that does not exist`);
-                }
-
-                const found_link = await this.db.items.findOne({ id: link_item });
-                if (found_link) {
-                    await this.db.linked_items.insert({ item_id: returnedItem.id, linked_item_id: link_item });
-                }
+                await this.db.linked_items.insert({ item_id: returnedItem.id, linked_item_id: link_item });
             });
         }
 
