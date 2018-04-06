@@ -3,6 +3,7 @@
 const Fixtures = require('../fixtures');
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
+const Faker = require('faker');
 const Server = Fixtures.server;
 const db = Fixtures.db;
 
@@ -12,8 +13,12 @@ const { expect } = require('code');
 describe('POST Items:', () => {
 
     const event = Fixtures.event();
+    let place = Fixtures.place();
+
     let server;
+
     const user = Fixtures.user_id();
+
     let token;
     let eventID;
 
@@ -35,9 +40,11 @@ describe('POST Items:', () => {
         ]);
     });
 
-    it('Create item', () => {
+    it('Create item, Correct', () => {
 
         token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
+
+        event.tags = ['outdoors'];
 
         const query = {
             method: 'POST',
@@ -94,11 +101,114 @@ describe('POST Items:', () => {
         );
     });
 
+    it('Create Item: Event, No Start Date', () => {
+
+        place.type = 'event';
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
     it('Create Item: Wrong Type', () => {
 
-        event.type = 'carnival';
-        event.startDate = null;
-        event.endDate = null;
+        place.type = 'carnival';
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Create Item: No Name', () => {
+
+        place.name = '';
+        place.type = 'place';
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Create Place: Linked Items', () => {
+
+        place = Fixtures.place();
+        place.linked_items = [1];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Link Non-existent Item', () => {
+
+        event.type = 'event';
+        event.linked_items = [eventID + 100];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: event
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(404);
+                })
+        );
+    });
+
+    it('Link Event to Event', () => {
+
+        event.name = Faker.lorem.word();
+        event.type = 'event';
+        event.linked_items = [9];
 
         const query = {
             method: 'POST',
@@ -116,15 +226,41 @@ describe('POST Items:', () => {
         );
     });
 
-    it('Create Item: No Name', () => {
+    it('Link Group to not Place', () => {
 
-        event.type = null;
+        place.type = 'group';
+        delete place.linked_items;
+        place.linked_items = [4];
 
         const query = {
             method: 'POST',
             url: `/items`,
             headers: { 'Authorization': token },
-            payload: event
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Incorrect Tags', () => {
+
+        const falseTag = Faker.lorem.word();
+
+        delete place.linked_items;
+        place.name = Faker.lorem.word();
+        place.tags = [falseTag];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
         };
 
         return (

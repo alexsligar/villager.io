@@ -27,10 +27,6 @@ module.exports = {
             throw Boom.conflict(`Item already exists`);
         }
 
-        if (!request.payload.name) {
-            throw Boom.badRequest('No name given');
-        }
-
         if (request.payload.type !== 'event' && (request.payload.start_date || request.payload.end_date)) {
             throw Boom.badRequest('Only event can have start and end dates');
         }
@@ -43,53 +39,92 @@ module.exports = {
                 break;
 
             case 'place':
-                if (request.payload.linked_place) {
-                    throw Boom.badRequest('Can\'t link to place');
-                }
-                if (request.payload.linked_group) {
-                    throw Boom.badRequest('Can\'t link to group');
-                }
-                break;
-
-            case 'activity':
-                if (request.payload.linked_group) {
-                    throw Boom.badRequest('Can\'t link to group');
-                }
-                break;
-
-            case 'group':
-                if (request.payload.linked_group) {
-                    throw Boom.badRequest('Can\'t link to group');
+                if (request.payload.linked_items) {
+                    throw Boom.badRequest('Can\'t link place to other Items');
                 }
                 break;
 
             default:
-                throw Boom.badRequest('Invalid type');
         }
 
-        const returneditem = await this.db.items.insert(payload);
-        await this.db.item_owners.insert({ item_id: returneditem.id, username: credentials.username });
-        if ( tags ){
+        const returnedItem = await this.db.items.insert(payload);
+        await this.db.item_owners.insert({ item_id: returnedItem.id, username: credentials.username });
 
-            await forEach(tags, async (tag) => {
+        if (tags) {
+            // remove duplicates and ignore instead of throwing error
+            const uniqueTags = [... new Set(tags)];
 
-                await this.db.item_tags.insert({ item_id: returneditem.id, tag_name: tag.name });
+            await forEach(uniqueTags, async (tag) => {
+
+                const check_tags = await this.db.tags.findOne({ name: tag });
+                if (!check_tags) {
+                    throw Boom.badRequest(`Tag ${tag} does not exist`);
+                }
+                await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
             });
-
-            returneditem.tags = tags;
         }
+
+        let placeLinked = false;
 
         if ( linked_items ){
+            await forEach(linked_items, async (linkedItem) => {
 
-            await forEach(linked_items, async (item) => {
+                const foundItem = await this.db.items.findOne({ id: linkedItem });
 
-                await this.db.linked_items.insert({ item_id: returneditem.id, linked_item_id: item.id });
+                if (!foundItem) {
+                    this.db.items.destroy({ id: returnedItem.id });
+                    throw Boom.notFound('Attempting to link item that does not exist');
+                }
+
+                if (foundItem.type === 'place') {
+                    placeLinked = true;
+                }
+
+                if (request.payload.type === 'activity') {
+                    //error checking
+                    if (foundItem.type !== 'place') {
+                        this.db.items.destroy({ id: returnedItem.id });
+                        throw Boom.badRequest('Can\'t link activity to anything but Place');
+                    }
+                }
+
+                if (request.payload.type === 'group') {
+                    //error checking
+                    if (foundItem.type !== 'place') {
+                        this.db.items.destroy({ id: returnedItem.id });
+                        throw Boom.badRequest('Can\'t link group to anything but Place');
+                    }
+                }
+
+                if (request.payload.type === 'event') {
+                    //error checking
+                    if (foundItem.type === 'event' | foundItem.type === 'activity') {
+                        this.db.items.destroy({ id: returnedItem.id });
+                        throw Boom.badRequest('Can\'t link Event to Item type');
+                    }
+                }
+            }
+            );
+
+            if (request.payload.type === 'event') {
+                //error checking
+                if (!placeLinked) {
+                    this.db.items.destroy({ id: returnedItem.id });
+                    throw Boom.badRequest('Event required to be linked to Place');
+                }
+            }
+
+            const uniqueLinks = [... new Set(linked_items)];
+
+            await forEach(uniqueLinks, async (item) => {
+
+                await this.db.linked_items.insert({ item_id: returnedItem.id, linked_item_id: item.id });
             });
 
-            returneditem.linked_items = linked_items;
-        }
+            returnedItem.linked_items = linked_items;
+        };
 
-        return reply({ data: returneditem });
+        return reply({ data: returnedItem });
     },
 
     response: {
