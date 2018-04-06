@@ -43,6 +43,13 @@ exports.seed = function seed(knex, Promise) {
             name: 'Fiesta Mexican Restaurant',
             location: '8524 W Gage Blvd #130, Kennewick, WA 99336',
             type: 'place'
+        },
+        {//9
+            name: 'Go To Dive in Diner',
+            location: '2000 Fire ln, Flavor Town, USA',
+            type: 'event',
+            start_date: '01/22/2018',
+            end_date: '01/22/2018'
         }
     ];
 

@@ -11,6 +11,10 @@ exports.seed = function seed(knex, Promise) {
         {
             item_id: 3,
             linked_item_id: 1
+        },
+        {
+            item_id: 9,
+            linked_item_id: 2
         }
 
     ];
