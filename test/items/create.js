@@ -14,6 +14,7 @@ describe('POST Items:', () => {
 
     const event = Fixtures.event();
     let place = Fixtures.place();
+    const group = Fixtures.group();
 
     let server;
 
@@ -21,6 +22,9 @@ describe('POST Items:', () => {
 
     let token;
     let eventID;
+    let placeID;
+    let groupID;
+    let activityID;
 
     before(async () => {
 
@@ -35,8 +39,10 @@ describe('POST Items:', () => {
 
         await Promise.all([
             db.users.destroy({ id: user.id }),
-            db.items.destroy({ id: eventID })//,
-            // db.items.destroy({ name: event.name += 'a' })
+            db.items.destroy({ id: eventID }),
+            db.items.destroy({ id: placeID }),
+            db.items.destroy({ id: groupID }),
+            db.items.destroy({ id: activityID })
         ]);
     });
 
@@ -83,7 +89,7 @@ describe('POST Items:', () => {
 
     it('Create Item: Not Event, With Dates', () => {
 
-        event.name += 'a';
+        event.name = Faker.lorem.word();
         event.type = 'place';
         const query = {
             method: 'POST',
@@ -110,6 +116,26 @@ describe('POST Items:', () => {
             url: `/items`,
             headers: { 'Authorization': token },
             payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Create Item: Non-Event, End-Date', () => {
+
+        group.end_date = '01/01/2015';
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: group
         };
 
         return (
@@ -164,6 +190,7 @@ describe('POST Items:', () => {
 
     it('Create Place: Linked Items', () => {
 
+        place = Faker.lorem.word();
         place = Fixtures.place();
         place.linked_items = [1];
 
@@ -226,9 +253,81 @@ describe('POST Items:', () => {
         );
     });
 
+    it('Link Group to Place', () => {
+
+        place.name = Faker.lorem.word();
+        place.type = 'group';
+        delete place.linked_items;
+        place.linked_items = [1];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    groupID = response.result.data.id;
+                    expect(response.statusCode).to.equal(200);
+                })
+        );
+    });
+
     it('Link Group to not Place', () => {
 
+        place.name = Faker.lorem.word();
         place.type = 'group';
+        delete place.linked_items;
+        place.linked_items = [4];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Link Activity to Place', () => {
+
+        place.name = Faker.lorem.word() + 'a';
+        place.type = 'activity';
+        delete place.linked_items;
+        place.linked_items = [1];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    activityID = response.result.data.id;
+                    expect(response.statusCode).to.equal(200);
+                })
+        );
+    });
+
+    it('Link Activity to not Place', () => {
+
+        place.name = Faker.lorem.word();
+        place.type = 'activity';
         delete place.linked_items;
         place.linked_items = [4];
 
@@ -261,6 +360,52 @@ describe('POST Items:', () => {
             url: `/items`,
             headers: { 'Authorization': token },
             payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(400);
+                })
+        );
+    });
+
+    it('Place without links', () => {
+
+        delete place.linked_items;
+        place.name = Faker.lorem.word();
+        delete place.tags;
+        place.type = 'place';
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: place
+        };
+
+        return (
+            server.inject(query)
+                .then((response) => {
+
+                    placeID = response.result.data.id;
+                    expect(response.statusCode).to.equal(200);
+                })
+        );
+    });
+
+    it('Place without links', () => {
+
+        delete event.linked_items;
+        event.name = Faker.lorem.word();
+        event.linked_items = [4];
+
+        const query = {
+            method: 'POST',
+            url: `/items`,
+            headers: { 'Authorization': token },
+            payload: event
         };
 
         return (
