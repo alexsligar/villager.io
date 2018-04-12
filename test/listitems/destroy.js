@@ -9,7 +9,7 @@ const db = Fixtures.db;
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
-describe('POST List Items:', () => {
+describe('Destroy List Items:', () => {
 
     let server;
     const list = Fixtures.list();
