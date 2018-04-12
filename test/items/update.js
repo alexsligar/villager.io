@@ -286,7 +286,6 @@ describe('PUT Items:', () => {
             server.inject(query)
                 .then((response) => {
 
-                    //console.log(response);
                     expect(response.statusCode).to.equal(400);
                 })
         );

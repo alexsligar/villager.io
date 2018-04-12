@@ -89,6 +89,7 @@ describe('PUT Tags:', () => {
             server.inject(query)
                 .then((response) => {
 
+                    expect(response.result.data.name).to.equal(tag2.name);
                     expect(response.statusCode).to.equal(200);
                 })
         );

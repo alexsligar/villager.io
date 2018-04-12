@@ -59,9 +59,9 @@ describe('POST Lists:', () => {
     after(async () => {
 
         await Promise.all([
+            db.lists.destroy({ id: list2.id }),
             db.users.destroy({ id: user1.id }),
-            db.users.destroy({ id: user2.id }),
-            db.lists.destroy({ id: list2.id })
+            db.users.destroy({ id: user2.id })
         ]);
     });
 
