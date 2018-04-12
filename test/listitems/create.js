@@ -18,37 +18,35 @@ describe('POST List Items:', () => {
     const user2 = Fixtures.user_id();
     const event1 = Fixtures.event();
     const event2 = Fixtures.event();
-    const event3 = Fixtures.event();
-    let item1 = null;
-    let item2 = null;
-    let item3 = null;
+
+    let item1;
+    let item2;
 
     before(async () => {
 
         // const token = JWT.sign({ id: user1.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        list1.owner = user1.id;
 
         server = await Server;
 
         await Promise.all([
             db.users.insert(user1),
-            db.users.insert(user2),
+            db.users.insert(user2)
+        ]);
+
+        list1.owner = user1.id;
+
+        await Promise.all([
             db.lists.insert(list1)
         ]);
 
         const items = await Promise.all([
             db.items.insert(event1),
-            db.items.insert(event2),
-            db.items.insert(event3)
+            db.items.insert(event2)
         ]);
 
         item1 = items[0];
         item2 = items[1];
-        item3 = items[2];
 
-        await Promise.all([
-            db.items.destroy({ id: item3.id })
-        ]);
     });
 
     after(async () => {
@@ -117,7 +115,7 @@ describe('POST List Items:', () => {
         const token = JWT.sign({ id: user1.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
 
         const payload = {
-            item_id: item3.id,
+            item_id: (item2.id + 100),
             list_id: list1.id
         };
 
