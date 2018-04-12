@@ -10,50 +10,28 @@ const { expect } = require('code');
 
 describe('POST /lists:', () => {
 
-    const list = Fixtures.list();
     let server;
-    let user = Fixtures.user();
+
+    const list = Fixtures.list();
+    const user = Fixtures.user_id();
     let token;
 
     before(async () => {
 
-        const query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user
-        };
         server = await Server;
-        await server.inject(query)
-            .then((response) => {
 
-                user = response.result.data;
-            });
+        await Promise.all([
+            db.users.insert(user)
+        ]);
     });
 
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
+            db.users.destroy({ id: user.id }),
             db.lists.destroy({ id: list.id })
         ]);
     });
-
-    // it('List list empty', () => {
-
-    //     const query = {
-    //         method: 'GET',
-    //         url: '/lists'
-    //     };
-
-    //     return (
-    //         server.inject(query)
-    //             .then((response) => {
-
-    //                 expect(response.result.data.length).to.equal(0);
-    //                 expect(response.statusCode).to.equal(200);
-    //             })
-    //     );
-    // });
 
     it('List list', async () => {
 

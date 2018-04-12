@@ -11,11 +11,15 @@ const { expect } = require('code');
 
 describe('GET Lists:', () => {
 
+    let server;
+
     let list = Fixtures.list();
     const list2 = Fixtures.list_id();
+
     const event = Fixtures.event();
-    let server;
+
     const user = Fixtures.user_id();
+
     let token;
     let item;
 
