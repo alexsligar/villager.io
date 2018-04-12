@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['400']);
+const swagger = Schema.generate(['400', '204']);
 
 module.exports = {
     description: 'Delete list',
@@ -30,7 +30,8 @@ module.exports = {
         list.items = await this.db.list_items.by_list_id({ id: list.id });
 
         await this.db.lists.destroy({ id: list.id });
-        return reply();
+
+        return reply(null).code(204);
     },
     plugins: {
         'hapi-swagger': swagger

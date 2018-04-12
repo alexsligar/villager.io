@@ -117,7 +117,7 @@ describe('DELETE /items/{id}', () => {
         const payload = { username: user.username };
         return server.inject({ method: 'delete', url: `/items/${ newEvent[0].id }`, payload, headers: { 'Authorization': token } }).then((res) => {
 
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(204);
         });
     });
 
