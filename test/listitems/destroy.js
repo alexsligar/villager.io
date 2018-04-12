@@ -12,16 +12,18 @@ const { expect } = require('code');
 describe('Destroy List Items:', () => {
 
     let server;
+
     const list = Fixtures.list();
     const nolist = Fixtures.list_id();
+
     const admin = Fixtures.user_admin();
     const nonAuth = Fixtures.user_id();
+
     const event1 = Fixtures.event();
     const event2 = Fixtures.event();
-    const event3 = Fixtures.event();
+
     let item1 = null;
     let item2 = null;
-    let item3 = null;
 
     before(async () => {
 
@@ -34,17 +36,11 @@ describe('Destroy List Items:', () => {
 
         const items = await Promise.all([
             db.items.insert(event1),
-            db.items.insert(event2),
-            db.items.insert(event3)
+            db.items.insert(event2)
         ]);
 
         item1 = items[0];
         item2 = items[1];
-        item3 = items[2];
-
-        await Promise.all([
-            db.items.destroy({ id: item3.id })
-        ]);
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
 
@@ -113,7 +109,7 @@ describe('Destroy List Items:', () => {
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const payload = {
             list_id: list.id,
-            item_id: item3.id
+            item_id: (item2.id + 100)
         };
         const query = {
             method: 'DELETE',

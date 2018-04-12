@@ -12,30 +12,27 @@ const { expect } = require('code');
 describe('POST Lists:', () => {
 
     const list = Fixtures.list();
+
     let server;
-    let user = Fixtures.user();
+
+    const user = Fixtures.user_id();
     let token;
+    let listID;
 
     before(async () => {
 
-        const query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user
-        };
         server = await Server;
-        await server.inject(query)
-            .then((response) => {
 
-                user = response.result.data;
-            });
+        await Promise.all([
+            db.users.insert(user)
+        ]);
     });
 
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.lists.destroy({ id: list.id })
+            db.users.destroy({ id: user.id }),
+            db.lists.destroy({ id: listID })
         ]);
     });
 
@@ -52,6 +49,7 @@ describe('POST Lists:', () => {
             server.inject(query)
                 .then((response) => {
 
+                    listID = response.result.data.id;
                     expect(response.statusCode).to.equal(200);
                 })
         );
