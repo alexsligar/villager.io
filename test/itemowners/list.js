@@ -66,7 +66,7 @@ describe('List /item_owners', () => {
     });
     it('Get owners of fake item', () => {
 
-        let fakeItem = newEvent[0].id + 100;
+        const fakeItem = newEvent[0].id + 100;
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         return server.inject({ method: 'get', url: `/item_owners/${fakeItem}`, headers: { 'Authorization': token } }).then((res) => {

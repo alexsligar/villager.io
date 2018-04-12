@@ -29,8 +29,8 @@ describe('POST tags:', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.users.destroy({ username: mod.username }),
+            db.users.destroy({ id: user.id }),
+            db.users.destroy({ id: mod.id }),
             db.tags.destroy({ name: tag1.name }),
             db.tags.destroy({ name: tag2.name })
         ]);

@@ -44,7 +44,7 @@ describe('PUT Tags:', () => {
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const query = {
             method: 'PUT',
-            url:    `/tags/${tag1.name}`,
+            url:    `/tags/${tag2.name}`,
             headers: { 'authorization': token }
         };
 

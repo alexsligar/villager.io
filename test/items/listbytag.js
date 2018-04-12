@@ -13,6 +13,7 @@ const { expect } = require('code');
 describe('GET /items/tags/{name}', () => {
 
     let server;
+
     const user = Fixtures.user_id();
     const place = Fixtures.place();
     const tag = Fixtures.tag();
@@ -36,7 +37,7 @@ describe('GET /items/tags/{name}', () => {
 
         await Promise.all([
             db.users.destroy({ id: user.id }),
-            db.items.destroy({ name: place.name }),
+            db.items.destroy({ id: newPlace[0].id }),
             db.tags.destroy({ name: tag.name })
         ]);
 
