@@ -83,7 +83,8 @@ exports.event_id = function (attrs, id) {
         location: Faker.address.streetAddress(),
         type: 'event',
         start_date: Faker.date.past(),
-        end_date: Faker.date.future()
+        end_date: Faker.date.future(),
+        linked_items: [1]
     };
     return Object.assign(defaults, attrs);
 };
