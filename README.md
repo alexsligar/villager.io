@@ -100,8 +100,8 @@ Want to contribute? Here's what you need to do to run the API locally.
 3. ``npm run migratedb`` to create tables
 
 4. ``npm start`` to run
-```
-```
+
+
 ## Testing
 
 Stuff here
