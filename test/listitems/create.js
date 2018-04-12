@@ -12,10 +12,13 @@ const { expect } = require('code');
 describe('POST List Items:', () => {
 
     let server;
+
     const list1 = Fixtures.list_id();
     const list2 = Fixtures.list_id();
+
     const user1 = Fixtures.user_admin();
     const user2 = Fixtures.user_id();
+
     const event1 = Fixtures.event();
     const event2 = Fixtures.event();
 
@@ -54,8 +57,8 @@ describe('POST List Items:', () => {
         await Promise.all([
             db.users.destroy({ id: user1.id }),
             db.users.destroy({ id: user2.id }),
-            // db.lists.destroy({ id: list1.id }),
-            // db.items.destroy({ id: item1.id }),
+            db.lists.destroy({ id: list1.id }),
+            db.items.destroy({ id: item1.id }),
             db.items.destroy({ id: item2.id })
         ]);
     });
