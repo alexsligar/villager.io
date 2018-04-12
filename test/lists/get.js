@@ -9,33 +9,51 @@ const db = Fixtures.db;
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
-describe('POST Lists:', () => {
+describe('GET Lists:', () => {
 
     let list = Fixtures.list();
+    const list2 = Fixtures.list();
+    const event = Fixtures.event();
+    const place = Fixtures.place();
     let server;
-    let user = Fixtures.user();
+    const user = Fixtures.user_id();
     let token;
+    let items;
 
     before(async () => {
 
-        const query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user
-        };
         server = await Server;
-        await server.inject(query)
-            .then((response) => {
 
-                user = response.result.data;
-            });
+        await Promise.all([
+            db.users.insert(user)
+        ]);
+
+        list2.owner = user.id;
+
+        items = await Promise.all([
+            db.items.insert(event),
+            db.items.insert(place)
+        ]);
+
+        await Promise.all([
+            db.lists.insert(list2)
+        ]);
+
+        await Promise.all([
+            db.list_items.insert({ item_id: items[0].id, list_id: list2.id }),
+            db.list_items.insert({ item_id: items[1].id, list_id: list2.id })
+        ]);
+
     });
 
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.lists.destroy({ id: list.id })
+            db.lists.destroy({ id: list.id }),
+            db.lists.destroy({ id: list2.id }),
+            db.items.destroy({ id: items[0].id }),
+            db.items.destroy({ id: items[1].id }),
+            db.users.destroy({ id: user.id })
         ]);
     });
 
@@ -68,6 +86,23 @@ describe('POST Lists:', () => {
                     expect(response.statusCode).to.equal(200);
                 })
         );
+    });
+
+    it('Get list w/ items', () => {
+
+        const getQuery = {
+            method: 'GET',
+            url: `/lists/${list2.id}`
+        };
+
+        return (
+            server.inject(getQuery)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(200);
+                })
+        );
+
     });
 
     it('get invalid list', () => {
