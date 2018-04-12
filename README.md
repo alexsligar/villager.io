@@ -75,7 +75,7 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 PostgreSQL version 9.6
 ```
-# Enviroment Variable
+### Enviroment Variable
 
 
 3 environment variables need to be set to the values in the local.json file. 
@@ -88,7 +88,7 @@ This can be done on Windows using the command below.
 ```
 $node -pe require('getconfig').db.connection.user > user &&node -pe require('getconfig').db.connection.password > password && node -pe require('getconfig').db.connection.database > database && set /p PGUSER= < user && set /p PGDATABASE= < database && set /p PGPASSWORD= < password && del user password database
 ```
-# Running the code
+### Running the code
 
 Want to contribute? Here's what you need to do to run the API locally.
 
@@ -102,6 +102,6 @@ Want to contribute? Here's what you need to do to run the API locally.
 4. ``npm start`` to run
 ```
 ```
-# Testing
+## Testing
 
 Stuff here
