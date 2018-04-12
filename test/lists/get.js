@@ -12,13 +12,12 @@ const { expect } = require('code');
 describe('GET Lists:', () => {
 
     let list = Fixtures.list();
-    const list2 = Fixtures.list();
+    const list2 = Fixtures.list_id();
     const event = Fixtures.event();
-    const place = Fixtures.place();
     let server;
     const user = Fixtures.user_id();
     let token;
-    let items;
+    let item;
 
     before(async () => {
 
@@ -30,9 +29,8 @@ describe('GET Lists:', () => {
 
         list2.owner = user.id;
 
-        items = await Promise.all([
-            db.items.insert(event),
-            db.items.insert(place)
+        item = await Promise.all([
+            db.items.insert(event)
         ]);
 
         await Promise.all([
@@ -40,8 +38,7 @@ describe('GET Lists:', () => {
         ]);
 
         await Promise.all([
-            db.list_items.insert({ item_id: items[0].id, list_id: list2.id }),
-            db.list_items.insert({ item_id: items[1].id, list_id: list2.id })
+            db.list_items.insert({ item_id: item[0].id, list_id: list2.id })
         ]);
 
     });
@@ -51,8 +48,7 @@ describe('GET Lists:', () => {
         await Promise.all([
             db.lists.destroy({ id: list.id }),
             db.lists.destroy({ id: list2.id }),
-            db.items.destroy({ id: items[0].id }),
-            db.items.destroy({ id: items[1].id }),
+            db.items.destroy({ id: item[0].id }),
             db.users.destroy({ id: user.id })
         ]);
     });
