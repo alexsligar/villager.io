@@ -12,8 +12,10 @@ const { expect } = require('code');
 describe('POST tags:', () => {
 
     let server;
+
     const user = Fixtures.user_id();
     const mod = Fixtures.user_mod();
+
     const tag1 = Fixtures.tag();
     const tag2 = Fixtures.tag();
 
@@ -29,10 +31,9 @@ describe('POST tags:', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.users.destroy({ username: mod.username }),
-            db.tags.destroy({ name: tag1.name }),
-            db.tags.destroy({ name: tag2.name })
+            db.users.destroy({ id: user.id }),
+            db.users.destroy({ id: mod.id }),
+            db.tags.destroy({ name: tag1.name })
         ]);
     });
 

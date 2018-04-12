@@ -47,7 +47,7 @@ describe('DELETE /item_owners', () => {
             db.users.destroy({ id: admin.id })
         ]);
     });
-    it('Destory owner as user', () => {
+    it('Destroy owner as user', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const payload = { username: user.username, item_id: newEvent[0].id };
@@ -56,7 +56,7 @@ describe('DELETE /item_owners', () => {
             expect(res.statusCode).to.equal(401);
         });
     });
-    it('Destory owner', () => {
+    it('Destroy owner', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const payload = { username: user.username, item_id: newEvent[0].id };
@@ -65,7 +65,7 @@ describe('DELETE /item_owners', () => {
             expect(res.statusCode).to.equal(204);
         });
     });
-    it('Destory owner that does not exist', () => {
+    it('Destroy owner that does not exist', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const payload = { username: user.username, item_id: newEvent[0].id };

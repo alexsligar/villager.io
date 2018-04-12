@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate();
+const swagger = Schema.generate(['204', '401', '404']);
 
 module.exports = {
     description: 'Delete tag category from use and all items',
@@ -24,7 +24,7 @@ module.exports = {
 
         await this.db.tags.destroy({ name: request.payload.name });
 
-        return reply({ message: 'Tag deleted' });
+        return reply(null).code(204);
     },
     // response: {
     //     status: {

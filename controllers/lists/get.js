@@ -1,7 +1,6 @@
 'use strict';
 
 const Joi = require('joi');
-const { forEach } = require('p-iteration');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
 const swagger = Schema.generate(['404']);
@@ -25,15 +24,6 @@ module.exports = {
         else {
             list.items = await this.db.list_items.by_list_id({ id: list.id });
         }
-
-        // if (list.items.length < 1) {
-        //     return reply('List is empty').code(404);
-        // }
-        await forEach(list.items, async (item) => {
-
-            const linked_items_var = await this.db.linked_items.getlinks({ id: item.id },['name']);
-            item.linked_items = linked_items_var.linked_item;
-        });
 
         return reply({ data: list });
     },

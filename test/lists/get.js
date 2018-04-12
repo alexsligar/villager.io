@@ -9,33 +9,51 @@ const db = Fixtures.db;
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
-describe('POST Lists:', () => {
+describe('GET Lists:', () => {
+
+    let server;
 
     let list = Fixtures.list();
-    let server;
-    let user = Fixtures.user();
+    const list2 = Fixtures.list_id();
+
+    const event = Fixtures.event();
+
+    const user = Fixtures.user_id();
+
     let token;
+    let item;
 
     before(async () => {
 
-        const query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user
-        };
         server = await Server;
-        await server.inject(query)
-            .then((response) => {
 
-                user = response.result.data;
-            });
+        await Promise.all([
+            db.users.insert(user)
+        ]);
+
+        list2.owner = user.id;
+
+        item = await Promise.all([
+            db.items.insert(event)
+        ]);
+
+        await Promise.all([
+            db.lists.insert(list2)
+        ]);
+
+        await Promise.all([
+            db.list_items.insert({ item_id: item[0].id, list_id: list2.id })
+        ]);
+
     });
 
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.lists.destroy({ id: list.id })
+            db.lists.destroy({ id: list.id }),
+            db.lists.destroy({ id: list2.id }),
+            db.items.destroy({ id: item[0].id }),
+            db.users.destroy({ id: user.id })
         ]);
     });
 
@@ -68,6 +86,23 @@ describe('POST Lists:', () => {
                     expect(response.statusCode).to.equal(200);
                 })
         );
+    });
+
+    it('Get list w/ items', () => {
+
+        const getQuery = {
+            method: 'GET',
+            url: `/lists/${list2.id}`
+        };
+
+        return (
+            server.inject(getQuery)
+                .then((response) => {
+
+                    expect(response.statusCode).to.equal(200);
+                })
+        );
+
     });
 
     it('get invalid list', () => {

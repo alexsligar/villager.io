@@ -12,8 +12,10 @@ const { expect } = require('code');
 describe('PUT Tags:', () => {
 
     let server;
+
     const user = Fixtures.user_id();
     const mod = Fixtures.user_mod();
+
     const tag1 = Fixtures.tag();
     const tag2 = Fixtures.tag();
 
@@ -33,8 +35,8 @@ describe('PUT Tags:', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user.username }),
-            db.users.destroy({ username: mod.username }),
+            db.users.destroy({ id: user.id }),
+            db.users.destroy({ id: mod.id }),
             db.tags.destroy({ name: tag2.name })
         ]);
     });
@@ -44,7 +46,7 @@ describe('PUT Tags:', () => {
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const query = {
             method: 'PUT',
-            url:    `/tags/${tag1.name}`,
+            url:    `/tags/${tag2.name}`,
             headers: { 'authorization': token }
         };
 
@@ -87,6 +89,7 @@ describe('PUT Tags:', () => {
             server.inject(query)
                 .then((response) => {
 
+                    expect(response.result.data.name).to.equal(tag2.name);
                     expect(response.statusCode).to.equal(200);
                 })
         );

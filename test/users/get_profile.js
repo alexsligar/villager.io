@@ -31,6 +31,7 @@ describe('GET /users/profile', () => {
         ]);
 
     });
+
     it('Get user profile', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
@@ -39,6 +40,7 @@ describe('GET /users/profile', () => {
             expect(res.statusCode).to.equal(200);
         });
     });
+
     it('Get fake user profile', () => {
 
         const fake = Fixtures.user_id();

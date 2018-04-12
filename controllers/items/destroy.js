@@ -2,7 +2,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400', '412']);
+const swagger = Schema.generate(['401', '404', '400', '412', '204']);
 
 module.exports = {
     description: 'Delete item',
@@ -52,7 +52,7 @@ module.exports = {
         }
         else {
             await this.db.items.destroy({ id: request.params.id });
-            return reply({ message: 'Item deleted' });
+            return reply(null).code(204);
         }
 
     },

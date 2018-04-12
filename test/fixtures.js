@@ -74,6 +74,21 @@ exports.event = function (attrs, id) {
     return Object.assign(defaults, attrs);
 };
 
+// Build and export a fake event
+exports.event_id = function (attrs, id) {
+
+    const defaults = {
+        id: Faker.random.uuid(),
+        name: Faker.lorem.word(),
+        location: Faker.address.streetAddress(),
+        type: 'event',
+        start_date: Faker.date.past(),
+        end_date: Faker.date.future(),
+        linked_items: [1]
+    };
+    return Object.assign(defaults, attrs);
+};
+
 // Build and export a fake activity
 exports.activity = function (attrs, id) {
 
@@ -110,6 +125,17 @@ exports.group = function (attrs, id) {
 exports.list = function (attrs, id) {
 
     const defaults = {
+        name: Faker.lorem.word(),
+        description: Faker.lorem.words()
+    };
+    return Object.assign(defaults, attrs);
+};
+
+// Build and export a fake list
+exports.list_id = function (attrs, id) {
+
+    const defaults = {
+        id: Faker.random.uuid(),
         name: Faker.lorem.word(),
         description: Faker.lorem.words()
     };

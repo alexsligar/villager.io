@@ -20,6 +20,8 @@ describe('POST Items:', () => {
 
     const user = Fixtures.user_id();
 
+    const tag = Fixtures.tag();
+
     let token;
     let eventID;
     let placeID;
@@ -29,7 +31,8 @@ describe('POST Items:', () => {
     before(async () => {
 
         await Promise.all([
-            db.users.insert(user)
+            db.users.insert(user),
+            db.tags.insert(tag)
         ]);
 
         server = await Server;
@@ -42,7 +45,8 @@ describe('POST Items:', () => {
             db.items.destroy({ id: eventID }),
             db.items.destroy({ id: placeID }),
             db.items.destroy({ id: groupID }),
-            db.items.destroy({ id: activityID })
+            db.items.destroy({ id: activityID }),
+            db.tags.destroy({ name: tag.name })
         ]);
     });
 
@@ -50,7 +54,7 @@ describe('POST Items:', () => {
 
         token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
 
-        event.tags = ['outdoors'];
+        event.tags = [tag.name];
 
         const query = {
             method: 'POST',
@@ -192,7 +196,7 @@ describe('POST Items:', () => {
 
         place = Faker.lorem.word();
         place = Fixtures.place();
-        place.linked_items = [1];
+        place.linked_items = [eventID];
 
         const query = {
             method: 'POST',
