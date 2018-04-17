@@ -25,7 +25,7 @@ describe('LIST tags:', () => {
     after(async () => {
 
         await Promise.all([
-            db.tags.destroy(tag.name)
+            db.tags.destroy({ name: tag.name })
         ]);
     });
 

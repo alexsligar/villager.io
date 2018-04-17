@@ -14,7 +14,7 @@
     "seeddb": "knex seed:run",
     "knex": "knex",
     "testcoverage": "lab test -a code -L -v -c -e test",
-    "test": "lab test/listitems -a code -L -v -c -e test",
+    "test": "lab test -a code -L -v -c -e test",
     "start": "node server.js",
     "setenv": "set NODE_ENV=development && set GETCONFIG_ROOT=./config"
   },
