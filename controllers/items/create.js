@@ -58,6 +58,7 @@ module.exports = {
 
                 const check_tags = await this.db.tags.findOne({ name: tag });
                 if (!check_tags) {
+                    await this.db.items.destroy({ id: returnedItem.id });
                     throw Boom.badRequest(`Tag ${tag} does not exist`);
                 }
                 await this.db.item_tags.insert({ item_id: returnedItem.id, tag_name: tag });
@@ -72,7 +73,7 @@ module.exports = {
                 const foundItem = await this.db.items.findOne({ id: linkedItem });
 
                 if (!foundItem) {
-                    this.db.items.destroy({ id: returnedItem.id });
+                    await this.db.items.destroy({ id: returnedItem.id });
                     throw Boom.notFound('Attempting to link item that does not exist');
                 }
 
@@ -83,7 +84,7 @@ module.exports = {
                 if (request.payload.type === 'activity') {
                     //error checking
                     if (foundItem.type !== 'place') {
-                        this.db.items.destroy({ id: returnedItem.id });
+                        await this.db.items.destroy({ id: returnedItem.id });
                         throw Boom.badRequest('Can\'t link activity to anything but Place');
                     }
                 }
@@ -91,7 +92,7 @@ module.exports = {
                 if (request.payload.type === 'group') {
                     //error checking
                     if (foundItem.type !== 'place') {
-                        this.db.items.destroy({ id: returnedItem.id });
+                        await this.db.items.destroy({ id: returnedItem.id });
                         throw Boom.badRequest('Can\'t link group to anything but Place');
                     }
                 }
@@ -99,7 +100,7 @@ module.exports = {
                 if (request.payload.type === 'event') {
                     //error checking
                     if (foundItem.type === 'event' | foundItem.type === 'activity') {
-                        this.db.items.destroy({ id: returnedItem.id });
+                        await this.db.items.destroy({ id: returnedItem.id });
                         throw Boom.badRequest('Can\'t link Event to Item type');
                     }
                 }
@@ -109,7 +110,7 @@ module.exports = {
             if (request.payload.type === 'event') {
                 //error checking
                 if (!placeLinked) {
-                    this.db.items.destroy({ id: returnedItem.id });
+                    await this.db.items.destroy({ id: returnedItem.id });
                     throw Boom.badRequest('Event required to be linked to Place');
                 }
             }
