@@ -59,7 +59,28 @@ Allowing people to build on and embed this information in their own sites will i
 
 ## So what's the current status?
 
-add stuff here..........................
+Version 1.0 of Villager has the base functionality to get this project started, but it still has some room to grow before it's the API that we've envisioned. You can take a look at the Swagger documentation for a detailed list of all the functionality available, but at a glance, here are some of the current highlights:
+
+Items (Events, Activities, Places, and Groups):
+- Adding and deleting items from the database
+- Linking items to other items (such as an Event being run by a Group)
+- Tagging items with a category ('outdoors', 'kid-friendly', etc.)
+
+Lists:
+- Adding and deleting of lists
+- Adding and deleting Items from lists
+
+Moderation functions:
+- Ability to edit items, regardless of owner/creator
+- Ability to merge virtually identical items (maintaining all owners/tags/links of the originals)
+- Ability to assign users permissions on items
+
+In addition to this functionality, future additions could include:
+- Following of Users and Lists (Get a notification when a List you like has been updated)
+- Event calendars with filters for specific tags/locations/days, etc.
+- Search functionality
+- Flagging items for Moderator attention
+- The sky's the limit!
 
 ## Contributors welcome!
 
