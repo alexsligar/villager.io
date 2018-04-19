@@ -59,7 +59,28 @@ Allowing people to build on and embed this information in their own sites will i
 
 ## So what's the current status?
 
-add stuff here..........................
+Version 1.0 of Villager has the base functionality to get this project started, but it still has some room to grow before it's the API that we've envisioned. You can take a look at the Swagger documentation for a detailed list of all the functionality available, but at a glance, here are some of the current highlights:
+
+### Items (Events, Activities, Places, and Groups):
+- Adding and deleting items from the database
+- Linking items to other items (such as an Event being run by a Group)
+- Tagging items with a category ('outdoors', 'kid-friendly', etc.)
+
+### Lists:
+- Adding and deleting of lists
+- Adding and deleting Items from lists
+
+### Moderation functions:
+- Ability to edit items, regardless of owner/creator
+- Ability to merge virtually identical items (maintaining all owners/tags/links of the originals)
+- Ability to assign users permissions on items
+
+### In addition to this functionality, future additions could include:
+- Following of Users and Lists (Get a notification when a List you like has been updated)
+- Event calendars with filters for specific tags/locations/days, etc.
+- Search functionality
+- Flagging items for Moderator attention
+- The sky's the limit!
 
 ## Contributors welcome!
 
@@ -104,4 +125,49 @@ Want to contribute? Here's what you need to do to run the API locally.
 
 ## Testing
 
-Stuff here
+For testing, we depend on 3 separate libaries in order to perform proper testing
+
+1. ``lab`` is the main driver for executing the API tests
+
+2. ``code`` is the assertion library utilized by lab
+
+3. ``faker`` enables the capabilities to provide the tests mock data
+
+We have two scripts for testing
+
+1. ``npm run testcoverage`` will conduct the full checks (Linting, Coverage, Unit Tests).
+
+2. ``npm run test`` will be the customizable script developers will use to run unit tests.
+
+To customize the *test* script, go into `package.json` and in the *scripts* object, modify the *test* line
+
+```
+"test": "lab test -a code -L -v -c -e test"
+```
+
+Should the developer want to test in a specific folder, change the script to include the folder name
+
+```
+"test": "lab test/[folder name] -a code -L -v -c -e test"
+```
+### Running the code
+
+Want to contribute? Here's what you need to do to run the API locally.
+
+
+1. ``npm i`` to install dependencies
+
+2. ``npm run makedb`` to set up db
+
+3. ``npm run migratedb`` to create tables
+
+4. ``npm start`` to run
+
+
+## Testing
+
+For more documentation, please see <a href="https://github.com/hapijs/lab">Lab</a> github page for more details.
+
+The structure of our tests is simple; All tests are in the *test* directory and the *test* directory should reflect the *controller* directory (1-1 file for testing) with the exception of the `fixtures.js` file in *test*.
+
+The `fixtures.js` contains all the pertinent mock data used by each unit tests. This is where the `faker` library is utilized.  Every tests will depend on receiving mock data from the `fixtures.js`.

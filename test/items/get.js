@@ -11,6 +11,7 @@ const { expect } = require('code');
 describe('GET /items/id', () => {
 
     let server;
+
     const event = Fixtures.event();
     let newEvent;
 

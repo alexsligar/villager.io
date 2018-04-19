@@ -22,6 +22,8 @@ describe('PUT Items:', () => {
     const user = Fixtures.user_id();
     const mod = Fixtures.user_mod();
 
+    const tag = Fixtures.tag();
+
     let token;
     let newEvent;
 
@@ -43,6 +45,10 @@ describe('PUT Items:', () => {
             db.item_owners.insert({ username: user.username, item_id: newEvent[0].id })
         ]);
 
+        await Promise.all([
+            db.tags.insert(tag)
+        ]);
+
         server = await Server;
     });
 
@@ -54,7 +60,8 @@ describe('PUT Items:', () => {
             db.items.destroy({ id: newEvent[0].id }),
             db.items.destroy({ id: newEvent[1].id }),
             db.items.destroy({ id: newEvent[2].id }),
-            db.items.destroy({ id: newEvent[3].id })
+            db.items.destroy({ id: newEvent[3].id }),
+            db.tags.destroy({ name: tag.name })
         ]);
     });
 
@@ -286,7 +293,6 @@ describe('PUT Items:', () => {
             server.inject(query)
                 .then((response) => {
 
-                    //console.log(response);
                     expect(response.statusCode).to.equal(400);
                 })
         );
@@ -400,7 +406,7 @@ describe('PUT Items:', () => {
             method: 'PUT',
             url: `/items/${newEvent[2].id}`,
             headers: { 'Authorization': token },
-            payload: { 'tags': ['outdoors'] }
+            payload: { 'tags': [tag.name] }
         };
 
         return (

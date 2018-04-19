@@ -2,6 +2,7 @@
 
 const Fixtures = require('../fixtures');
 const Server = Fixtures.server;
+const db = Fixtures.db;
 
 const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
@@ -10,17 +11,21 @@ describe('LIST tags:', () => {
 
     let server;
 
+    const tag = Fixtures.tag();
+
     before(async () => {
 
         server = await Server;
 
         await Promise.all([
+            db.tags.insert(tag)
         ]);
     });
 
     after(async () => {
 
         await Promise.all([
+            db.tags.destroy({ name: tag.name })
         ]);
     });
 

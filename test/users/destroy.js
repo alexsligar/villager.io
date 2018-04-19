@@ -13,6 +13,7 @@ const { expect } = require('code');
 describe('DELETE /users', () => {
 
     let server;
+
     const user = Fixtures.user_id();
     const userdel = Fixtures.user_id();
     const userdel2 = Fixtures.user_id();
@@ -23,15 +24,9 @@ describe('DELETE /users', () => {
         server = await Server;
 
         await Promise.all([
-            db.users.insert(user)
-        ]);
-        await Promise.all([
-            db.users.insert(userdel)
-        ]);
-        await Promise.all([
-            db.users.insert(userdel2)
-        ]);
-        await Promise.all([
+            db.users.insert(user),
+            db.users.insert(userdel),
+            db.users.insert(userdel2),
             db.users.insert(admin)
         ]);
     });
@@ -39,12 +34,11 @@ describe('DELETE /users', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ id: user.id })
-        ]);
-        await Promise.all([
+            db.users.destroy({ id: user.id }),
             db.users.destroy({ id: admin.id })
         ]);
     });
+
     it('Delete as different user', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
@@ -53,6 +47,7 @@ describe('DELETE /users', () => {
             expect(res.statusCode).to.equal(401);
         });
     });
+
     it('Delete own account as user', () => {
 
         const token = JWT.sign({ id: userdel2.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
@@ -61,6 +56,7 @@ describe('DELETE /users', () => {
             expect(res.statusCode).to.equal(204);
         });
     });
+
     it('Delete as admin', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
@@ -69,7 +65,8 @@ describe('DELETE /users', () => {
             expect(res.statusCode).to.equal(204);
         });
     });
-    it('Delete as fake', () => {
+
+    it('Delete fake user', () => {
 
         const fake = Fixtures.user_id();
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);

@@ -13,13 +13,17 @@ const { expect } = require('code');
 describe('DELETE /items/{id}', () => {
 
     let server;
+
     const user = Fixtures.user_id();
     const invalidUser = Fixtures.user_id();
+    const admin = Fixtures.user_admin();
+
     const event = Fixtures.event();
     const multiEvent = Fixtures.event();
     const listEvent = Fixtures.event();
-    const admin = Fixtures.user_admin();
+
     const list = Fixtures.list();
+
     let newEvent;
     let newMultiEvent;
     let newListEvent;
@@ -94,27 +98,17 @@ describe('DELETE /items/{id}', () => {
     after(async () => {
 
         await Promise.all([
-            db.items.destroy({ id: newEvent[0].id })
+            db.items.destroy({ id: newMultiEvent[0].id }),
+            db.items.destroy({ id: newListEvent[0].id })
         ]);
         await Promise.all([
-            db.users.destroy({ id: user.id })
-        ]);
-        await Promise.all([
-            db.users.destroy({ id: invalidUser.id })
-        ]);
-        await Promise.all([
-            db.items.destroy({ id: newMultiEvent[0].id })
-        ]);
-        await Promise.all([
+            db.users.destroy({ id: user.id }),
+            db.users.destroy({ id: invalidUser.id }),
             db.users.destroy({ id: admin.id })
         ]);
         await Promise.all([
             db.lists.destroy({ id: newList.id })
         ]);
-        await Promise.all([
-            db.items.destroy({ id: newListEvent[0].id })
-        ]);
-
     });
 
     it('Destroy item', () => {
@@ -123,7 +117,7 @@ describe('DELETE /items/{id}', () => {
         const payload = { username: user.username };
         return server.inject({ method: 'delete', url: `/items/${ newEvent[0].id }`, payload, headers: { 'Authorization': token } }).then((res) => {
 
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(204);
         });
     });
 
@@ -131,7 +125,7 @@ describe('DELETE /items/{id}', () => {
 
         const token = JWT.sign({ id: invalidUser.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         const payload = { username: user.username };
-        return server.inject({ method: 'delete', url: `/items/${ newEvent[0].id }`, payload, headers: { 'Authorization': token } }).then((res) => {
+        return server.inject({ method: 'delete', url: `/items/${ newListEvent[0].id }`, payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(401);
         });

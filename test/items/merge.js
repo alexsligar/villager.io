@@ -13,13 +13,16 @@ const { expect } = require('code');
 describe('PUT /merge', () => {
 
     let server;
+
     const mod = Fixtures.user_mod();
     const user = Fixtures.user_id();
+
     const event = Fixtures.event();
     const event2 = Fixtures.event();
+
     let token;
-    let newEvent1;
-    let newEvent2;
+
+    let newEvent;
 
     before(async () => {
 
@@ -30,16 +33,14 @@ describe('PUT /merge', () => {
             db.users.insert(user)
         ]);
 
-        newEvent1 = await Promise.all([
-            db.items.insert(event)
-        ]);
-        newEvent2 = await Promise.all([
+        newEvent = await Promise.all([
+            db.items.insert(event),
             db.items.insert(event2)
         ]);
 
         await Promise.all([
-            db.item_owners.insert({ username: user.username, item_id: newEvent1[0].id }),
-            db.item_owners.insert({ username: mod.username, item_id: newEvent2[0].id })
+            db.item_owners.insert({ username: user.username, item_id: newEvent[0].id }),
+            db.item_owners.insert({ username: mod.username, item_id: newEvent[1].id })
         ]);
 
     });
@@ -47,7 +48,7 @@ describe('PUT /merge', () => {
     after(async () => {
 
         await Promise.all([
-            db.items.destroy({ id: newEvent1[0].id }),
+            db.items.destroy({ id: newEvent[0].id }),
             db.users.destroy({ id: mod.id }),
             db.users.destroy({ id: user.id })
         ]);
@@ -63,7 +64,7 @@ describe('PUT /merge', () => {
             headers: { 'Authorization': token },
             payload: {
                 'item_id': [
-                    newEvent1[0].id, newEvent2[0].id
+                    newEvent[0].id, newEvent[1].id
                 ]
             }
         };
@@ -82,7 +83,7 @@ describe('PUT /merge', () => {
             headers: { 'Authorization': token },
             payload: {
                 'item_id': [
-                    newEvent1[0].id, newEvent2[0].id
+                    newEvent[0].id, newEvent[1].id
                 ]
             }
         };
@@ -90,15 +91,4 @@ describe('PUT /merge', () => {
         expect(response.statusCode).to.equal(401);
     });
 
-    // it('Get Item - Does not exist', async () => {
-
-    //     const notExist = newEvent[0].id + 100;
-
-    //     const query = {
-    //         method: 'GET',
-    //         url: `/items/${notExist}`
-    //     };
-    //     const response = await server.inject(query);
-    //     expect(response.statusCode).to.equal(404);
-    // });
 });

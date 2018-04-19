@@ -16,9 +16,15 @@ describe('POST Items:', () => {
     let place = Fixtures.place();
     const group = Fixtures.group();
 
+    const stableEvent = Fixtures.event();
+    const stablePlace = Fixtures.place();
+    const stableGroup = Fixtures.group();
+
     let server;
 
     const user = Fixtures.user_id();
+
+    const tag = Fixtures.tag();
 
     let token;
     let eventID;
@@ -26,10 +32,19 @@ describe('POST Items:', () => {
     let groupID;
     let activityID;
 
+    let stableItems;
+
     before(async () => {
 
         await Promise.all([
-            db.users.insert(user)
+            db.users.insert(user),
+            db.tags.insert(tag)
+        ]);
+
+        stableItems = await Promise.all([
+            db.items.insert(stableEvent),
+            db.items.insert(stablePlace),
+            db.items.insert(stableGroup)
         ]);
 
         server = await Server;
@@ -42,7 +57,11 @@ describe('POST Items:', () => {
             db.items.destroy({ id: eventID }),
             db.items.destroy({ id: placeID }),
             db.items.destroy({ id: groupID }),
-            db.items.destroy({ id: activityID })
+            db.items.destroy({ id: activityID }),
+            db.items.destroy({ id: stableItems[0].id }),
+            db.items.destroy({ id: stableItems[1].id }),
+            db.items.destroy({ id: stableItems[2].id }),
+            db.tags.destroy({ name: tag.name })
         ]);
     });
 
@@ -50,7 +69,7 @@ describe('POST Items:', () => {
 
         token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
 
-        event.tags = ['outdoors'];
+        event.tags = [tag.name];
 
         const query = {
             method: 'POST',
@@ -192,7 +211,7 @@ describe('POST Items:', () => {
 
         place = Faker.lorem.word();
         place = Fixtures.place();
-        place.linked_items = [1];
+        place.linked_items = [eventID];
 
         const query = {
             method: 'POST',
@@ -235,7 +254,7 @@ describe('POST Items:', () => {
 
         event.name = Faker.lorem.word();
         event.type = 'event';
-        event.linked_items = [9];
+        event.linked_items = [stableItems[0].id];
 
         const query = {
             method: 'POST',
@@ -258,7 +277,7 @@ describe('POST Items:', () => {
         place.name = Faker.lorem.word();
         place.type = 'group';
         delete place.linked_items;
-        place.linked_items = [1];
+        place.linked_items = [stableItems[1].id];
 
         const query = {
             method: 'POST',
@@ -282,7 +301,7 @@ describe('POST Items:', () => {
         place.name = Faker.lorem.word();
         place.type = 'group';
         delete place.linked_items;
-        place.linked_items = [4];
+        place.linked_items = [stableItems[0].id];
 
         const query = {
             method: 'POST',
@@ -305,7 +324,7 @@ describe('POST Items:', () => {
         place.name = Faker.lorem.word() + 'a';
         place.type = 'activity';
         delete place.linked_items;
-        place.linked_items = [1];
+        place.linked_items = [stableItems[1].id];
 
         const query = {
             method: 'POST',
@@ -329,7 +348,7 @@ describe('POST Items:', () => {
         place.name = Faker.lorem.word();
         place.type = 'activity';
         delete place.linked_items;
-        place.linked_items = [4];
+        place.linked_items = [stableItems[2].id];
 
         const query = {
             method: 'POST',
@@ -394,12 +413,11 @@ describe('POST Items:', () => {
                 })
         );
     });
-
-    it('Place without links', () => {
+    it('Event without place', () => {
 
         delete event.linked_items;
         event.name = Faker.lorem.word();
-        event.linked_items = [4];
+        event.linked_items = [stableItems[2].id];
 
         const query = {
             method: 'POST',

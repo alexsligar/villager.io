@@ -46,9 +46,7 @@ describe('List /item_owners', () => {
         await Promise.all([
             db.users.destroy({ id: admin.id })
         ]);
-        // await Promise.all([
-        //     db.item_owners.destroy({ username: user.username })
-        // ]);
+
     });
     it('Get owners of item as user', () => {
 
@@ -68,8 +66,10 @@ describe('List /item_owners', () => {
     });
     it('Get owners of fake item', () => {
 
+        const fakeItem = newEvent[0].id + 100;
+
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        return server.inject({ method: 'get', url: `/item_owners/77`, headers: { 'Authorization': token } }).then((res) => {
+        return server.inject({ method: 'get', url: `/item_owners/${fakeItem}`, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(404);
         });

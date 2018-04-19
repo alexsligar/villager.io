@@ -10,25 +10,20 @@ const { expect } = require('code');
 
 describe('POST Lists:', () => {
 
+    let server;
+
     let list1 = Fixtures.list();
     let list2 = Fixtures.list();
-    let server;
-    let user1 = Fixtures.user();
-    let user2 = Fixtures.user();
+
+    const user1 = Fixtures.user_id();
+    const user2 = Fixtures.user_id();
 
     before(async () => {
 
-        const user1Query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user1
-        };
-
-        const user2Query = {
-            method: 'POST',
-            url: '/create_account',
-            payload: user2
-        };
+        await Promise.all([
+            db.users.insert(user1),
+            db.users.insert(user2)
+        ]);
 
         const list1Query = {
             method: 'POST',
@@ -43,17 +38,6 @@ describe('POST Lists:', () => {
         };
 
         server = await Server;
-        await server.inject(user1Query)
-            .then((response) => {
-
-                user1 = response.result.data;
-            });
-
-        await server.inject(user2Query)
-            .then((response) => {
-
-                user2 = response.result.data;
-            });
 
         const token = JWT.sign({ id: user1.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
         list1Query.headers = { 'Authorization': token };
@@ -75,9 +59,9 @@ describe('POST Lists:', () => {
     after(async () => {
 
         await Promise.all([
-            db.users.destroy({ username: user1.username }),
-            db.users.destroy({ username: user2.username }),
-            db.lists.destroy({ id: list2.id })
+            db.lists.destroy({ id: list2.id }),
+            db.users.destroy({ id: user1.id }),
+            db.users.destroy({ id: user2.id })
         ]);
     });
 
@@ -95,7 +79,7 @@ describe('POST Lists:', () => {
             server.inject(deleteQuery)
                 .then((response) => {
 
-                    expect(response.statusCode).to.equal(200);
+                    expect(response.statusCode).to.equal(204);
                 })
         );
     });

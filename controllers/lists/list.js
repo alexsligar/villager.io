@@ -13,10 +13,6 @@ module.exports = {
 
         const foundlists = await this.db.lists.getall();
 
-        // if (!foundlists[0]) {
-        //     throw Boom.notFound();
-        // }
-
         return reply({ data: foundlists });
     },
     response: {
