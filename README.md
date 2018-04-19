@@ -93,8 +93,7 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 PostgreSQL version 9.6
 ```
-### Enviroment Variable
-
+### Enviroment Variables
 
 3 environment variables need to be set to the values in the local.json file. 
 ```
@@ -106,6 +105,7 @@ This can be done on Windows using the command below.
 ```
 $node -pe require('getconfig').db.connection.user > user &&node -pe require('getconfig').db.connection.password > password && node -pe require('getconfig').db.connection.database > database && set /p PGUSER= < user && set /p PGDATABASE= < database && set /p PGPASSWORD= < password && del user password database
 ```
+
 ### Running the code
 
 Want to contribute? Here's what you need to do to run the API locally.
@@ -120,7 +120,7 @@ Want to contribute? Here's what you need to do to run the API locally.
 4. ``npm start`` to run
 
 
-## Testing
+### Testing
 
 For testing, we depend on 3 separate libaries in order to perform proper testing
 
@@ -147,21 +147,6 @@ Should the developer want to test in a specific folder, change the script to inc
 ```
 "test": "lab test/[folder name] -a code -L -v -c -e test"
 ```
-### Running the code
-
-Want to contribute? Here's what you need to do to run the API locally.
-
-
-1. ``npm i`` to install dependencies
-
-2. ``npm run makedb`` to set up db
-
-3. ``npm run migratedb`` to create tables
-
-4. ``npm start`` to run
-
-
-## Testing
 
 For more documentation, please see <a href="https://github.com/hapijs/lab">Lab</a> github page for more details.
 
