@@ -7,9 +7,6 @@ villager (work in progress)
 ===========================
 __Forget massive corporate social networks. Let's build villages.__
 
-![](https://img.shields.io/travis/adambrault/villager.svg)
-![](https://img.shields.io/david/adambrault/villager.svg)
-
 The project takes its name from [Jane Jacobs](http://en.wikipedia.org/wiki/Jane_Jacobs) (above) and her work on the [urban village](http://en.wikipedia.org/wiki/Urban_village). The underlying thesis of this project is that our online connectedness can be a tool to help overcome the tragic disconnectedness of suburbia.
 
 ---
