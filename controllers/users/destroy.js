@@ -3,7 +3,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 // const Server = require('../../server');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['404', '401', '204']);
+const swagger = Schema.generate(['404', '401']);
 
 module.exports = {
     description: 'Deletes user from table',
