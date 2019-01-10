@@ -1,8 +1,10 @@
 'use strict';
+
 const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404']);
 
 module.exports = {
