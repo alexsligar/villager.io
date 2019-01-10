@@ -7,7 +7,7 @@ const swagger = Schema.generate(['401', '404']);
 
 module.exports = {
     description: 'Delete tag category from use and all items',
-    tags: ['api', 'mod'],
+    tags: ['api', 'tags'],
     validate: {
         payload: Joi.object({ 'name': Joi.string().required() }),
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()

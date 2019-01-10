@@ -7,7 +7,7 @@ const swagger = Schema.generate();
 
 module.exports = {
     description: 'Add a category to tag items with',
-    tags: ['api', 'mod'],
+    tags: ['api', 'tags'],
     validate: {
         payload: Joi.object({ 'name': Joi.string().required() }),
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()

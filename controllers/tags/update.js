@@ -6,7 +6,7 @@ const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
     description: 'Update tag',
-    tags: ['api', 'mod'],
+    tags: ['api', 'tags'],
     validate: {
         params: Joi.object({ 'name': Joi.string().required() }),
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
