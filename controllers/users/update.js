@@ -5,6 +5,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404', '409']);
 
 module.exports = {
@@ -28,9 +29,11 @@ module.exports = {
         if (!user) {
             throw Boom.notFound('User not found');
         }
+
         if (user.id !== credentials.id) {
             throw Boom.unauthorized('User is not permitted to edit this account');
         }
+
         user = request.payload;
         if (user.username) {
             const takenUsername = await this.db.users.findOne({ username: user.username }, ['username']);
@@ -38,12 +41,14 @@ module.exports = {
                 throw Boom.conflict(`Username ${ takenUsername.username } already exists`);
             }
         }
+
         if (user.email) {
             const takenEmail = await this.db.users.findOne({ email: user.email }, ['email']);
             if (takenEmail) {
                 throw Boom.conflict(`Email ${ takenEmail.email } already exists`);
             }
         }
+
         //might have to logout user if they change password
         await this.db.users.updateOne({ id: credentials.id }, user);
         user = await this.db.users.findOne({ id: credentials.id });

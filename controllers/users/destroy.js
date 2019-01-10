@@ -1,8 +1,10 @@
 'use strict';
+
 const Joi = require('joi');
 const Boom = require('boom');
 // const Server = require('../../server');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404', '401']);
 
 module.exports = {
@@ -18,12 +20,14 @@ module.exports = {
         if (!user) {
             throw Boom.notFound();
         }
+
         if (credentials.role === 'admin' || credentials.id === user.id) {
             await this.db.users.destroy({ id: user.id });
         }
         else {
             throw Boom.unauthorized('The user is not permitted to delete this user!');
         }
+
         return reply(null).code(204);
     },
     response: {

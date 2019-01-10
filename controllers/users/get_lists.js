@@ -5,6 +5,7 @@ const Boom = require('boom');
 const uuid = require('uuid').v4;
 
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate();
 
 module.exports = {
@@ -22,6 +23,7 @@ module.exports = {
         if (!user) {
             throw Boom.notFound();
         }
+
         const userlists = await this.db.lists.getAllByOwner({ owner: user.username });
         // if (!userlists[0]) {
         //     throw Boom.notFound('User has no lists');

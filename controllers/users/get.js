@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404']);
 
 module.exports = {
@@ -21,6 +22,7 @@ module.exports = {
         if (!user) {
             throw Boom.notFound();
         }
+
         const favorite_list = await this.db.list_items.by_list_id({ id: user_id.id });
         return reply({ data: { user, favorite_list } });
     },
