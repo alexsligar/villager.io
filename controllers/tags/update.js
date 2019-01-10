@@ -1,7 +1,9 @@
 'use strict';
+
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
@@ -18,6 +20,7 @@ module.exports = {
         if (credentials.role === 'user') {
             throw Boom.unauthorized('Not permitted to edit tags');
         }
+
         let tag = await this.db.tags.findOne({ name: request.params.name });
         if (!tag){
             throw Boom.notFound('No tag by that name');

@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate();
 
 module.exports = {
@@ -18,9 +19,11 @@ module.exports = {
         if (credentials.role === 'user') {
             throw Boom.unauthorized();
         }
+
         if (await this.db.tags.findOne(request.payload)) {
             throw Boom.conflict(`Tag ${ request.payload.name } already exists`);
         }
+
         await this.db.tags.insert(request.payload);
 
         return reply({ message: 'Tag added successfully' });

@@ -1,5 +1,7 @@
 'use strict';
+
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404']);
 
 module.exports = {

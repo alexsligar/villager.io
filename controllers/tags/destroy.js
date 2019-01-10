@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['401', '404']);
 
 module.exports = {
@@ -18,6 +19,7 @@ module.exports = {
         if (credentials.role === 'user') {
             throw Boom.unauthorized();
         }
+
         if (!await this.db.tags.findOne({ name: request.payload.name })) {
             throw Boom.notFound('Tag doesn\'t exist');
         }
