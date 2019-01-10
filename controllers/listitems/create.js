@@ -27,8 +27,8 @@ module.exports = {
         if (!foundlist) {
             throw Boom.notFound('List not found');
         }
-        if (foundlist.owner !== credentials.id) {
-            throw Boom.forbidden();
+        if (foundlist.owner !== credentials.username) {
+            throw Boom.unauthorized();
         }
 
         await this.db.list_items.insert(request.payload);
