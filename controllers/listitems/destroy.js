@@ -22,9 +22,11 @@ module.exports = {
         if (!founditem) {
             throw Boom.notFound('Item not found');
         }
+
         if (!foundlist) {
             throw Boom.notFound('List not found');
         }
+
         if (foundlist.owner !== credentials.username) {
             throw Boom.unauthorized();
         }

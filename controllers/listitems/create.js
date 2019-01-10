@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['400','404']);
 
 module.exports = {
@@ -24,9 +25,11 @@ module.exports = {
         if (!founditem) {
             throw Boom.notFound('Item not found');
         }
+
         if (!foundlist) {
             throw Boom.notFound('List not found');
         }
+
         if (foundlist.owner !== credentials.username) {
             throw Boom.unauthorized();
         }
