@@ -22,11 +22,11 @@ module.exports = {
             throw Boom.notFound();
         }
 
-        const starsCount = await this.db.items.countingstars({ id: foundItems.id });
-        const listCount = await this.db.items.countinglists({ id: foundItems.id });
+        // const starsCount = await this.db.items.countingstars({ id: foundItems.id });
+        // const listCount = await this.db.items.countinglists({ id: foundItems.id });
 
-        foundItems.starred_number = Number(starsCount.count);
-        foundItems.list_number = Number(listCount.count);
+        // foundItems.starred_number = Number(starsCount.count);
+        // foundItems.list_number = Number(listCount.count);
 
         const links = await this.db.linked_items.getlinks({ id: foundItems.id },['name']);
         foundItems.linked_items = links.linked_item;
