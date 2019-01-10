@@ -22,8 +22,8 @@ exports.up = function (knex, Promise) {
                 itemsTable.text('name').notNullable();
                 itemsTable.text('location');
                 itemsTable.text('type').notNullable();
-                itemsTable.date('start_date');
-                itemsTable.date('end_date');
+                itemsTable.datetime('start_date');
+                itemsTable.datetime('end_date');
                 itemsTable.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
                 itemsTable.timestamp('updated_at').notNullable().defaultTo(knex.raw('now()'));
             })
@@ -31,7 +31,7 @@ exports.up = function (knex, Promise) {
 
                 listsTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
                 listsTable.text('name').notNullable();
-                listsTable.uuid('owner').references('id').inTable('users').index().onDelete('CASCADE');
+                listsTable.uuid('owner').references('username').inTable('users').index().onDelete('CASCADE');
                 listsTable.text('description');
             })
             .createTable('list_items', (listitemTable) => {
