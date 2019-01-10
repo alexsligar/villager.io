@@ -3,7 +3,7 @@ const { forEach } = require('p-iteration');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401', '404', '400']);
+const swagger = Schema.generate(['401', '404', '400', '409']);
 
 module.exports = {
     description: 'Update item',
@@ -52,6 +52,12 @@ module.exports = {
         }
         if (temp.name) {
             item.name = temp.name;
+
+            const inTable = await this.db.items.find({ name: temp.name, id: { $ne: request.params.id } });
+
+            if (inTable[0]) {
+                throw Boom.conflict(`Item already exists with name.`);
+            }
         }
 
         switch (item.type) {
