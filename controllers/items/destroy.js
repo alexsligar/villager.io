@@ -6,7 +6,7 @@ const swagger = Schema.generate(['401', '404', '400', '412']);
 
 module.exports = {
     description: 'Delete item',
-    tags: ['api', 'items', 'users'],
+    tags: ['api', 'items'],
     validate: {
         params: {
             id: Joi.number().required()
