@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const Schema = require('../../lib/schema');
 // const Config = require('getconfig');
+
 const swagger = Schema.generate(['401']);
 
 module.exports = {

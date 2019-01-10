@@ -4,8 +4,9 @@ const JWT = require('jsonwebtoken');
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
-const swagger = Schema.generate(['401']);
 const Config = require('getconfig');
+
+const swagger = Schema.generate(['401']);
 
 module.exports = {
     description: 'Login user',

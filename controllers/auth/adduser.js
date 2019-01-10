@@ -1,12 +1,10 @@
 'use strict';
 
 const uuid = require('uuid').v4;
-
-
 const Joi = require('joi');
 const Boom = require('boom');
-
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['409']);
 
 module.exports = {
@@ -59,4 +57,3 @@ module.exports = {
         'hapi-swagger': swagger
     }
 };
-
