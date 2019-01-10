@@ -4,6 +4,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['404','401']);
 
 module.exports = {
@@ -22,6 +23,7 @@ module.exports = {
             throw Boom.unauthorized('Not permitted use this feature');
         }
         // -------------------- Checks if relation exists in Tables ------------------- //
+
         const relation = await this.db.item_owners.findOne({ username, item_id });
 
         /**
