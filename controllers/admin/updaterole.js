@@ -2,8 +2,8 @@
 
 const Joi = require('joi');
 const Boom = require('boom');
-
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['401', '404']);
 
 module.exports = {

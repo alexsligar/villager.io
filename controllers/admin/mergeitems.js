@@ -1,7 +1,9 @@
 'use strict';
+
 const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/schema');
+
 const swagger = Schema.generate(['401', '404', '400']);
 
 module.exports = {
@@ -18,6 +20,7 @@ module.exports = {
             throw Boom.unauthorized('Not permitted use this feature');
         }
         //let numItems = request.payload.ids.length();
+
         const item_id = request.payload.item_id;
 
         await this.db.list_items.update({ item_id: item_id[1] },{ item_id: item_id[0] });
