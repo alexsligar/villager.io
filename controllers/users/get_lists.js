@@ -22,10 +22,10 @@ module.exports = {
         if (!user) {
             throw Boom.notFound();
         }
-        const userlists = await this.db.lists.getAllByOwner({ owner: user.id });
-        if (!userlists[0]) {
-            throw Boom.notFound('User has no lists');
-        }
+        const userlists = await this.db.lists.getAllByOwner({ owner: user.username });
+        // if (!userlists[0]) {
+        //     throw Boom.notFound('User has no lists');
+        // }
         return reply({ data: userlists });
     },
     response: {
@@ -34,7 +34,8 @@ module.exports = {
                 data: Joi.array().items(Joi.object({
                     id: Joi.string().guid().example(uuid()),
                     name: Joi.string().required().example('mon nom est'),
-                    description: Joi.string().required().example('description described descriptively').allow(null)
+                    description: Joi.string().required().example('description described descriptively').allow(null),
+                    items: Joi.array()
                 }))
             }
         }
