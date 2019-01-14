@@ -11,7 +11,7 @@ module.exports = {
     tags: ['api', 'lists'],
     validate: {
         payload: {
-            item_id: Joi.number().required(),
+            item_id: Joi.string().guid().required(),
             list_id: Joi.string().guid().required()
         },
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()

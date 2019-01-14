@@ -4,6 +4,7 @@ const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
 const Schema = require('../../lib/schema');
+const uuid = require('uuid').v4;
 
 const swagger = Schema.generate(['404']);
 
@@ -13,7 +14,7 @@ module.exports = {
     auth: false,
     validate: {
         params: {
-            id: Joi.number().required()
+            id: Joi.string().guid().example(uuid()).required()
         }
     },
     handler: async function (request, reply) {

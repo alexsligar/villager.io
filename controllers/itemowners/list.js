@@ -12,7 +12,7 @@ module.exports = {
     tags: ['api', 'mod'],
     validate: {
         headers: Joi.object({ 'authorization': Joi.string().required() }).unknown(),
-        params: { id: Joi.number().required() }
+        params: { id: Joi.string().guid().required() }
     },
     handler: async function (request, reply) {
 

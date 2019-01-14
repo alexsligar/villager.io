@@ -11,7 +11,7 @@ module.exports = {
     tags: ['api', 'items'],
     validate: {
         params: {
-            id: Joi.number().required()
+            id: Joi.string().guid().required()
         },
         headers: Joi.object({
             'authorization': Joi.string().required()
