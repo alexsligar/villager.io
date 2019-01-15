@@ -1,6 +1,8 @@
 'use strict';
 
 const Fixtures = require('../fixtures');
+const Faker = require('faker');
+
 const Server = Fixtures.server;
 const db = Fixtures.db;
 
@@ -11,45 +13,39 @@ const { expect } = require('code');
 describe('GET /items/id', () => {
 
     let server;
-
-    const event = Fixtures.event();
-    let newEvent;
+    let place = Fixtures.place();
+    let query;
 
     before(async () => {
 
         server = await Server;
-
-        newEvent = await Promise.all([
-            db.items.insert(event)
-        ]);
+        place = await db.items.insert(place);
+        query = {
+            method: 'GET',
+            url: `/items/${place.id}`
+        };
     });
 
     after(async () => {
 
-        await Promise.all([
-            db.items.destroy({ id: newEvent[0].id })
-        ]);
+        await db.items.destroy();
     });
 
     it('Get Item', async () => {
 
-        const query = {
-            method: 'GET',
-            url:    `/items/${newEvent[0].id}`
-        };
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
+        expect(response.result.data.id).to.equal(place.id);
     });
 
     it('Get Item - Does not exist', async () => {
 
-        const notExist = newEvent[0].id + 100;
-
-        const query = {
+        const notExist = Faker.random.uuid();
+        const newQuery = {
             method: 'GET',
             url: `/items/${notExist}`
         };
-        const response = await server.inject(query);
+        const response = await server.inject(newQuery);
         expect(response.statusCode).to.equal(404);
     });
 });
