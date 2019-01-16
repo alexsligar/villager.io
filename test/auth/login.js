@@ -1,6 +1,7 @@
 'use strict';
 
 const Fixtures = require('../fixtures');
+
 const Server = Fixtures.server;
 const db = Fixtures.db;
 

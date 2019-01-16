@@ -16,6 +16,7 @@ describe('PUT Items:', () => {
     let place;
     let group;
     let event;
+    let activity;
     let server;
 
     const user = Fixtures.user_id();
@@ -30,7 +31,8 @@ describe('PUT Items:', () => {
 
         place = await db.items.insert(Fixtures.place());
         group = await db.items.insert(Fixtures.group());
-        event = await db.items.insert(Fixtures.event({}));
+        event = await db.items.insert(Fixtures.event());
+        activity = await db.items.insert(Fixtures.activity());
         await Promise.all([
             db.users.insert(user),
             db.users.insert(mod)
@@ -78,10 +80,10 @@ describe('PUT Items:', () => {
             method: 'PUT',
             url: `/items/${place.id}`,
             headers: { 'Authorization': modToken },
-            payload: { name: 'THIS IS A TEST TOO' }
+            payload: { location: 'Somewhere' }
         };
         const response = await server.inject(query);
-        expect(response.result.data.name).to.equal('THIS IS A TEST TOO');
+        expect(response.result.data.location).to.equal('Somewhere');
         expect(response.statusCode).to.equal(200);
     });
 
@@ -131,6 +133,21 @@ describe('PUT Items:', () => {
         expect(response.result.data.start_date).to.equal(startDate);
         expect(response.result.data.end_date).to.equal(endDate);
         expect(response.result.data.name).to.equal('TOO TEST TOO FURIOUS');
+    });
+
+    it('Update item: name already exists', async () => {
+
+        const query = {
+            method: 'PUT',
+            url: `/items/${event.id}`,
+            headers: { 'Authorization': userToken },
+            payload: { name: place.name }
+        };
+        const response = await server.inject(query);
+        expect(response.statusCode).to.equal(409);
+        expect(response.result.message).to.equal(
+            'Item already exists with name.'
+        );
     });
 
     it('Update item: Non-Event with dates', async () => {
@@ -225,15 +242,27 @@ describe('PUT Items:', () => {
 
         const query = {
             method: 'PUT',
-            url: `/items/${place.id}`,
+            url: `/items/${activity.id}`,
             headers: { 'Authorization': modToken },
-            payload: { 'type': 'activity', 'linked_items': [group.id] }
+            payload: { 'linked_items': [group.id] }
         };
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(400);
         expect(response.result.message).to.equal(
             'Can\'t link activity to anything but Place'
         );
+    });
+
+    it('Update item: Add place link to activity', async () => {
+
+        const query = {
+            method: 'PUT',
+            url: `/items/${activity.id}`,
+            headers: { 'Authorization': modToken },
+            payload: { 'linked_items': [place.id] }
+        };
+        const response = await server.inject(query);
+        expect(response.statusCode).to.equal(200);
     });
 
     it('Update item: Add group link to group', async () => {
@@ -294,7 +323,7 @@ describe('PUT Items:', () => {
         );
     });
 
-    it('Up item: Add Tag', async () => {
+    it('Update item: Add Tag', async () => {
 
         const query = {
             method: 'PUT',
@@ -307,7 +336,7 @@ describe('PUT Items:', () => {
         expect(response.result.data.tags[0]).to.equal(tag.name);
     });
 
-    it('Up item: Add Non-Tag', async () => {
+    it('Update item: Add Non-Tag', async () => {
 
         const nonTag = Faker.lorem.word();
         const query = {

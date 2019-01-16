@@ -21,10 +21,8 @@ describe('GET /items/tags/{name}', () => {
         server = await Server;
 
         place = await db.items.insert(Fixtures.place());
-        await Promise.all([
-            db.tags.insert(tag),
-            db.item_tags.insert({ item_id: place.id, tag_name: tag.name })
-        ]);
+        await db.tags.insert(tag);
+        await db.item_tags.insert({ item_id: place.id, tag_name: tag.name });
     });
 
     after(async () => {
