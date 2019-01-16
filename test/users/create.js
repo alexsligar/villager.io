@@ -9,7 +9,7 @@ const { after, before, describe, it } = exports.lab = require('lab').script();
 const { expect } = require('code');
 
 
-describe('POST /create_account', () => {
+describe('POST /users', () => {
 
     let server;
     const user = Fixtures.user();
@@ -29,7 +29,7 @@ describe('POST /create_account', () => {
     it('Create user', () => {
 
         const payload = user;
-        return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
+        return server.inject({ method: 'post', url: '/users', payload }).then((res) => {
 
             expect(res.statusCode).to.equal(201);
         });
@@ -37,7 +37,7 @@ describe('POST /create_account', () => {
     it('Create user duplicate', () => {
 
         const payload = user;
-        return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
+        return server.inject({ method: 'post', url: '/users', payload }).then((res) => {
 
             expect(res.statusCode).to.equal(409);
         });
@@ -46,7 +46,7 @@ describe('POST /create_account', () => {
 
         const payload = Fixtures.user();
         payload.email = user.email;
-        return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
+        return server.inject({ method: 'post', url: '/users', payload }).then((res) => {
 
             expect(res.statusCode).to.equal(409);
         });

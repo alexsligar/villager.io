@@ -18,7 +18,7 @@ describe('POST /login', () => {
 
         server = await Server;
         const payload = user;
-        return server.inject({ method: 'post', url: '/create_account', payload });
+        await server.inject({ method: 'post', url: '/users', payload });
     });
 
 
