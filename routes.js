@@ -51,6 +51,10 @@ module.exports = [
 
     //list items
     { method: 'POST', path: '/lists/listitems', config: Controllers.listitems.create },
-    { method: 'DELETE', path: '/lists/listitems', config: Controllers.listitems.destroy }
+    { method: 'DELETE', path: '/lists/listitems', config: Controllers.listitems.destroy },
+
+    //starred_items
+    { method: 'POST', path: '/starred_items', config: Controllers.starreditems.create },
+    { method: 'DELETE', path: '/starred_items', config: Controllers.starreditems.destroy }
 
 ];

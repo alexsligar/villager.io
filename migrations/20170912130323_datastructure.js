@@ -63,6 +63,12 @@ exports.up = function (knex, Promise) {
                 linkedItemsTable.uuid('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
                 linkedItemsTable.uuid('linked_item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
             })
+            .createTable('starred_items', (starredItemsTable) => {
+
+                starredItemsTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
+                starredItemsTable.uuid('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
+                starredItemsTable.text( 'username' ).references( 'username' ).inTable( 'users' ).index().onDelete('CASCADE');
+            })
     );
 };
 
@@ -78,5 +84,6 @@ exports.down = function (knex, Promise) {
             .dropTableIfExists('tags')
             .dropTableIfExists('item_tags')
             .dropTableIfExists('linked_items')
+            .dropTableIfExists('starred_items')
     );
 };
