@@ -35,7 +35,7 @@ module.exports = {
         }
 
         await this.db.list_items.insert(request.payload);
-        return reply({ message: 'item inserted into list' });
+        return reply({ message: 'item inserted into list' }).code(201);
     },
     // response: {
     //     status: {

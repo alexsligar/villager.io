@@ -48,7 +48,7 @@ describe('POST Lists:', () => {
         const list = Fixtures.list();
         query.payload = list;
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
     });
 
     it('Create list duplicate', async () => {

@@ -58,7 +58,7 @@ describe('POST List Items:', () => {
             list_id: list1.id
         };
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
         expect(response.result.message).to.equal(
             'item inserted into list'
         );

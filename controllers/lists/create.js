@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const returnlist = await this.db.lists.insert(payload);
-        return reply({ data: returnlist });
+        return reply({ data: returnlist }).code(201);
     },
     plugins: {
         'hapi-swagger': swagger

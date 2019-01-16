@@ -33,11 +33,11 @@ module.exports = {
         }
 
         const user = await this.db.users.insert(request.payload);
-        return reply({ data: user });
+        return reply({ data: user }).code(201);
     },
     response: {
         status: {
-            200: Joi.object({
+            201: Joi.object({
                 data: {
                     id: Joi.string().guid().example(uuid()),
                     name: Joi.string().optional().example('totally not a robot'),

@@ -54,7 +54,7 @@ describe('POST /item_owners', () => {
         const payload = { username: user.username, item_id: newEvent[0].id };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(201);
         });
     });
     it('Create owner as user', () => {

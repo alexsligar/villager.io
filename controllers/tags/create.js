@@ -26,7 +26,7 @@ module.exports = {
 
         await this.db.tags.insert(request.payload);
 
-        return reply({ message: 'Tag added successfully' });
+        return reply({ message: 'Tag added successfully' }).code(201);
     },
     // response: {
     //     status: {

@@ -1,6 +1,7 @@
 'use strict';
 
 const Fixtures = require('../fixtures');
+
 const Server = Fixtures.server;
 const db = Fixtures.db;
 
@@ -30,7 +31,7 @@ describe('POST /create_account', () => {
         const payload = user;
         return server.inject({ method: 'post', url: '/create_account', payload }).then((res) => {
 
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(201);
         });
     });
     it('Create user duplicate', () => {

@@ -58,11 +58,11 @@ module.exports = {
             await this.db.item_owners.insert({ username, item_id });
         }
 
-        return reply({ data: request.payload });
+        return reply({ data: request.payload }).code(201);
     },
     response: {
         status: {
-            200: {
+            201: {
                 data: Schema.itemowner
             }
         }

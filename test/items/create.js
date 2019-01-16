@@ -61,7 +61,7 @@ describe('POST Items:', () => {
 
         query.payload = event;
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
     });
 
     it('Create item duplicate', async () => {
@@ -188,7 +188,7 @@ describe('POST Items:', () => {
 
         query.payload = group;
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
     });
 
     it('Link Group to not Place', async () => {
@@ -213,7 +213,7 @@ describe('POST Items:', () => {
 
         query.payload = activity;
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
     });
 
     it('Link Activity to not Place', async () => {
@@ -250,7 +250,7 @@ describe('POST Items:', () => {
 
         query.payload = place;
         const response = await server.inject(query);
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(201);
     });
 
     it('Event without place', async () => {

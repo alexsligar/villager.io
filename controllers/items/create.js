@@ -130,12 +130,12 @@ module.exports = {
             returnedItem.linked_items = linked_items;
         }
 
-        return reply({ data: returnedItem });
+        return reply({ data: returnedItem }).code(201);
     },
 
     response: {
         status: {
-            200: Schema.item_response
+            201: Schema.item_response
         }
     },
 
