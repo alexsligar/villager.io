@@ -19,6 +19,13 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
+        const item = await this.db.items.findOne({ id: request.params.id });
+
+        // Does item exist?
+        if (!item) {
+            throw Boom.notFound('Item not found');
+        }
+
         const credentials = request.auth.credentials;
 
         if (credentials.role === 'user') {
@@ -27,13 +34,6 @@ module.exports = {
             if (!item_owners) {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
-        }
-
-        const item = await this.db.items.findOne({ id: request.params.id });
-
-        // Does item exist?
-        if (!item) {
-            throw Boom.notFound('Item not found');
         }
 
         const listItem = await this.db.list_items.find({ item_id: request.params.id });
