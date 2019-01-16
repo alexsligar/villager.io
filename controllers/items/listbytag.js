@@ -21,7 +21,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.items_by_tag_response
+            200: Schema.simple_items_response
         }
     },
     plugins: {

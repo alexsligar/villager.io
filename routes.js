@@ -39,6 +39,7 @@ module.exports = [
     { method: 'GET', path: '/users/profile', config: Controllers.users.get_profile },
     { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },
+    { method: 'GET', path: '/users/{username}/starred', config: Controllers.users.get_starred_items },
     { method: 'PUT', path: '/users/{username}', config: Controllers.users.update },
     { method: 'DELETE', path: '/users/{username}', config: Controllers.users.destroy },
 

@@ -38,6 +38,27 @@ describe('GET /items/id', () => {
         expect(response.result.data.id).to.equal(place.id);
     });
 
+    it('Get Item - List Count', async () => {
+
+        const user = await db.users.insert(Fixtures.user());
+        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list2 = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        await db.list_items.insert({ list_id: list.id, item_id: place.id });
+        await db.list_items.insert({ list_id: list2.id, item_id: place.id });
+        const response = await server.inject(query);
+        expect(response.result.data.list_number).to.equal(2);
+    });
+
+    it('Get Item - Star Count', async () => {
+
+        const user = await db.users.insert(Fixtures.user());
+        const user2 = await db.users.insert(Fixtures.user());
+        await db.starred_items.insert({ username: user.username, item_id: place.id });
+        await db.starred_items.insert({ username: user2.username, item_id: place.id });
+        const response = await server.inject(query);
+        expect(response.result.data.starred_number).to.equal(2);
+    });
+
     it('Get Item - Does not exist', async () => {
 
         const notExist = Faker.random.uuid();

@@ -8,7 +8,7 @@ const RequestSchema = require('../../lib/requestSchema');
 const swagger = Schema.generate(['404']);
 
 module.exports = {
-    description: 'Returns users lists',
+    description: 'Returns users starred items',
     tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
@@ -21,12 +21,12 @@ module.exports = {
             throw Boom.notFound();
         }
 
-        const userlists = await this.db.lists.getAllByOwner({ owner: user.username });
-        return reply({ data: userlists });
+        const user_starred_items = await this.db.items.getstarredbyuser({ username: user.username });
+        return reply({ data: user_starred_items });
     },
     response: {
         status: {
-            200: Schema.lists_no_owner_response
+            200: Schema.simple_items_response
         }
     },
     plugins: {
