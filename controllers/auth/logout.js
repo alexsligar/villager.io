@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const Schema = require('../../lib/schema');
+const Schema = require('../../lib/responseSchema');
 // const Config = require('getconfig');
 
 const swagger = Schema.generate(['401']);

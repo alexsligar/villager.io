@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const Boom = require('boom');
 // const server = require('../../server');
-const Schema = require('../../lib/schema');
+const Schema = require('../../lib/responseSchema');
 const uuid = require('uuid').v4;
 
 const swagger = Schema.generate(['404']);

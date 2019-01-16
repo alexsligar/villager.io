@@ -1,6 +1,6 @@
 'use strict';
 
-const Schema = require('../../lib/schema');
+const Schema = require('../../lib/responseSchema');
 
 const swagger = Schema.generate(['404']);
 

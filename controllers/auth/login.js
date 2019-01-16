@@ -3,7 +3,7 @@
 const JWT = require('jsonwebtoken');
 const Joi = require('joi');
 const Boom = require('boom');
-const Schema = require('../../lib/schema');
+const Schema = require('../../lib/responseSchema');
 const Config = require('getconfig');
 
 const swagger = Schema.generate(['401']);
