@@ -1,17 +1,17 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate();
+const swagger = Schema.generate(['400', '409', '401']);
 
 module.exports = {
     description: 'Add a category to tag items with',
     tags: ['api', 'tags'],
     validate: {
-        payload: Joi.object({ 'name': Joi.string().required() }),
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        payload: RequestSchema.tagPayload,
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 
@@ -28,11 +28,11 @@ module.exports = {
 
         return reply({ message: 'Tag added successfully' }).code(201);
     },
-    // response: {
-    //     status: {
-    //         200: Schema
-    //     }
-    // },
+    response: {
+        status: {
+            201: Schema.message_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

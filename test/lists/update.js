@@ -71,8 +71,8 @@ describe('PUT Lists:', () => {
         });
         const response = await server.inject(updateQuery);
         expect(response.statusCode).to.equal(400);
-        expect(response.result.message).to.equal(
-            'No name provided'
+        expect(response.result.message).to.match(
+            /"name" is required/
         );
     });
 

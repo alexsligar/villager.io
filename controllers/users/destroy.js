@@ -1,15 +1,18 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
-// const Server = require('../../server');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate(['404', '401']);
+const swagger = Schema.generate(['400', '401', '404']);
 
 module.exports = {
     description: 'Deletes user from table',
     tags: ['api', 'mod'],
+    validate: {
+        params: RequestSchema.usernameParam,
+        headers: RequestSchema.tokenRequired
+    },
     handler: async function (request, reply) {
 
         // -------------------- Variables --------------------------------------------- //
@@ -32,7 +35,7 @@ module.exports = {
     },
     response: {
         status: {
-            204: Joi.only(null).label('Null')
+            204: Schema.null_response
         }
     },
     plugins: {

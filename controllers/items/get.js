@@ -1,10 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
-// const server = require('../../server');
 const Schema = require('../../lib/responseSchema');
-const uuid = require('uuid').v4;
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['404']);
 
@@ -13,15 +11,13 @@ module.exports = {
     tags: ['api', 'items' ,'public'],
     auth: false,
     validate: {
-        params: {
-            id: Joi.string().guid().example(uuid()).required()
-        }
+        params: RequestSchema.idParam
     },
     handler: async function (request, reply) {
 
-        const foundItems = await this.db.items.byid({ id: request.params.id });
+        const foundItem = await this.db.items.byid({ id: request.params.id });
 
-        if (!foundItems) {
+        if (!foundItem) {
             throw Boom.notFound();
         }
 
@@ -31,16 +27,16 @@ module.exports = {
         // foundItems.starred_number = Number(starsCount.count);
         // foundItems.list_number = Number(listCount.count);
 
-        const links = await this.db.linked_items.getlinks({ id: foundItems.id },['name']);
-        foundItems.linked_items = links.linked_item;
+        const links = await this.db.linked_items.getlinks({ id: foundItem.id },['name']);
+        foundItem.linked_items = links.linked_item;
 
-        return reply({ data: foundItems });
+        return reply({ data: foundItem });
     },
-    // response: {
-    //     status: {
-    //         200: Schema.item_response
-    //     }
-    // },
+    response: {
+        status: {
+            200: Schema.item_response
+        }
+    },
     plugins: {
         'hapi-swagger': swagger
     }

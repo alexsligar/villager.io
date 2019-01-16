@@ -1,9 +1,9 @@
 'use strict';
 
 const { forEach } = require('p-iteration');
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['401', '404', '400', '409']);
 
@@ -11,13 +11,9 @@ module.exports = {
     description: 'Update item',
     tags: ['api', 'items'],
     validate: {
-        params: {
-            id: Joi.string().guid().required()
-        },
+        params: RequestSchema.idParam,
         payload: Schema.updateitem,
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 

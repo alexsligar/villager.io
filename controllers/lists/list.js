@@ -1,10 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
-// const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
 
-const swagger = Schema.generate(['404']);
+const swagger = Schema.generate([]);
 
 module.exports = {
     description: 'Returns all lists',
@@ -18,17 +16,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: {
-                data: Joi.array().items(
-                    Joi.object({
-                        id: Joi.string().guid().required().example('269fffd8-a550-4871-8af2-db6eda3d6fb4'),
-                        name: Joi.string().required().example('Best Restaurants'),
-                        owner: Joi.string().required().example('mruser'),
-                        description: Joi.string().example('null').allow(null),
-                        items: Joi.array().items()
-                    })
-                )
-            }
+            200: Schema.lists_response
         }
     },
     plugins: {

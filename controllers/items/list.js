@@ -1,12 +1,9 @@
 'use strict';
 
-// const Joi = require('joi');
 const { forEach } = require('p-iteration');
-//const Boom = require('boom');
-// const server = require('../../server');
 const Schema = require('../../lib/responseSchema');
 
-const swagger = Schema.generate(['404']);
+const swagger = Schema.generate([]);
 
 module.exports = {
     description: 'Returns all items',
@@ -24,11 +21,11 @@ module.exports = {
         /* Add pagination */
         return reply({ data: founditems });
     },
-    /*response: {
+    response: {
         status: {
             200: Schema.items_response
         }
-    },*/
+    },
     plugins: {
         'hapi-swagger': swagger
     }

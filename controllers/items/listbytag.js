@@ -1,20 +1,16 @@
 'use strict';
 
-const Joi = require('joi');
-//const Boom = require('boom');
-// const server = require('../../server');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate(['404']);
+const swagger = Schema.generate([]);
 
 module.exports = {
     description: 'Returns all items by tag',
     tags: ['api', 'items','public'],
     auth: false,
     validate: {
-        params: {
-            name: Joi.string().required()
-        }
+        params: RequestSchema.tagParam
     },
     handler: async function (request, reply) {
 

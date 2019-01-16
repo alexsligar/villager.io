@@ -1,10 +1,9 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
-const uuid = require('uuid').v4;
 
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate();
 
@@ -13,9 +12,7 @@ module.exports = {
     tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
-        params: {
-            username: Joi.string().required()
-        }
+        params: RequestSchema.usernameParam
     },
     handler: async function (request, reply) {
 
@@ -25,21 +22,11 @@ module.exports = {
         }
 
         const userlists = await this.db.lists.getAllByOwner({ owner: user.username });
-        // if (!userlists[0]) {
-        //     throw Boom.notFound('User has no lists');
-        // }
         return reply({ data: userlists });
     },
     response: {
         status: {
-            200: {
-                data: Joi.array().items(Joi.object({
-                    id: Joi.string().guid().example(uuid()),
-                    name: Joi.string().required().example('mon nom est'),
-                    description: Joi.string().required().example('description described descriptively').allow(null),
-                    items: Joi.array()
-                }))
-            }
+            200: Schema.lists_no_owner_response
         }
     },
     plugins: {

@@ -1,8 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['401', '404', '400']);
 
@@ -10,8 +10,9 @@ module.exports = {
     description: 'Update tag',
     tags: ['api', 'tags'],
     validate: {
-        params: Joi.object({ 'name': Joi.string().required() }),
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        params: RequestSchema.tagParam,
+        payload: RequestSchema.tagPayload,
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 
@@ -29,6 +30,11 @@ module.exports = {
         tag = await this.db.tags.updateOne({ name: request.params.name }, { name: request.payload.name });
 
         return reply({ data: tag });
+    },
+    response: {
+        status: {
+            200: Schema.tag_response
+        }
     },
     plugins: {
         'hapi-swagger': swagger

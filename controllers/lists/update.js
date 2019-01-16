@@ -1,17 +1,17 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate(['400','400']);
+const swagger = Schema.generate(['400','401']);
 
 module.exports = {
     description: 'Add list',
     tags: ['api', 'lists'],
     validate: {
-        payload: { name: Joi.string().optional(), description: Joi.string().optional() },
-        params:{ id: Joi.string().guid() }
+        payload: RequestSchema.listPayload,
+        params: RequestSchema.idParam
     },
     handler: async function (request, reply) {
 
@@ -21,10 +21,6 @@ module.exports = {
             if (foundlist.owner !== credentials.username) {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
-        }
-
-        if (!request.payload.name) {
-            throw Boom.badRequest('No name provided');
         }
 
         const list = request.payload;

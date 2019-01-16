@@ -1,21 +1,19 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate(['409','401']);
+const swagger = Schema.generate(['409','401', '404']);
 
 module.exports = {
     description: 'Add owner x item relation',
     tags: ['api', 'mod'],
     validate: {
         payload: Schema.itemowner,
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
-
-        // const credentials = request.auth.credentials;
 
         // -------------------- Variables --------------------------------------------- //
         const { username, item_id } = request.payload;

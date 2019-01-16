@@ -1,8 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['400']);
 
@@ -10,8 +10,8 @@ module.exports = {
     description: 'Add list',
     tags: ['api', 'lists'],
     validate: {
-        payload: { name: Joi.string().required(), description: Joi.string().required() },
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        payload: RequestSchema.listPayload,
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 
@@ -28,6 +28,11 @@ module.exports = {
 
         const returnlist = await this.db.lists.insert(payload);
         return reply({ data: returnlist }).code(201);
+    },
+    response: {
+        status: {
+            201: Schema.list_response
+        }
     },
     plugins: {
         'hapi-swagger': swagger

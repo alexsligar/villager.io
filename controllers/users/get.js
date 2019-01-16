@@ -1,8 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['404']);
 
@@ -11,9 +11,7 @@ module.exports = {
     tags: ['api', 'users', 'public'],
     auth: false,
     validate: {
-        params: {
-            username: Joi.string().required()
-        }
+        params: RequestSchema.usernameParam
     },
     handler: async function (request, reply) {
 

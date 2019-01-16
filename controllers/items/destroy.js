@@ -1,8 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['401', '404', '400', '412']);
 
@@ -10,12 +10,8 @@ module.exports = {
     description: 'Delete item',
     tags: ['api', 'items'],
     validate: {
-        params: {
-            id: Joi.string().guid().required()
-        },
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
+        params: RequestSchema.idParam,
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 
@@ -60,7 +56,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.message_response
+            200: Schema.null_response
         }
     },
     plugins: {

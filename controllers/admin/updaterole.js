@@ -1,8 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['401', '404']);
 
@@ -10,15 +10,9 @@ module.exports = {
     description: 'update user role',
     tags: ['api', 'admin'],
     validate: {
-        params: {
-            username: Joi.string().required()
-        },
-        payload: {
-            role: Joi.any().valid('mod', 'user', 'admin')
-        },
-        headers: Joi.object({
-            'authorization': Joi.string().required()
-        }).unknown()
+        params: RequestSchema.usernameParam,
+        payload: RequestSchema.updateRolePayload,
+        headers: RequestSchema.tokenRequired
     },
 
     handler: async function (request, reply) {

@@ -1,9 +1,8 @@
 'use strict';
 
-const Joi = require('joi');
 const Boom = require('boom');
-// const server = require('../../server');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['404','401']);
 
@@ -11,8 +10,8 @@ module.exports = {
     description: 'Returns all owners of an item',
     tags: ['api', 'mod'],
     validate: {
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown(),
-        params: { id: Joi.string().guid().required() }
+        headers: RequestSchema.tokenRequired,
+        params: RequestSchema.idParam
     },
     handler: async function (request, reply) {
 

@@ -1,9 +1,8 @@
 'use strict';
 
-const uuid = require('uuid').v4;
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate(['409']);
 
@@ -12,13 +11,7 @@ module.exports = {
     tags: ['api', 'users'],
     auth: false,
     validate: {
-        payload: {
-            name: Joi.string().optional().example('totally not a robot').allow(null),
-            username: Joi.string().required().example('seriously'),
-            email: Joi.string().required().example('real@email'),
-            bio: Joi.string().optional().example('I am a real person').allow(null),
-            password: Joi.string().required().example('password')
-        }
+        payload: RequestSchema.userPayload
     },
     handler: async function (request, reply) {
 
@@ -37,20 +30,7 @@ module.exports = {
     },
     response: {
         status: {
-            201: Joi.object({
-                data: {
-                    id: Joi.string().guid().example(uuid()),
-                    name: Joi.string().optional().example('totally not a robot'),
-                    username: Joi.string().required().example('seriously'),
-                    password: Joi.string().required().example('I am'),
-                    role: Joi.any().valid('mod', 'user', 'admin'),
-                    email: Joi.string().required().example('real@email'),
-                    bio: Joi.string().optional().example('I am a real person').allow(null),
-                    logout: Joi.date().timestamp().allow(null),
-                    created_at: Joi.date().timestamp(),
-                    updated_at: Joi.date().timestamp()
-                }
-            })
+            201: Schema.private_response
         }
     },
     plugins: {

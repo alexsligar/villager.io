@@ -1,25 +1,17 @@
 'use strict';
 
-//const JWT = require('jsonwebtoken');
-//const Config = require('getconfig');
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
-const swagger = Schema.generate(['404', '409']);
+const swagger = Schema.generate(['401', '404', '409']);
 
 module.exports = {
     description: 'update user',
     tags: ['api', 'users'],
     validate: {
-        payload: {
-            name: Joi.string().optional().example('totally not a robot'),
-            username: Joi.string().optional().example('seriously'),
-            email: Joi.string().optional().example('real@email'),
-            bio: Joi.string().optional().example('seriously i am not a robot'),
-            password: Joi.string().optional().example('password')
-        },
-        headers: Joi.object({ 'authorization': Joi.string().required() }).unknown()
+        payload: RequestSchema.userUpdatePayload,
+        headers: RequestSchema.tokenRequired
     },
     handler: async function (request, reply) {
 

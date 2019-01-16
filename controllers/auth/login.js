@@ -1,9 +1,9 @@
 'use strict';
 
 const JWT = require('jsonwebtoken');
-const Joi = require('joi');
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 const Config = require('getconfig');
 
 const swagger = Schema.generate(['401']);
@@ -13,10 +13,7 @@ module.exports = {
     tags: ['api', 'auth'],
     auth: false,
     validate: {
-        payload: {
-            username: Joi.string().required(),
-            password: Joi.string().required()
-        }
+        payload: RequestSchema.authPayload
     },
     handler: async function (request, reply){
 
@@ -35,7 +32,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Joi.object({ data:{ token: [Joi.string().example('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmMGMzOGNiLTY1YzItNGRkMi1hMmU0LWJhNjBhYmM0NjBlMSIsInRpbWVzdGFtcCI6IjIwMTgtMDItMjZUMjM6NTQ6MTUuNDU1WiIsImlhdCI6MTUxOTY4OTI1NX0.3qXMbtdRYrC4Tlh14ykyOtt3B8RmtM9t3rVlIs7rysM'), Joi.number()] } })
+            200: Schema.token_response
         }
     },
     plugins: {
