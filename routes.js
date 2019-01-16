@@ -1,4 +1,5 @@
 'use strict';
+
 const Controllers = require('keyfob').load({ path: './controllers', fn: require });
 
 module.exports = [
@@ -37,7 +38,6 @@ module.exports = [
     //users
     { method: 'GET', path: '/users/profile', config: Controllers.users.get_profile },
     { method: 'GET', path: '/users/{username}', config: Controllers.users.get },
-    { method: 'GET', path: '/users/{username}/favorites', config: Controllers.users.get_favorites },
     { method: 'GET', path: '/users/{username}/lists', config: Controllers.users.get_lists },
     { method: 'PUT', path: '/users/{username}', config: Controllers.users.update },
     { method: 'DELETE', path: '/users/{username}', config: Controllers.users.destroy },
