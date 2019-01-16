@@ -21,6 +21,12 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
+        const item = await this.db.items.findOne({ id: request.params.id });
+
+        if (!item) {
+            throw Boom.notFound('Item not found');
+        }
+
         const tags = request.payload.tags;
         const linked_items = request.payload.linked_items;
 
@@ -32,12 +38,6 @@ module.exports = {
             if (!item_owners) {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
-        }
-
-        const item = await this.db.items.findOne({ id: request.params.id });
-
-        if (!item) {
-            throw Boom.notFound('Item not found');
         }
 
         if (temp.location) {
