@@ -25,8 +25,11 @@ module.exports = {
             throw Boom.unauthorized('Username or password is invalid');
         }
         else {
-            find_user.timestamp = new Date();
-            const token = JWT.sign({ ...find_user }, Config.auth.secret, Config.auth.options);
+            const token = JWT.sign(
+                { id: find_user.id, username: find_user.username, timestamp: new Date() },
+                Config.auth.secret,
+                Config.auth.options
+            );
             return reply({ data: { token } });
         }
     },
