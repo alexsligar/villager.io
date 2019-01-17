@@ -18,7 +18,10 @@ module.exports = {
     },
     handler: async function (request, reply){
 
-        const user = await this.db.users.findOne({ username: request.payload.username }, ['password']);
+        const user = await this.db.users.byUsernameOrEmail(
+            { username: request.payload.username },
+            ['password']
+        );
         if (!user) {
             throw Boom.unauthorized('Username/email not found');
         }
