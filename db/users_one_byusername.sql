@@ -1,4 +1,4 @@
-SELECT 
+SELECT
 users.id,
 users.name,
 users.email,
@@ -8,5 +8,7 @@ users.role,
 users.logout,
 users.created_at,
 users.updated_at
-FROM 
+FROM
 users
+WHERE
+users.username = ${username}

@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
 const RequestSchema = require('../../lib/requestSchema');
+const Bcrypt = require('bcrypt');
 
 const swagger = Schema.generate(['401', '404', '409']);
 
@@ -41,9 +42,13 @@ module.exports = {
             }
         }
 
+        if (user.password) {
+            user.password = await Bcrypt.hash(user.password, 10);
+        }
+
         //might have to logout user if they change password
-        await this.db.users.updateOne({ id: credentials.id }, user);
-        user = await this.db.users.findOne({ id: credentials.id });
+        user = await this.db.users.updateOne({ id: credentials.id }, user);
+        delete user.password;
         return reply({ data: { user } });
     },
     response: {

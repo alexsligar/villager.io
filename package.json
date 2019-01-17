@@ -25,6 +25,7 @@
   "author": "Villagers",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.3",
     "boom": "^6.0.0",
     "getconfig": "^3.1.0",
     "hapi": "^16.6.3",

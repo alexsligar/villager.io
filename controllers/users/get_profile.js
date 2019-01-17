@@ -14,7 +14,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         const credentials = request.auth.credentials;
-        const user = await this.db.users.findOne({ username: credentials.username });
+        const user = await this.db.users.byusername({ username: credentials.username });
 
         return reply({ data: user });
     },

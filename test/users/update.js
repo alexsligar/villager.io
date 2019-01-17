@@ -3,6 +3,7 @@
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
 const Fixtures = require('../fixtures');
+
 const Server = Fixtures.server;
 const db = Fixtures.db;
 
@@ -54,6 +55,7 @@ describe('PUT /users/{username}', () => {
 
             updated_user.id = user.id;
             user = updated_user;
+            delete updated_user.password;
             expect(result.data).to.include(updated_user);
         });
     });
@@ -81,6 +83,7 @@ describe('PUT /users/{username}', () => {
             updated_user.username = user.username;
 
             user = updated_user;
+            delete updated_user.password;
             expect(result.data).to.include(updated_user);
         });
     });
@@ -108,6 +111,7 @@ describe('PUT /users/{username}', () => {
             updated_user.email = user.email;
 
             user = updated_user;
+            delete updated_user.password;
             expect(result.data).to.include(updated_user);
         });
     });

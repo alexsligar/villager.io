@@ -34,6 +34,14 @@ describe('POST /users', () => {
             expect(res.statusCode).to.equal(201);
         });
     });
+    it('Should not store password as plain text', async () => {
+
+        const currentUser = Fixtures.user();
+        const payload = currentUser;
+        const response = await server.inject({ method: 'post', url: '/users', payload });
+        expect(response.statusCode).to.equal(201);
+        expect(currentUser.password).not.to.equal(response.result.data.password);
+    });
     it('Create user duplicate', () => {
 
         const payload = user;

@@ -37,6 +37,14 @@ describe('POST /login', () => {
             expect(res.statusCode).to.equal(200);
         });
     });
+    it('login with wrong username', () => {
+
+        const payload = { username: 'wrong', password: user.password };
+        return server.inject({ method: 'post', url: '/login', payload }).then((res) => {
+
+            expect(res.statusCode).to.equal(401);
+        });
+    });
     it('login wrong password', () => {
 
         const payload = { username: user.username, password: user_random.password  };

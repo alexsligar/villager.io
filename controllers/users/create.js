@@ -3,6 +3,7 @@
 const Boom = require('boom');
 const Schema = require('../../lib/responseSchema');
 const RequestSchema = require('../../lib/requestSchema');
+const Bcrypt = require('bcrypt');
 
 const swagger = Schema.generate(['409']);
 
@@ -25,7 +26,10 @@ module.exports = {
             throw Boom.conflict(`Email ${takenEmail.email} already exists`);
         }
 
+        request.payload.password = await Bcrypt.hash(request.payload.password, 10);
+
         const user = await this.db.users.insert(request.payload);
+        delete user.password;
         return reply({ data: user }).code(201);
     },
     response: {
