@@ -1,8 +1,10 @@
 SELECT
-  users.password
+    users.id,
+    users.username,
+    users.password
 FROM
-  users
+    users
 WHERE
-  users.username = ${username}
+    LOWER(users.username) = LOWER(${username})
 OR
-  users.email = ${username}
+    LOWER(users.email) = LOWER(${username})
