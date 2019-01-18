@@ -27,27 +27,32 @@ module.exports = {
             throw Boom.unauthorized('User is not permitted to edit this account');
         }
 
-        user = request.payload;
-        if (user.username) {
-            const takenUsername = await this.db.users.findOne({ username: user.username }, ['username']);
-            if (takenUsername) {
-                throw Boom.conflict(`Username ${ takenUsername.username } already exists`);
+        const updatedUser = request.payload;
+        if (updatedUser.username) {
+            const usernameExists = await this.db.users.byusername({ username: updatedUser.username });
+            if (usernameExists) {
+                throw Boom.conflict(`Username ${ updatedUser.username } already exists`);
             }
         }
 
-        if (user.email) {
-            const takenEmail = await this.db.users.findOne({ email: user.email }, ['email']);
-            if (takenEmail) {
-                throw Boom.conflict(`Email ${ takenEmail.email } already exists`);
+        if (updatedUser.email) {
+            const emailExists = await this.db.users.byEmail({ email: updatedUser.email });
+            if (emailExists) {
+                throw Boom.conflict(`Email ${ updatedUser.email } already exists`);
             }
         }
 
-        if (user.password) {
-            user.password = await Bcrypt.hash(user.password, 10);
+        if (updatedUser.password) {
+            const match = await Bcrypt.compare(updatedUser.oldPassword, user.password);
+            if (!match) {
+                throw Boom.unauthorized('Old password invalid');
+            }
+
+            updatedUser.password = await Bcrypt.hash(user.password, 10);
         }
 
         //might have to logout user if they change password
-        user = await this.db.users.updateOne({ id: credentials.id }, user);
+        user = await this.db.users.updateOne({ id: credentials.id }, updatedUser);
         delete user.password;
         return reply({ data: { user } });
     },

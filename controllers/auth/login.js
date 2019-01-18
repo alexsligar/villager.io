@@ -18,7 +18,7 @@ module.exports = {
     },
     handler: async function (request, reply){
 
-        const user = await this.db.users.byUsernameOrEmail(
+        const user = await this.db.users.byIdentifier(
             { username: request.payload.username }
         );
         if (!user) {

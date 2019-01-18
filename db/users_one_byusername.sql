@@ -11,4 +11,4 @@ users.updated_at
 FROM
 users
 WHERE
-users.username = ${username}
+LOWER(users.username) = LOWER(${username})
