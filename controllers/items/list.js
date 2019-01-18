@@ -2,6 +2,7 @@
 
 const { forEach } = require('p-iteration');
 const Schema = require('../../lib/responseSchema');
+const RequestSchema = require('../../lib/requestSchema');
 
 const swagger = Schema.generate([]);
 
@@ -9,9 +10,16 @@ module.exports = {
     description: 'Returns all items',
     tags: ['api', 'items', 'public'],
     auth: false,
+    validate: {
+        query: RequestSchema.itemsQuery
+    },
     handler: async function (request, reply) {
 
-        const founditems = await this.db.items.getall();
+        const query = {
+            item_type: request.query.type,
+            item_name: request.query.name
+        };
+        const founditems = await this.db.items.getall(query);
 
         await forEach(founditems, async (item) => {
 
