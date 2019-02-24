@@ -56,6 +56,8 @@ describe('PUT /users/{username}', () => {
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
         expect(response.result.data.user).to.include(updatedUser);
+        expect(response.result.data.token).not.to.be.undefined();
+        expect(response.result.data.token).not.to.equal(token);
     });
 
     it('Update user without username', async () => {
@@ -69,6 +71,7 @@ describe('PUT /users/{username}', () => {
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
         expect(response.result.data.user).to.include(updatedUser);
+        expect(response.result.data.token).to.be.undefined();
     });
 
     it('Update user without email', async () => {
@@ -95,6 +98,8 @@ describe('PUT /users/{username}', () => {
         const query = queryBuilder(user, token, updatedUser);
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
+        expect(response.result.data.token).not.to.be.undefined();
+        expect(response.result.data.token).not.to.equal(token);
     });
 
     it('Failed update user password', async () =>  {
