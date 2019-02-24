@@ -17,7 +17,7 @@ module.exports = {
 
         const query = {
             item_type: request.query.type,
-            item_name: request.query.name
+            item_name: request.query.name ? '%' + request.query.name + '%' : undefined
         };
         const founditems = await this.db.items.getall(query);
 
