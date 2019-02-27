@@ -33,7 +33,7 @@ describe('List /item_owners', () => {
             db.users.insert(admin)
         ]);
         await Promise.all([
-            db.item_owners.insert({ username: user.username, item_id: newEvent[0].id })
+            db.item_owners.insert({ user_id: user.id, item_id: newEvent[0].id })
         ]);
     });
 
@@ -47,6 +47,9 @@ describe('List /item_owners', () => {
         ]);
         await Promise.all([
             db.users.destroy({ id: admin.id })
+        ]);
+        await Promise.all([
+            db.item_owners.destroy()
         ]);
 
     });

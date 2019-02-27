@@ -29,7 +29,7 @@ describe('GET /users/{username}/lists', () => {
     it('Get lists', async () => {
 
         const user = await db.users.insert(Fixtures.user());
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         const query = {
             method: 'GET',
             url: `/users/${user.username}/lists`

@@ -50,7 +50,7 @@ describe('Destroy Starred Items:', () => {
 
     it('Delete Starred Item - 204', async () => {
 
-        await db.starred_items.insert({ username: user.username, item_id: item.id });
+        await db.starred_items.insert({ user_id: user.id, item_id: item.id });
         const payload = {
             item_id: item.id
         };

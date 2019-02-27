@@ -17,13 +17,13 @@ module.exports = {
 
         const { credentials } = request.auth;
         const { payload } = request;
-        const inTable = await this.db.lists.find({ name: payload.name, owner: credentials.username  });
+        const inTable = await this.db.lists.find({ name: payload.name, owner: credentials.id });
 
         if (inTable.length > 0) {
             throw Boom.conflict('List of that name and owner already exists.');
         }
         else {
-            payload.owner = credentials.username;
+            payload.owner = credentials.id;
         }
 
         const returnlist = await this.db.lists.insert(payload);

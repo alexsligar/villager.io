@@ -60,7 +60,7 @@ describe('DELETE /items/{id}', () => {
     it('Destroy item', async () => {
 
         const item = await db.items.insert(Fixtures.place());
-        await db.item_owners.insert({ username: user.username, item_id: item.id });
+        await db.item_owners.insert({ user_id: user.id, item_id: item.id });
         query.url = `/items/${item.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(204);
@@ -69,7 +69,7 @@ describe('DELETE /items/{id}', () => {
     it('Invalid user destroy item', async () => {
 
         const item = await db.items.insert(Fixtures.place());
-        await db.item_owners.insert({ username: userTwo.username, item_id: item.id });
+        await db.item_owners.insert({ user_id: userTwo.id, item_id: item.id });
         query.url = `/items/${item.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(401);
@@ -81,8 +81,8 @@ describe('DELETE /items/{id}', () => {
     it('Destroy item with multiple owners', async () => {
 
         const item = await db.items.insert(Fixtures.place());
-        await db.item_owners.insert({ username: user.username, item_id: item.id });
-        await db.item_owners.insert({ username: userTwo.username, item_id: item.id });
+        await db.item_owners.insert({ user_id: user.id, item_id: item.id });
+        await db.item_owners.insert({ user_id: userTwo.id, item_id: item.id });
         query.url = `/items/${item.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(412);
@@ -94,7 +94,7 @@ describe('DELETE /items/{id}', () => {
     it('Non-user (admin) destroy item', async () => {
 
         const item = await db.items.insert(Fixtures.place());
-        await db.item_owners.insert({ username: user.username, item_id: item.id });
+        await db.item_owners.insert({ user_id: user.id, item_id: item.id });
         const newToken = JWT.sign(
             { id: adminUser.id, username: adminUser.username, timestamp: new Date() },
             Config.auth.secret,
@@ -126,7 +126,7 @@ describe('DELETE /items/{id}', () => {
         const item = await db.items.insert(Fixtures.place());
         const list = await db.lists.insert(Fixtures.list());
         await db.list_items.insert({ list_id: list.id, item_id: item.id });
-        await db.item_owners.insert({ username: user.username, item_id: item.id });
+        await db.item_owners.insert({ user_id: user.id, item_id: item.id });
         query.url = `/items/${item.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(412);

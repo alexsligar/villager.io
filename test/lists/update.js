@@ -48,7 +48,7 @@ describe('PUT Lists:', () => {
 
     it('update list', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         const updatedList = Fixtures.list();
         const updateQuery = Object.assign({}, query, {
             url: `/lists/${list.id}`,
@@ -62,7 +62,7 @@ describe('PUT Lists:', () => {
 
     it('update list with no name', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         const updatedList = Fixtures.list();
         delete updatedList.name;
         const updateQuery = Object.assign({}, query, {
@@ -78,7 +78,7 @@ describe('PUT Lists:', () => {
 
     it('Unauthorized update list', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         const newToken = JWT.sign(
             { id: adminUser.id, username: adminUser.username, timestamp: new Date() },
             Config.auth.secret,

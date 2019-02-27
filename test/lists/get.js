@@ -36,7 +36,7 @@ describe('GET Lists:', () => {
 
     it('get list', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         query.url = `/lists/${list.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(200);
@@ -45,7 +45,7 @@ describe('GET Lists:', () => {
 
     it('Get list w/ items', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
         const item = await db.items.insert(Fixtures.place());
         await db.list_items.insert({ list_id: list.id, item_id: item.id });
         query.url = `/lists/${list.id}`;

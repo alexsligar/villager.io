@@ -51,7 +51,7 @@ describe('POST /item_owners', () => {
     it('Create owner', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(201);
@@ -60,7 +60,7 @@ describe('POST /item_owners', () => {
     it('Create owner as user', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(401);
@@ -69,7 +69,7 @@ describe('POST /item_owners', () => {
     it('Create owner duplicate', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(409);
@@ -80,7 +80,7 @@ describe('POST /item_owners', () => {
         const notExist = Faker.random.uuid();
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: notExist };
+        const payload = { user_id: user.id, item_id: notExist };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(404);
@@ -90,7 +90,7 @@ describe('POST /item_owners', () => {
 
         const fake = Fixtures.user_id();
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: fake.username, item_id: newEvent[0].id };
+        const payload = { user_id: fake.id, item_id: newEvent[0].id };
         return server.inject({ method: 'post', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(404);

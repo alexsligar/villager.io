@@ -16,14 +16,14 @@ module.exports = {
     handler: async function (request, reply) {
 
         // -------------------- Variables --------------------------------------------- //
-        const { item_id, username } = request.payload;
+        const { item_id, user_id } = request.payload;
         const credentials = request.auth.credentials;
         if (credentials.role === 'user') {
             throw Boom.unauthorized('Not permitted use this feature');
         }
         // -------------------- Checks if relation exists in Tables ------------------- //
 
-        const relation = await this.db.item_owners.findOne({ username, item_id });
+        const relation = await this.db.item_owners.findOne({ user_id, item_id });
 
         /**
          * If relation does not exist, throw an error.
@@ -33,7 +33,7 @@ module.exports = {
             throw Boom.notFound();
         }
         else {
-            await this.db.item_owners.destroy({ username, item_id });
+            await this.db.item_owners.destroy({ user_id, item_id });
             return reply(null).code(204);
         }
     },

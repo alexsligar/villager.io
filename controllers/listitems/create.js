@@ -27,7 +27,7 @@ module.exports = {
             throw Boom.notFound('List not found');
         }
 
-        if (foundlist.owner !== credentials.username) {
+        if (foundlist.owner !== credentials.id) {
             throw Boom.unauthorized();
         }
 

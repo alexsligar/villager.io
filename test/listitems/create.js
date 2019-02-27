@@ -26,7 +26,7 @@ describe('POST List Items:', () => {
         server = await Server;
         await db.users.insert(user),
         await db.users.insert(adminUser);
-        list1.owner = user.username;
+        list1.owner = user.id;
         await db.lists.insert(list1);
         item1 = await db.items.insert(Fixtures.place());
         token = JWT.sign(

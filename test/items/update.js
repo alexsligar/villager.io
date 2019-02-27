@@ -39,7 +39,7 @@ describe('PUT Items:', () => {
         ]);
 
         await Promise.all([
-            db.item_owners.insert({ username: user.username, item_id: event.id })
+            db.item_owners.insert({ user_id: user.id, item_id: event.id })
         ]);
 
         await Promise.all([

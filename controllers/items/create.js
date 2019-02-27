@@ -50,7 +50,7 @@ module.exports = {
         }
 
         const returnedItem = await this.db.items.insert(payload);
-        await this.db.item_owners.insert({ item_id: returnedItem.id, username: credentials.username });
+        await this.db.item_owners.insert({ item_id: returnedItem.id, user_id: credentials.id });
 
         if (tags) {
             // remove duplicates and ignore instead of throwing error

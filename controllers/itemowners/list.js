@@ -15,13 +15,13 @@ module.exports = {
     },
     handler: async function (request, reply) {
 
-        const { id } = request.params;
-        const relation = await this.db.item_owners.find({ item_id: id },['username']);
         const credentials = request.auth.credentials;
         if (credentials.role === 'user') {
             throw Boom.unauthorized('Not permitted use this feature');
         }
 
+        const { id } = request.params;
+        const relation = await this.db.item_owners.find({ item_id: id },['user_id']);
         if (!relation[0]) {
             throw Boom.notFound();
         }
@@ -30,7 +30,7 @@ module.exports = {
     },
     response: {
         status: {
-            200: Schema.usernames_reponse
+            200: Schema.user_ids_response
         }
     },
     plugins: {

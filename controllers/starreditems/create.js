@@ -22,15 +22,15 @@ module.exports = {
         }
 
         const credentials = request.auth.credentials;
-        const { username } = credentials;
+        const { id, username } = credentials;
         const relation = await this.db.starred_items.findOne(
-            { item_id: item.id, username }
+            { item_id: item.id, user_id: id }
         );
         if (relation) {
             throw Boom.conflict(`${username} has already starred this item!`);
         }
 
-        await this.db.starred_items.insert({ item_id: item.id, username });
+        await this.db.starred_items.insert({ item_id: item.id, user_id: id });
         return reply({ message: 'Item starred by user' }).code(201);
     },
     response: {

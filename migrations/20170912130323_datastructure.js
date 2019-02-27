@@ -31,7 +31,7 @@ exports.up = function (knex, Promise) {
 
                 listsTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
                 listsTable.text('name').notNullable();
-                listsTable.text('owner').references('username').inTable('users').index().onDelete('CASCADE');
+                listsTable.uuid('owner').references('id').inTable('users').index().onDelete('CASCADE');
                 listsTable.text('description');
             })
             .createTable('list_items', (listitemTable) => {
@@ -44,7 +44,7 @@ exports.up = function (knex, Promise) {
             .createTable('item_owners', (ownerTable) => {
 
                 ownerTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
-                ownerTable.text( 'username' ).references( 'username' ).inTable( 'users' ).index().onDelete('CASCADE');
+                ownerTable.uuid( 'user_id' ).references( 'id' ).inTable( 'users' ).index().onDelete('CASCADE');
                 ownerTable.uuid('item_id').references('id').inTable('items').index().onDelete('CASCADE');
             })
             .createTable('tags', (tagsTable) => {
@@ -67,7 +67,7 @@ exports.up = function (knex, Promise) {
 
                 starredItemsTable.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
                 starredItemsTable.uuid('item_id').references('id').inTable('items').index().onDelete('CASCADE').onUpdate('CASCADE');
-                starredItemsTable.text( 'username' ).references( 'username' ).inTable( 'users' ).index().onDelete('CASCADE');
+                starredItemsTable.uuid( 'user_id' ).references( 'id' ).inTable( 'users' ).index().onDelete('CASCADE');
             })
     );
 };

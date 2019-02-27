@@ -21,7 +21,7 @@ module.exports = {
             throw Boom.notFound();
         }
 
-        const user_starred_items = await this.db.items.getstarredbyuser({ username: user.username });
+        const user_starred_items = await this.db.items.getstarredbyuser({ user_id: user.id });
         return reply({ data: user_starred_items });
     },
     response: {

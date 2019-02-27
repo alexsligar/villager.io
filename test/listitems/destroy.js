@@ -28,7 +28,7 @@ describe('Destroy List Items:', () => {
         await db.users.insert(user);
         await db.users.insert(adminUser);
         item = await db.items.insert(Fixtures.place());
-        list = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        list = await db.lists.insert(Fixtures.list({ owner: user.id }));
 
         token = JWT.sign(
             { id: user.id, username: user.username, timestamp: new Date() },

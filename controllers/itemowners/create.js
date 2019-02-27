@@ -16,7 +16,7 @@ module.exports = {
     handler: async function (request, reply) {
 
         // -------------------- Variables --------------------------------------------- //
-        const { username, item_id } = request.payload;
+        const { user_id, item_id } = request.payload;
         let item = null;
         let relation = null;
         let user = null;
@@ -27,7 +27,7 @@ module.exports = {
 
         // -------------------- Checks if payload exists in Tables -------------------- //
         // Searches users table by id
-        user = await this.db.users.findOne({ username });
+        user = await this.db.users.findOne({ id: user_id });
         // Searches items table by id
         item = await this.db.items.findOne({ id: item_id });
 
@@ -43,17 +43,17 @@ module.exports = {
 
         // -------------------- Checks if owner/item relation already exists in table -- //
         // Searches item_owners table for relation of username and item_id
-        relation = await this.db.item_owners.findOne({ username, item_id });
+        relation = await this.db.item_owners.findOne({ user_id, item_id });
 
         /**
          * Checks if user/item relation exists in table and throws an error if they do.
          * Otherwise, inserts relation into table
          */
         if (relation) {
-            throw Boom.conflict(`${username} is already an owner of that item!`);
+            throw Boom.conflict(`${user.username} is already an owner of that item!`);
         }
         else {
-            await this.db.item_owners.insert({ username, item_id });
+            await this.db.item_owners.insert({ user_id, item_id });
         }
 
         return reply({ data: request.payload }).code(201);

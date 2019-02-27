@@ -3,6 +3,7 @@
 const JWT = require('jsonwebtoken');
 const Config = require('getconfig');
 const Fixtures = require('../fixtures');
+
 const Server = Fixtures.server;
 const db = Fixtures.db;
 
@@ -31,7 +32,7 @@ describe('DELETE /item_owners', () => {
             db.users.insert(admin)
         ]);
         await Promise.all([
-            db.item_owners.insert({ username: user.username, item_id: newEvent[0].id })
+            db.item_owners.insert({ user_id: user.id, item_id: newEvent[0].id })
         ]);
     });
 
@@ -50,7 +51,7 @@ describe('DELETE /item_owners', () => {
     it('Destroy owner as user', () => {
 
         const token = JWT.sign({ id: user.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'delete', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(401);
@@ -59,7 +60,7 @@ describe('DELETE /item_owners', () => {
     it('Destroy owner', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'delete', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(204);
@@ -68,7 +69,7 @@ describe('DELETE /item_owners', () => {
     it('Destroy owner that does not exist', () => {
 
         const token = JWT.sign({ id: admin.id, timestamp: new Date() }, Config.auth.secret, Config.auth.options);
-        const payload = { username: user.username, item_id: newEvent[0].id };
+        const payload = { user_id: user.id, item_id: newEvent[0].id };
         return server.inject({ method: 'delete', url: '/item_owners', payload, headers: { 'Authorization': token } }).then((res) => {
 
             expect(res.statusCode).to.equal(404);

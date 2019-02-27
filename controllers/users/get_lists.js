@@ -21,7 +21,7 @@ module.exports = {
             throw Boom.notFound();
         }
 
-        const userlists = await this.db.lists.getAllByOwner({ owner: user.username });
+        const userlists = await this.db.lists.getAllByOwner({ owner: user.id });
         return reply({ data: userlists });
     },
     response: {

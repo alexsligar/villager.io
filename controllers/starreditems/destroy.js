@@ -17,9 +17,9 @@ module.exports = {
 
         const { item_id } = request.payload;
         const credentials = request.auth.credentials;
-        const { username } = credentials;
+        const { id } = credentials;
 
-        const relation = await this.db.starred_items.findOne({ username, item_id });
+        const relation = await this.db.starred_items.findOne({ user_id: id, item_id });
 
         /**
          * If relation does not exist, throw an error.
@@ -29,7 +29,7 @@ module.exports = {
             throw Boom.notFound('Item not starred by user');
         }
 
-        await this.db.starred_items.destroy({ username, item_id });
+        await this.db.starred_items.destroy({ user_id: id, item_id });
         return reply(null).code(204);
     },
     response: {

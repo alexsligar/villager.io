@@ -27,8 +27,8 @@ describe('GET /lists:', () => {
 
     it('List list', async () => {
 
-        await db.lists.insert(Fixtures.list({ owner: user.username }));
-        await db.lists.insert(Fixtures.list({ owner: user.username }));
+        await db.lists.insert(Fixtures.list({ owner: user.id }));
+        await db.lists.insert(Fixtures.list({ owner: user.id }));
         const listQuery = {
             method: 'GET',
             url: '/lists'

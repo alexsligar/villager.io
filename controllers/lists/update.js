@@ -18,13 +18,13 @@ module.exports = {
         const credentials = request.auth.credentials;
         if (credentials.role !== 'admin' || credentials.role !== 'mod') {
             const foundlist = await this.db.lists.findOne({ id: request.params.id });
-            if (foundlist.owner !== credentials.username) {
+            if (foundlist.owner !== credentials.id) {
                 throw Boom.unauthorized('Not permitted to edit item');
             }
         }
 
         const list = request.payload;
-        list.owner = credentials.username;
+        list.owner = credentials.id;
 
         await this.db.lists.updateOne({ id: request.params.id }, list);
 

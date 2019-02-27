@@ -22,7 +22,7 @@ module.exports = {
             throw Boom.notFound('List was not found.');
         }
 
-        if (credentials.username !== list.owner && credentials.role !== 'admin') {
+        if (credentials.id !== list.owner && credentials.role !== 'admin') {
             throw Boom.unauthorized('Unauthorized to delete list.');
         }
 

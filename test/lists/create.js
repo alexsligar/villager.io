@@ -55,7 +55,7 @@ describe('POST Lists:', () => {
 
         const list = Fixtures.list();
         const dup = Object.assign({}, list);
-        list.owner = user.username;
+        list.owner = user.id;
         await db.lists.insert(list);
         query.payload = dup;
         const response = await server.inject(query);

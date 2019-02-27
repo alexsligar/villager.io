@@ -51,7 +51,7 @@ describe('DELETE Lists:', () => {
 
     it('delete list', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user1.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user1.id }));
         query.url = `/lists/${list.id}`;
         const response = await server.inject(query);
         expect(response.statusCode).to.equal(204);
@@ -59,7 +59,7 @@ describe('DELETE Lists:', () => {
 
     it('unauthorized delete list', async () => {
 
-        const list = await db.lists.insert(Fixtures.list({ owner: user1.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user1.id }));
         const newToken = JWT.sign(
             { id: user2.id, username: user2.username, timestamp: new Date() },
             Config.auth.secret,

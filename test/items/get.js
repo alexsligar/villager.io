@@ -41,8 +41,8 @@ describe('GET /items/id', () => {
     it('Get Item - List Count', async () => {
 
         const user = await db.users.insert(Fixtures.user());
-        const list = await db.lists.insert(Fixtures.list({ owner: user.username }));
-        const list2 = await db.lists.insert(Fixtures.list({ owner: user.username }));
+        const list = await db.lists.insert(Fixtures.list({ owner: user.id }));
+        const list2 = await db.lists.insert(Fixtures.list({ owner: user.id }));
         await db.list_items.insert({ list_id: list.id, item_id: place.id });
         await db.list_items.insert({ list_id: list2.id, item_id: place.id });
         const response = await server.inject(query);

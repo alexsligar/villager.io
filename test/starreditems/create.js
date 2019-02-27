@@ -73,7 +73,7 @@ describe('POST Starred Items:', () => {
     it('Add Starred Item - Item already starred', async () => {
 
         const item2 = await db.items.insert(Fixtures.place());
-        await db.starred_items.insert({ username: user.username, item_id: item2.id });
+        await db.starred_items.insert({ user_id: user.id, item_id: item2.id });
         query.payload = {
             item_id: item2.id
         };

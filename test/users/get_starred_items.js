@@ -31,8 +31,8 @@ describe('GET /users/{username}/starred', () => {
         const user = await db.users.insert(Fixtures.user());
         const item = await db.items.insert(Fixtures.place());
         const item2 = await db.items.insert(Fixtures.place());
-        await db.starred_items.insert({ username: user.username, item_id: item.id });
-        await db.starred_items.insert({ username: user.username, item_id: item2.id });
+        await db.starred_items.insert({ user_id: user.id, item_id: item.id });
+        await db.starred_items.insert({ user_id: user.id, item_id: item2.id });
         const query = {
             method: 'GET',
             url: `/users/${user.username}/starred`
