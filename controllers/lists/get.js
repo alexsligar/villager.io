@@ -15,7 +15,7 @@ module.exports = {
     auth: false,
     handler: async function (request, reply) {
 
-        const list = await this.db.lists.findOne({ id: request.params.id });
+        const list = await this.db.lists.byid({ id: request.params.id });
 
         if (!list) {
             throw Boom.notFound('List was not found.');
